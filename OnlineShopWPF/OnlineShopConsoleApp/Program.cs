@@ -13,6 +13,7 @@ namespace OnlineShopConsoleApp
     {
       CPU c = new CPU(1234567, 3.5f, "INTEL PENTIUM");
       Graphic g = new Graphic(4, "NVIDIA GeForce 1080TI");
+      HardDrive h = new HardDrive(256, "ssd");
     }
   }
 }
