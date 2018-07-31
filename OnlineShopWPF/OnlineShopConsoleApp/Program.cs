@@ -11,7 +11,8 @@ namespace OnlineShopConsoleApp
   {
     static void Main(string[] args)
     {
-      CPU c = new CPU(777777, 3.5f, "INTEL PENTIUM");
+      CPU c = new CPU(1234567, 3.5f, "INTEL PENTIUM");
+      Graphic g = new Graphic(4, "NVIDIA GeForce 1080TI");
     }
   }
 }
