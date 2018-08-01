@@ -9,7 +9,7 @@ namespace OnlineShop
 {
   public class Product
   {
-    public Product(string name, float price)
+    public Product(string name, double price)
     {
       SQLiteConnection connection;
       using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))

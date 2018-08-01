@@ -27,7 +27,7 @@ namespace OnlineShop
       {
         connection.Open();
         SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO HardDrives(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
+        command.CommandText = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
         command.Parameters.AddWithValue("$id", null);
         command.Parameters.AddWithValue("$graphicId", data.GraphicId);
         command.Parameters.AddWithValue("$cpuId", data.CpuId);

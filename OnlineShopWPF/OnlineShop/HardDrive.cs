@@ -22,7 +22,6 @@ namespace OnlineShop
         command.Parameters.AddWithValue("$memory", memory);
 
         command.ExecuteNonQuery();
-
       }
     }
   }

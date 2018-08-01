@@ -10,7 +10,7 @@ namespace OnlineShop
   public class CPU
   {
     SQLiteConnection connection;
-    public CPU(int count, float clockRate, string name)
+    public CPU(int count, double clockRate, string name)
     {
       using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
       {
