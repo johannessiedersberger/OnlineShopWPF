@@ -20,8 +20,12 @@ namespace OnlineShop
 
   public class Notebook
   {
+    public NotebookData NotebookData { get; private set; } 
+
     public Notebook(NotebookData data)
     {
+      NotebookData = data;
+
       SQLiteConnection connection;
       using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
       {

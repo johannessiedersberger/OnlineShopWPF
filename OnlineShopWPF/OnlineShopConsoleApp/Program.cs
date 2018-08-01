@@ -12,17 +12,15 @@ namespace OnlineShopConsoleApp
     static void Main(string[] args)
     {
       Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
-
       CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
       Graphic g = new Graphic(4, "NVIDIA GeForce GTX 1050 Ti");
-
       Notebook n = new Notebook(
         new NotebookData()
         {
           ProductId = Product.GetId(p.Name),
           GraphicId = Graphic.GetId(g.Name),
-          CpuId = 1,
-          HardDriveId = 1,
+          CpuId = CPU.GetId(c.Name),
+          HardDriveId = HardDrive.GetId(256, "ssd"),
           RamMemory = 8,
           AverageBatteryTime = 11,
           Os = "windwos"

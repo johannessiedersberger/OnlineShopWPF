@@ -9,9 +9,15 @@ namespace OnlineShop
 {
   public class HardDrive
   {
+    public int Memory { get; private set; }
+    public string Type { get; private set; }
+
     SQLiteConnection connection;
     public HardDrive(int memory, string type)
     {
+      Memory = memory;
+      Type = type;
+
       using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
       {
         connection.Open();
@@ -22,6 +28,25 @@ namespace OnlineShop
         command.Parameters.AddWithValue("$memory", memory);
 
         command.ExecuteNonQuery();
+      }
+    }
+
+    public static int GetId(int memory, string type)
+    {
+      SQLiteConnection connection;
+      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+      {
+        connection.Open();
+        SQLiteCommand command = new SQLiteCommand(connection);
+        command.CommandText = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
+        command.Parameters.AddWithValue("$memory", memory);
+        command.Parameters.AddWithValue("$type", type);
+        SQLiteDataReader reader = command.ExecuteReader();
+
+        int id = 0;
+        while (reader.Read())
+          id = int.Parse(reader[0].ToString());
+        return id;
       }
     }
   }
