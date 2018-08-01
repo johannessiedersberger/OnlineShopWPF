@@ -11,9 +11,25 @@ namespace OnlineShopConsoleApp
   {
     static void Main(string[] args)
     {
-      CPU c = new CPU(1234567, 3.5f, "INTEL PENTIUM");
-      Graphic g = new Graphic(4, "NVIDIA GeForce 1080TI");
-      HardDrive h = new HardDrive(256, "ssd");
+      Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
+
+      CPU c = new CPU(4, 3.80f, "Intel® Core™ i7-7700HQ");
+      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
+
+      Notebook n = new Notebook(
+        new NotebookData()
+        {
+          ProductId = 1,
+          GraphicId = 1,
+          CpuId = 1,
+          HardDriveId = 1,
+          RamMemory = 8,
+          AverageBatteryTime = 11,
+          Os = "windwos"
+
+        });
     }
+
+
   }
 }

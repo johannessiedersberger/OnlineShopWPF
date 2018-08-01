@@ -58,6 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CPU.cs" />
+    <Compile Include="Graphic.cs" />
+    <Compile Include="HardDrive.cs" />
+    <Compile Include="Notebook.cs" />
+    <Compile Include="Product.cs" />
     <Compile Include="Shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
