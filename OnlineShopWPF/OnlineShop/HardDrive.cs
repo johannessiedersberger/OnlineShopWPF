@@ -31,6 +31,24 @@ namespace OnlineShop
       }
     }
 
+    public static bool CheckIfHardDriveExists(int memory, string type)
+    {    
+      using (SQLiteConnection connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+      {
+        connection.Open();
+        SQLiteCommand command = new SQLiteCommand(connection);
+        command.CommandText = "SELECT memory, type FROM HardDrives WHERE memory = $memory AND type = $type";
+        command.Parameters.AddWithValue("$type", type);
+        command.Parameters.AddWithValue("$memory", memory);
+        SQLiteDataReader reader = command.ExecuteReader();
+        while (reader.Read())
+          if (reader[0].ToString() != null)
+            return true;
+        return false;
+      }
+     
+    }
+
     public static int GetId(int memory, string type)
     {
       SQLiteConnection connection;
