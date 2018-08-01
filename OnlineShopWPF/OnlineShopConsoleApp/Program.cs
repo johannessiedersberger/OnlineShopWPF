@@ -19,7 +19,7 @@ namespace OnlineShopConsoleApp
       Notebook n = new Notebook(
         new NotebookData()
         {
-          ProductId = 1,
+          ProductId = Product.GetId(p.Name),
           GraphicId = Graphic.GetId(g.Name),
           CpuId = 1,
           HardDriveId = 1,

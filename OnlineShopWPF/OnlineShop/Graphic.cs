@@ -40,9 +40,10 @@ namespace OnlineShop
         command.CommandText = "SELECT graphic_id FROM Graphics WHERE name = $name";
         command.Parameters.AddWithValue("$name", name);
         SQLiteDataReader reader = command.ExecuteReader();
+
         int id = 0;
         while(reader.Read())
-          int.Parse(reader[0].ToString());
+          id = int.Parse(reader[0].ToString());
         return id;
       }
     }

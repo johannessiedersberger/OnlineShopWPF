@@ -39,7 +39,6 @@ namespace OnlineShop
         command.ExecuteNonQuery();
 
       }
-
     }
   }
 }
