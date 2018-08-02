@@ -12,27 +12,28 @@ namespace OnlineShop
     public int Memory { get; private set; }
     public string Type { get; private set; }
 
-    SQLiteConnection connection;
     public HardDrive(int memory, string type)
     {
       Memory = memory;
       Type = type;
 
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
-      {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory) ";
-        command.Parameters.AddWithValue("$id", null);
-        command.Parameters.AddWithValue("$type", type);
-        command.Parameters.AddWithValue("$memory", memory);
+      SqliteDatabase database = new SqliteDatabase("OnlineShop.db");
 
-        command.ExecuteNonQuery();
+      using (var createHardDrive = database.CreateCommand(CommandAddHardDrive))
+      {
+        database.Open();
+        createHardDrive.Parameters.Add(database.CreateParameter("$id", null));
+        createHardDrive.Parameters.Add(database.CreateParameter("$type", type));
+        createHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
+        createHardDrive.ExecuteNonQuery();
+        database.Close();
       }
     }
 
+    private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
+
     public static bool CheckIfHardDriveExists(int memory, string type)
-    {    
+    {
       using (SQLiteConnection connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
       {
         connection.Open();
@@ -46,7 +47,6 @@ namespace OnlineShop
             return true;
         return false;
       }
-     
     }
 
     public static int GetId(int memory, string type)

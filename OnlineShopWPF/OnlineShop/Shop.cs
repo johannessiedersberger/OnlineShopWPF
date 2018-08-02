@@ -10,7 +10,7 @@ namespace OnlineShop
 {
   public class Shop
   {
-
+    public static string file = @"C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db";
   }
  
 }

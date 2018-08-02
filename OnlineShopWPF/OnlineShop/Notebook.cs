@@ -21,7 +21,7 @@ namespace OnlineShop
   public class Notebook
   {
     public NotebookData NotebookData { get; private set; } 
-
+    
     public Notebook(NotebookData data)
     {
       NotebookData = data;
@@ -41,7 +41,6 @@ namespace OnlineShop
         command.Parameters.AddWithValue("$os", data.Os);
 
         command.ExecuteNonQuery();
-
       }
     }
   }
