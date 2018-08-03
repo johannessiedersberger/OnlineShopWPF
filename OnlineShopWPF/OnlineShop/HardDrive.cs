@@ -28,11 +28,11 @@ namespace OnlineShop
     /// <param name="type"></param>
     public HardDrive(int memory, string type)
     {
-      if (CheckIfHardDriveExists(memory, type))
-        return;
-
       Memory = memory;
       Type = type;
+
+      if (GetId(memory, type) != 0)
+        return;
 
       using (var createHardDrive = database.CreateCommand(CommandAddHardDrive))
       {
@@ -48,38 +48,6 @@ namespace OnlineShop
     private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
 
     /// <summary>
-    /// Checks if the HardDrive already exists in the Databse
-    /// </summary>
-    /// <param name="memory">memory in GB</param>
-    /// <param name="type">ssd or hdd</param>
-    /// <returns></returns>
-    public bool CheckIfHardDriveExists(int memory, string type)
-    {
-      using (var checkHardDrive = database.CreateCommand(CommandCheckHardDrive))
-      {
-        database.Open();
-        checkHardDrive.Parameters.Add(database.CreateParameter("$type", type));
-        checkHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
-
-        IDataReader reader = checkHardDrive.ExecuteReader();
-        return IsNotEmpty(reader); //Close Databse
-      }    
-    }
-
-    private const string CommandCheckHardDrive = "SELECT memory, type FROM HardDrives WHERE memory = $memory AND type = $type";
-
-    private bool IsNotEmpty(IDataReader reader)
-    {
-      bool foundValues = false;
-      while (reader.Read())
-        if (reader[0].ToString() != null)
-          foundValues = true;
-
-      database.Close();
-      return foundValues;
-    }
-
-    /// <summary>
     /// Returns the id from the Databse 
     /// </summary>
     /// <param name="memory"></param>
@@ -93,20 +61,15 @@ namespace OnlineShop
         getID.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
         getID.Parameters.Add(database.CreateParameter("$type", type));
         IDataReader reader = getID.ExecuteReader();
-
-        return ID(reader);//Close Database
+        
+        int id = 0;
+        while (reader.Read())
+          id = int.Parse(reader[0].ToString());
+        database.Close();
+        return id;     
       }
     }
 
     private const string CommandSelectID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
-
-    private int ID(IDataReader reader)
-    {
-      int id = 0;
-      while (reader.Read())
-        id = int.Parse(reader[0].ToString());
-      database.Close();
-      return id;
-    }
   }
 }

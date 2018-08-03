@@ -21,17 +21,7 @@ namespace OnlineShopConsoleApp
       CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
       Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
       HardDrive h = new HardDrive(256, "ssd");
-      Notebook n = new Notebook(
-        new NotebookData()
-        {
-          ProductId = Product.GetId(p.Name),
-          GraphicId = Graphic.GetId(g.Name),
-          CpuId = CPU.GetId(c.Name),
-          HardDriveId = h.GetId(256, "ssd"),
-          RamMemory = 8,
-          AverageBatteryTime = 11,
-          Os = "windwos"
-        });
+     
     }
 
     static void CreateDellNotebook()
@@ -41,17 +31,7 @@ namespace OnlineShopConsoleApp
       CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
       Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
       HardDrive h = new HardDrive(128, "ssd");
-      Notebook n = new Notebook(
-        new NotebookData()
-        {
-          ProductId = Product.GetId(p.Name),
-          GraphicId = Graphic.GetId(g.Name),
-          CpuId = CPU.GetId(c.Name),
-          HardDriveId = h.GetId(256, "ssd"),
-          RamMemory = 8,
-          AverageBatteryTime = 11,
-          Os = "windwos"
-        });
+      
     }
   }
 }

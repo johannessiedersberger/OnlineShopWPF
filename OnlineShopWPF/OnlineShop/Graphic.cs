@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Data;
 
 namespace OnlineShop
 {
@@ -30,6 +31,9 @@ namespace OnlineShop
       VRAM = vram;
       Name = name;
 
+      if (GetId(name) != 0)
+        return;
+
       using (var createGraphic = database.CreateCommand(CommandAddGraphic))
       {
         database.Open();
@@ -42,6 +46,30 @@ namespace OnlineShop
     }
 
     private const string CommandAddGraphic = "INSERT INTO Graphics(graphic_id, vram, name) VALUES($id,$vram,$name)";
+
+    /// <summary>
+    /// Returns the id from the Databse 
+    /// </summary>
+    /// <param name="memory"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public int GetId(string name)
+    {
+      using (var getID = database.CreateCommand(CommandSelectID))
+      {
+        database.Open();
+        getID.Parameters.Add(database.CreateParameter("$name", name));
+        IDataReader reader = getID.ExecuteReader();
+
+        int id = 0;
+        while (reader.Read())
+          id = int.Parse(reader[0].ToString());
+        database.Close();
+        return id;
+      }
+    }
+
+    private const string CommandSelectID = "SELECT graphic_id FROM Graphics WHERE name = $name";
 
   }
 }
