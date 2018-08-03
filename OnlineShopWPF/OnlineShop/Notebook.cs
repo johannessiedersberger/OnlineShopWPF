@@ -20,28 +20,36 @@ namespace OnlineShop
 
   public class Notebook
   {
+    /// <summary>
+    /// The Data of The Notebook
+    /// </summary>
     public NotebookData NotebookData { get; private set; } 
     
+    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+
+    /// <summary>
+    /// Creates a new Notebook in the Database
+    /// </summary>
+    /// <param name="data"></param>
     public Notebook(NotebookData data)
     {
       NotebookData = data;
-
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+      
+      using (var createNotebook = database.CreateCommand(CommandCreateNotebook))
       {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
-        command.Parameters.AddWithValue("$id", null);
-        command.Parameters.AddWithValue("$graphicId", data.GraphicId);
-        command.Parameters.AddWithValue("$cpuId", data.CpuId);
-        command.Parameters.AddWithValue("$hardDriveId", data.HardDriveId);
-        command.Parameters.AddWithValue("$ramMemory", data.RamMemory);
-        command.Parameters.AddWithValue("$avgBatteryTime", data.AverageBatteryTime);
-        command.Parameters.AddWithValue("$os", data.Os);
-
-        command.ExecuteNonQuery();
+        database.Open();
+        createNotebook.Parameters.Add(database.CreateParameter("$id", null));
+        createNotebook.Parameters.Add(database.CreateParameter("$graphicId", data.GraphicId.ToString()));
+        createNotebook.Parameters.Add(database.CreateParameter("$cpuId", data.CpuId.ToString()));
+        createNotebook.Parameters.Add(database.CreateParameter("$hardDriveId", data.HardDriveId.ToString()));
+        createNotebook.Parameters.Add(database.CreateParameter("$ramMemory", data.RamMemory.ToString()));
+        createNotebook.Parameters.Add(database.CreateParameter("$avgBatteryTime", data.AverageBatteryTime.ToString()));
+        createNotebook.Parameters.Add(database.CreateParameter("$os", data.Os));
+        createNotebook.ExecuteNonQuery();
+        database.Close();
       }
     }
+
+    private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
   }
 }
