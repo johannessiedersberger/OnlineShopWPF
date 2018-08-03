@@ -40,7 +40,7 @@ namespace OnlineShop
       if (GetId(name) != 0)
         return;
 
-      using (var createCPU = database.CreateCommand(CommandAddHardDrive))
+      using (var createCPU = database.CreateCommand(CommandAddCPU))
       {
         database.Open();
         createCPU.Parameters.Add(database.CreateParameter("$id", null));
@@ -52,7 +52,7 @@ namespace OnlineShop
       }
     }
 
-    private const string CommandAddHardDrive = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
+    private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
 
     /// <summary>
     /// Returns the id from the Databse 
