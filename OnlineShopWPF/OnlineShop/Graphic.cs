@@ -9,43 +9,39 @@ namespace OnlineShop
 {
   public class Graphic
   {
+    /// <summary>
+    /// The Video RAM of the Graphic-Card in GB
+    /// </summary>
     public int VRAM { get; private set; }
+    /// <summary>
+    /// The name of the Graphic-Card
+    /// </summary>
     public string Name { get; private set; }
 
+    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+
+    /// <summary>
+    /// Creates a Graphic-Card in the Database
+    /// </summary>
+    /// <param name="vram">The video RAM of the Graphic-Card</param>
+    /// <param name="name">The name of the Graphic-card</param>
     public Graphic(int vram, string name)
     {
       VRAM = vram;
       Name = name;
 
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+      using (var createGraphic = database.CreateCommand(CommandAddGraphic))
       {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO Graphics(graphic_id, vram, name) VALUES($id,$vram,$name)";
-        command.Parameters.AddWithValue("$id", null);
-        command.Parameters.AddWithValue("$vram", vram);
-        command.Parameters.AddWithValue("$name", name);
-        command.ExecuteNonQuery();
+        database.Open();
+        createGraphic.Parameters.Add(database.CreateParameter("$id", null));
+        createGraphic.Parameters.Add(database.CreateParameter("$vram", vram.ToString()));
+        createGraphic.Parameters.Add(database.CreateParameter("$name", name));
+        createGraphic.ExecuteNonQuery();
+        database.Close();
       }
     }
 
-    public static int GetId(string name)
-    {
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
-      {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "SELECT graphic_id FROM Graphics WHERE name = $name";
-        command.Parameters.AddWithValue("$name", name);
-        SQLiteDataReader reader = command.ExecuteReader();
+    private const string CommandAddGraphic = "INSERT INTO Graphics(graphic_id, vram, name) VALUES($id,$vram,$name)";
 
-        int id = 0;
-        while(reader.Read())
-          id = int.Parse(reader[0].ToString());
-        return id;
-      }
-    }
   }
 }

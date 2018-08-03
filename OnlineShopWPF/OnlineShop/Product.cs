@@ -30,7 +30,6 @@ namespace OnlineShop
       Name = name;
       Price = price;
 
-
       using (var createProduct = database.CreateCommand(CommandAddProduct))
       {
         database.Open();
@@ -43,25 +42,5 @@ namespace OnlineShop
     }
 
     private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
-
-
-
-    public static int GetId(string name)
-    {
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
-      {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "SELECT product_id FROM Products WHERE name = $name";
-        command.Parameters.AddWithValue("$name", name);
-        SQLiteDataReader reader = command.ExecuteReader();
-
-        int id = 0;
-        while (reader.Read())
-          id = int.Parse(reader[0].ToString());
-        return id;
-      }
-    }
   }
 }
