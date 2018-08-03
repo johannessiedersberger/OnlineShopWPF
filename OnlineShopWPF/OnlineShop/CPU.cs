@@ -9,47 +9,46 @@ namespace OnlineShop
 {
   public class CPU
   {
+    /// <summary>
+    /// The number of kernels
+    /// </summary>
     public int Count { get; private set; }
+    /// <summary>
+    /// The Clock rate in GHZ
+    /// </summary>
     public double ClockRate { get; private set; }
+    /// <summary>
+    /// The name of the CPU
+    /// </summary>
     public string Name { get; private set; }
 
-    SQLiteConnection connection;
+    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+
+    /// <summary>
+    /// Creates a CPU in the Database
+    /// </summary>
+    /// <param name="count">The number of kernels</param>
+    /// <param name="clockRate">The clock rate in ghz </param>
+    /// <param name="name">The name of the cpu </param>
     public CPU(int count, double clockRate, string name)
     {
       Count = count;
       ClockRate = clockRate;
       Name = name;
 
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+      using (var createCPU = database.CreateCommand(CommandAddHardDrive))
       {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
-        command.Parameters.AddWithValue("$id", null);
-        command.Parameters.AddWithValue("$count", count);
-        command.Parameters.AddWithValue("$clockRate", clockRate);
-        command.Parameters.AddWithValue("$name", name);
-
-        command.ExecuteNonQuery();
-
+        database.Open();
+        createCPU.Parameters.Add(database.CreateParameter("$id", null));
+        createCPU.Parameters.Add(database.CreateParameter("$count", count.ToString()));
+        createCPU.Parameters.Add(database.CreateParameter("$clockRate", clockRate.ToString()));
+        createCPU.Parameters.Add(database.CreateParameter("$name", name));
+        createCPU.ExecuteNonQuery();
+        database.Close();
       }
     }
 
-    public static int GetId(string name)
-    {
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
-      {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "SELECT cpu_id FROM CPU WHERE name = $name";
-        command.Parameters.AddWithValue("$name", name);
-        SQLiteDataReader reader = command.ExecuteReader();
-        int id = 0;
-        while (reader.Read())
-          id = int.Parse(reader[0].ToString());
-        return id;
-      }
-    }
+    private const string CommandAddHardDrive = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
+
   }
 }

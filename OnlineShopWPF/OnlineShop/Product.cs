@@ -9,28 +9,42 @@ namespace OnlineShop
 {
   public class Product
   {
+    /// <summary>
+    /// The Name of the Product
+    /// </summary>
     public string Name { get; private set; }
+    /// <summary>
+    /// The Price of the Product
+    /// </summary>
     public double Price { get; private set; }
 
+    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+
+    /// <summary>
+    /// Creates the Product in the Database
+    /// </summary>
+    /// <param name="name">The name of the Product</param>
+    /// <param name="price">The price of the Product</param>
     public Product(string name, double price)
     {
       Name = name;
       Price = price;
 
-      SQLiteConnection connection;
-      using (connection = new SQLiteConnection(@"Data Source = C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db; Version=3"))
+
+      using (var createProduct = database.CreateCommand(CommandAddProduct))
       {
-        connection.Open();
-        SQLiteCommand command = new SQLiteCommand(connection);
-        command.CommandText = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
-        command.Parameters.AddWithValue("$id", null);
-        command.Parameters.AddWithValue("$name", name);
-        command.Parameters.AddWithValue("$price", price);
-
-        command.ExecuteNonQuery();
-
+        database.Open();
+        createProduct.Parameters.Add(database.CreateParameter("$id", null));
+        createProduct.Parameters.Add(database.CreateParameter("$name", name));
+        createProduct.Parameters.Add(database.CreateParameter("$price", price.ToString()));
+        createProduct.ExecuteNonQuery();
+        database.Close();
       }
     }
+
+    private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
+
+
 
     public static int GetId(string name)
     {

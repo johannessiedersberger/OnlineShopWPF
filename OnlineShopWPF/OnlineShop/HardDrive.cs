@@ -61,7 +61,7 @@ namespace OnlineShop
         checkHardDrive.Parameters.Add(database.CreateParameter("$type", type));
         checkHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
 
-        var reader = checkHardDrive.ExecuteReader();
+        IDataReader reader = checkHardDrive.ExecuteReader();
         return IsNotEmpty(reader); //Close Databse
       }    
     }
@@ -92,7 +92,7 @@ namespace OnlineShop
         database.Open();
         getID.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
         getID.Parameters.Add(database.CreateParameter("$type", type));
-        var reader = getID.ExecuteReader();
+        IDataReader reader = getID.ExecuteReader();
 
         return ID(reader);//Close Database
       }
