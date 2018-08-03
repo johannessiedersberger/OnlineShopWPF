@@ -27,7 +27,7 @@ namespace OnlineShopConsoleApp
           ProductId = Product.GetId(p.Name),
           GraphicId = Graphic.GetId(g.Name),
           CpuId = CPU.GetId(c.Name),
-          HardDriveId = HardDrive.GetId(256, "ssd"),
+          HardDriveId = h.GetId(256, "ssd"),
           RamMemory = 8,
           AverageBatteryTime = 11,
           Os = "windwos"
@@ -47,7 +47,7 @@ namespace OnlineShopConsoleApp
           ProductId = Product.GetId(p.Name),
           GraphicId = Graphic.GetId(g.Name),
           CpuId = CPU.GetId(c.Name),
-          HardDriveId = HardDrive.GetId(256, "ssd"),
+          HardDriveId = h.GetId(256, "ssd"),
           RamMemory = 8,
           AverageBatteryTime = 11,
           Os = "windwos"

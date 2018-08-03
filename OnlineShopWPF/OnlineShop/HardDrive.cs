@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Data;
 
 namespace OnlineShop
 {
@@ -18,7 +19,7 @@ namespace OnlineShop
     /// </summary>
     public string Type { get; private set; }
 
-    IDatabase database = new SqliteDatabase("OnlineShop.db");
+    private IDatabase database = new SqliteDatabase("OnlineShop.db");
 
     /// <summary>
     /// Creates a HardDrive in the Database
@@ -32,7 +33,7 @@ namespace OnlineShop
 
       Memory = memory;
       Type = type;
-      
+
       using (var createHardDrive = database.CreateCommand(CommandAddHardDrive))
       {
         database.Open();
@@ -40,7 +41,6 @@ namespace OnlineShop
         createHardDrive.Parameters.Add(database.CreateParameter("$type", type));
         createHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
         createHardDrive.ExecuteNonQuery();
-
         database.Close();
       }
     }
@@ -55,7 +55,6 @@ namespace OnlineShop
     /// <returns></returns>
     public bool CheckIfHardDriveExists(int memory, string type)
     {
-      
       using (var checkHardDrive = database.CreateCommand(CommandCheckHardDrive))
       {
         database.Open();
@@ -63,20 +62,22 @@ namespace OnlineShop
         checkHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
 
         var reader = checkHardDrive.ExecuteReader();
-        while (reader.Read())
-        {
-          if (reader[0].ToString() != null)
-          {
-            database.Close();
-            return true;
-          }
-        }
-        database.Close();
-        return false;
-      }
+        return IsNotEmpty(reader); //Close Databse
+      }    
     }
 
     private const string CommandCheckHardDrive = "SELECT memory, type FROM HardDrives WHERE memory = $memory AND type = $type";
+
+    private bool IsNotEmpty(IDataReader reader)
+    {
+      bool foundValues = false;
+      while (reader.Read())
+        if (reader[0].ToString() != null)
+          foundValues = true;
+
+      database.Close();
+      return foundValues;
+    }
 
     /// <summary>
     /// Returns the id from the Databse 
@@ -86,23 +87,26 @@ namespace OnlineShop
     /// <returns></returns>
     public int GetId(int memory, string type)
     {
-      database.Open();
       using (var getID = database.CreateCommand(CommandSelectID))
       {
-        
+        database.Open();
         getID.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
         getID.Parameters.Add(database.CreateParameter("$type", type));
         var reader = getID.ExecuteReader();
 
-        int id = 0;
-        while (reader.Read())
-          id = int.Parse(reader[0].ToString());
-        database.Close();
-        return id;
+        return ID(reader);//Close Database
       }
     }
 
     private const string CommandSelectID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
-  }
 
+    private int ID(IDataReader reader)
+    {
+      int id = 0;
+      while (reader.Read())
+        id = int.Parse(reader[0].ToString());
+      database.Close();
+      return id;
+    }
+  }
 }
