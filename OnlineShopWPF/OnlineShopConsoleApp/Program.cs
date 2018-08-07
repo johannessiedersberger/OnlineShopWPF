@@ -12,6 +12,8 @@ namespace OnlineShopConsoleApp
     static void Main(string[] args)
     {
       HardDrive hd = new HardDrive(11, "ssd");
+      CPU cpu = new CPU(4, 4.4, "INTEL CORE i7");
+      Product p = new Product("Dell G3 17", 829.99);
     }
 
     static void CreateHPNotebook()

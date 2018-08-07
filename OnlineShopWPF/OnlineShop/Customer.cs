@@ -34,7 +34,7 @@ namespace OnlineShop
       if (GetId(customerData.Email) != 0)
         return;
 
-      using (var createCustomer = database.CreateCommand(CommandAddHardDrive))
+      using (var createCustomer = database.CreateCommand(CommandAddCustomer))
       {
         database.Open();
         createCustomer.Parameters.Add(database.CreateParameter("$id", null));
@@ -53,7 +53,7 @@ namespace OnlineShop
       }
     }
 
-    private const string CommandAddHardDrive
+    private const string CommandAddCustomer
       = "INSERT INTO Customers(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
                               " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
 
@@ -79,6 +79,6 @@ namespace OnlineShop
       }
     }
 
-    private const string CommandSelectID = "SELECT customer_id FROM Cpu WHERE email = $email";
+    private const string CommandSelectID = "SELECT customer_id FROM Customer WHERE email = $email";
   }
 }

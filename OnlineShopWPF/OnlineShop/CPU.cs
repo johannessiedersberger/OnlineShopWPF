@@ -23,8 +23,6 @@ namespace OnlineShop
     /// </summary>
     public string Name { get; private set; }
 
-    private IDatabase database = new SqliteDatabase("OnlineShop.db");
-
     /// <summary>
     /// Creates a CPU in the Database
     /// </summary>
@@ -36,23 +34,9 @@ namespace OnlineShop
       Count = count;
       ClockRate = clockRate;
       Name = name;
-
-      if (GetId(name) != 0)
-        return;
-
-      using (var createCPU = database.CreateCommand(CommandAddCPU))
-      {
-        database.Open();
-        createCPU.Parameters.Add(database.CreateParameter("$id", null));
-        createCPU.Parameters.Add(database.CreateParameter("$count", count.ToString()));
-        createCPU.Parameters.Add(database.CreateParameter("$clockRate", clockRate.ToString()));
-        createCPU.Parameters.Add(database.CreateParameter("$name", name));
-        createCPU.ExecuteNonQuery();
-        database.Close();
-      }
     }
 
-    private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
+    public const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
 
     /// <summary>
     /// Returns the id from the Databse 
@@ -60,19 +44,33 @@ namespace OnlineShop
     /// <param name="memory"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public int GetId(string name)
+    public int GetId(IDatabase db)
     {
-      using (var getID = database.CreateCommand(CommandSelectID))
+      using (var getID = db.CreateCommand(CommandSelectID))
       {
-        database.Open();
-        getID.Parameters.Add(database.CreateParameter("$name", name));
+        db.Open();
+        getID.Parameters.Add(db.CreateParameter("$name", Name));
         IDataReader reader = getID.ExecuteReader();
 
         int id = 0;
         while (reader.Read())
           id = int.Parse(reader[0].ToString());
-        database.Close();
+        db.Close();
         return id;
+      }
+    }
+
+    public void WriteToDatabase(IDatabase db)
+    {
+      using (var createCPU = db.CreateCommand(CommandAddCPU))
+      {
+        db.Open();
+        createCPU.Parameters.Add(db.CreateParameter("$id", null));
+        createCPU.Parameters.Add(db.CreateParameter("$count", Count.ToString()));
+        createCPU.Parameters.Add(db.CreateParameter("$clockRate", ClockRate.ToString()));
+        createCPU.Parameters.Add(db.CreateParameter("$name", Name));
+        createCPU.ExecuteNonQuery();
+        db.Close();
       }
     }
 
