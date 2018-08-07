@@ -24,7 +24,7 @@ namespace OnlineShop
     public string Name { get; private set; }
 
     /// <summary>
-    /// Creates a CPU in the Database
+    /// 
     /// </summary>
     /// <param name="count">The number of kernels</param>
     /// <param name="clockRate">The clock rate in ghz </param>
@@ -39,7 +39,8 @@ namespace OnlineShop
     public const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
 
     /// <summary>
-    /// Returns the id from the Databse 
+    /// Returns the id from the Databse
+    /// If The Object does not exist in the database, the method returns 0
     /// </summary>
     /// <param name="memory"></param>
     /// <param name="type"></param>
@@ -60,6 +61,10 @@ namespace OnlineShop
       }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="db"></param>
     public void WriteToDatabase(IDatabase db)
     {
       using (var createCPU = db.CreateCommand(CommandAddCPU))
