@@ -71,17 +71,34 @@ namespace OnlineShop
     }
   }
 
+  /// <summary>
+  /// SqliteQuery that returns a value
+  /// </summary>
   public class SqliteQueryCommand : IQueryCommand
   {
+    /// <summary>
+    /// The SqliteQueryCommand
+    /// </summary>
     public string CommandText { get; set; }
+    /// <summary>
+    /// The Sqlite Database Object
+    /// </summary>
     public SqliteDatabase DB { get; private set; }
-    public SQLiteCommand Command { get; private set; }
+    
+    private SQLiteCommand _command;
 
+    /// <summary>
+    /// Saves the Database as a memeber
+    /// </summary>
+    /// <param name="db"></param>
     public SqliteQueryCommand(SqliteDatabase db)
     {
       DB = db;
     }
 
+    /// <summary>
+    /// Contains the Parameters from the Query
+    /// </summary>
     public IReadOnlyDictionary<string, object> Parameters
     {
       get
@@ -91,38 +108,62 @@ namespace OnlineShop
     }
     private IDictionary<string, object> _parameters = new Dictionary<string, object>();
 
+    /// <summary>
+    /// Ads a Parameter to the Parameter Dicitionary
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
     public void AddParameter(string name, object value)
     {
       _parameters.Add(name, value);
     }
 
+    /// <summary>
+    /// Disposes the Database
+    /// </summary>
     public void Dispose()
     {
       DB.Dispose();
     }
 
+    /// <summary>
+    /// Executes the Reader and returns a SqliteDataReaderObject
+    /// </summary>
+    /// <returns></returns>
     public IReader ExecuteReader()
     {
-      Command = new SQLiteCommand(DB.Connection);
-      Command.CommandText = CommandText;
+      _command = new SQLiteCommand(DB.Connection);
+      _command.CommandText = CommandText;
       foreach (var p in Parameters)
       {
-        Command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
+        _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
 
-      return new SqliteDataReader(Command);
+      return new SqliteDataReader(_command);
     }
   }
 
+  /// <summary>
+  /// SqliteReader that returns the data which was selected by the query
+  /// </summary>
   public class SqliteDataReader : IReader
   {
     private SQLiteCommand _command;
 
+    /// <summary>
+    /// Saves the command as a member
+    /// </summary>
+    /// <param name="command"></param>
     public SqliteDataReader(SQLiteCommand command)
     {
       _command = command;
     }
 
+    /// <summary>
+    /// Gets the data from the column by the index
+    /// </summary>
+    /// <param name="i"></param>
+    /// <returns></returns>
     public object this[int i]
     {
       get
@@ -156,17 +197,30 @@ namespace OnlineShop
     }
   }
 
+  /// <summary>
+  /// Sqlite Command that changes the database
+  /// </summary>
   public class SqliteNonQueryCommand : INonQueryCommand
   {
+    /// <summary>
+    /// The SqliteCommand 
+    /// </summary>
     public string CommandText { get; set; }
     private SqliteDatabase _db;
     private SQLiteCommand _command;
 
+    /// <summary>
+    /// Save the database as a member
+    /// </summary>
+    /// <param name="db"></param>
     public SqliteNonQueryCommand(SqliteDatabase db)
     {
       _db = db;
     }
 
+    /// <summary>
+    /// Contains the Parameters from the query
+    /// </summary>
     public IReadOnlyDictionary<string, object> Parameters
     {
       get
@@ -176,16 +230,27 @@ namespace OnlineShop
     }
     private IDictionary<string, object> _parameters = new Dictionary<string, object>();
 
+    /// <summary>
+    /// Ads a Parameter to the Dictionary
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
     public void AddParameter(string name, object value)
     {
       _parameters.Add(name, value);
     }
 
+    /// <summary>
+    /// Disposes the Database
+    /// </summary>
     public void Dispose()
     {
       _db.Dispose();
     }
 
+    /// <summary>
+    /// Executes the SqliteQuery
+    /// </summary>
     public void Execute()
     {
       _command = new SQLiteCommand(_db.Connection);
