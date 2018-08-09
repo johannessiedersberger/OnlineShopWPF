@@ -47,17 +47,12 @@ namespace OnlineShop
     /// <returns></returns>
     public int GetId(IDatabase db)
     {
-      using (var getID = db.CreateCommand(CommandSelectID))
+      using (var getID = db.CreateQueryCommand(CommandSelectID))
       {
-        db.Open();
-        getID.Parameters.Add(db.CreateParameter("$name", Name));
-        IDataReader reader = getID.ExecuteReader();
+        getID.AddParameter("$name", Name);
+        IReader reader = getID.ExecuteReader();
 
-        int id = 0;
-        while (reader.Read())
-          id = int.Parse(reader[0].ToString());
-        db.Close();
-        return id;
+        return 0;
       }
     }
 
@@ -67,15 +62,13 @@ namespace OnlineShop
     /// <param name="db"></param>
     public void WriteToDatabase(IDatabase db)
     {
-      using (var createCPU = db.CreateCommand(CommandAddCPU))
+      using (var createCPU = db.CreateNonQueryCommand(CommandAddCPU))
       {
-        db.Open();
-        createCPU.Parameters.Add(db.CreateParameter("$id", null));
-        createCPU.Parameters.Add(db.CreateParameter("$count", Count.ToString()));
-        createCPU.Parameters.Add(db.CreateParameter("$clockRate", ClockRate.ToString()));
-        createCPU.Parameters.Add(db.CreateParameter("$name", Name));
-        createCPU.ExecuteNonQuery();
-        db.Close();
+        createCPU.AddParameter("$id", null);
+        createCPU.AddParameter("$count", Count.ToString());
+        createCPU.AddParameter("$clockRate", ClockRate.ToString());
+        createCPU.AddParameter("$name", Name);
+        createCPU.Execute();
       }
     }
 

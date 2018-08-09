@@ -5,17 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace OnlineShop
 {
-  class SqliteDatabase : IDatabase
+  public class SqliteDatabase : IDatabase
   {
     /// <summary>
     /// Connection to the Database
     /// </summary>
     public string ConnectionString { get; private set; }
 
-    private SQLiteConnection _connection;
+    public SQLiteConnection Connection { get;private set;}
      
     /// <summary>
     /// Creates the Connection to the Database
@@ -24,15 +27,8 @@ namespace OnlineShop
     public SqliteDatabase(string fileName)
     {
       ConnectionString = fileName;
-      _connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", Shop.file));
-    }
-
-    /// <summary>
-    /// Closes the Databse
-    /// </summary>
-    public void Close()
-    {
-      _connection.Close();
+      Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", Shop.file));
+      Connection.Open();
     }
 
     /// <summary>
@@ -40,22 +36,18 @@ namespace OnlineShop
     /// </summary>
     /// <param name="commandText">The command to execute</param>
     /// <returns></returns>
-    public IDbCommand CreateCommand(string commandText)
+    public IQueryCommand CreateQueryCommand(string commandText)
     {
-      SQLiteCommand command = new SQLiteCommand(_connection);
+      var command = new SqliteQueryCommand(this);
       command.CommandText = commandText;
       return command;
     }
 
-    /// <summary>
-    /// Creates a Parameter for a SqliteQuery
-    /// </summary>
-    /// <param name="parameterName">The parameter</param>
-    /// <param name="value">The value</param>
-    /// <returns></returns>
-    public IDataParameter CreateParameter(string parameterName, string value)
+    public INonQueryCommand CreateNonQueryCommand(string commandText)
     {
-      return new SQLiteParameter(parameterName, value);
+      var sqliteCommand = new SqliteNonQueryCommand(this);
+      sqliteCommand.CommandText = commandText;
+      return sqliteCommand;
     }
 
     /// <summary>
@@ -63,15 +55,126 @@ namespace OnlineShop
     /// </summary>
     public void Dispose()
     {
-      _connection.Dispose();
-    }
-
-    /// <summary>
-    /// Opens the Databse
-    /// </summary>
-    public void Open()
-    {
-      _connection.Open();
+      //Connection.Dispose();
     }
   }
+
+  public class SqliteQueryCommand : IQueryCommand
+  {
+    public string CommandText { get; set; }
+    public SqliteDatabase _db;
+    private SQLiteCommand _command;
+
+    public SqliteQueryCommand(SqliteDatabase db)
+    {
+      _db = db;
+    }
+
+    public IReadOnlyDictionary<string, object> Parameters
+    {
+      get
+      {
+        return new ReadOnlyDictionary<string, object>(_parameters);
+      }
+    }
+    private IDictionary<string, object> _parameters = new Dictionary<string, object>();
+
+    public void AddParameter(string name, object value)
+    {
+      _parameters.Add(name, value);
+    }
+
+    public void Dispose()
+    {
+      _db.Dispose();
+    }
+
+    public IReader ExecuteReader()
+    {
+      _command = new SQLiteCommand(_db.Connection);
+      _command.CommandText = CommandText;
+      foreach(var p in Parameters)
+      {
+        _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
+      }
+      
+      return new SqliteDataReader(_command);
+    }
+  }
+
+  public class SqliteDataReader : IReader
+  {
+    private SQLiteCommand _command;
+
+    public SqliteDataReader(SQLiteCommand command)
+    {
+      _command = command;
+      SQLiteDataReader reader = _command.ExecuteReader();
+      _values = ToDictionary(reader.GetValues());
+    }
+
+    public static IDictionary<string, string> ToDictionary(NameValueCollection col)
+    {
+      IDictionary<string, string> dict = new Dictionary<string, string>();
+      foreach (var k in col.AllKeys)
+      {
+        dict.Add(k, col[k]);
+      }
+      return dict;
+    }
+
+    public IReadOnlyDictionary<string,string> Values
+    {
+      get { return new ReadOnlyDictionary<string, string>(_values); }
+    }
+    private readonly IDictionary<string,string> _values = new Dictionary<string, string>();
+
+    public void Dispose()
+    {
+      _command.Dispose();
+    }
+  }
+
+  public class SqliteNonQueryCommand : INonQueryCommand
+  {
+    public string CommandText { get; set; }
+    private SqliteDatabase _db;
+    private SQLiteCommand _command;
+
+    public SqliteNonQueryCommand(SqliteDatabase db)
+    {
+      _db = db;
+    }
+
+    public IReadOnlyDictionary<string, object> Parameters
+    {
+      get
+      {
+        return new ReadOnlyDictionary<string, object>(_parameters);
+      }
+    }
+    private IDictionary<string, object> _parameters = new Dictionary<string, object>();
+
+    public void AddParameter(string name, object value)
+    {
+      _parameters.Add(name, value);
+    }
+
+    public void Dispose()
+    {
+      _db.Dispose();
+    }
+
+    public void Execute()
+    {
+      _command = new SQLiteCommand(_db.Connection);
+      _command.CommandText = CommandText;
+      foreach(var p in Parameters)
+      {
+        _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
+      }
+      _command.ExecuteNonQuery();
+    }
+  }
+
 }

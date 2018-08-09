@@ -14,36 +14,19 @@ namespace OnlineShop
   public interface IDatabase : IDisposable
   {
     /// <summary>
-    /// Information of connecting to a database.
-    /// </summary>
-    string ConnectionString { get; } // TODO: weg
-
-    /// <summary>
-    /// Creates a sql query.
+    /// Creates a sql query that returns something
     /// </summary>
     /// <param name="commandText">Query statement</param>
     /// <returns>A sql query that can be executed.</returns>
-    IDbCommand CreateCommand(string commandText);
-
-    // INonQueryCommand CreateNonQueryCommand(string commandText);
+    IQueryCommand CreateQueryCommand(string commandText);
 
     /// <summary>
-    /// Creates parameters for a sql query.
+    /// Creates a sql query that returns nothing
     /// </summary>
-    /// <param name="parameterName">The parameter to change</param>
-    /// <param name="value">The value for the parameter</param>
+    /// <param name="commandText"></param>
     /// <returns></returns>
-    IDataParameter CreateParameter(string parameterName, string value); // TODO: vom command
+    INonQueryCommand CreateNonQueryCommand(string commandText);
 
-    /// <summary>
-    /// Opens the database.
-    /// </summary>
-    void Open(); // TODO: das macht der ctor
-
-    /// <summary>
-    /// Closes the database.
-    /// </summary>
-    void Close(); // => Dispose();
   }
 
   public interface IDatabaseCommand : IDisposable
@@ -64,11 +47,20 @@ namespace OnlineShop
   public interface INonQueryCommand : IDatabaseCommand
   {
     /// <summary>
-    /// Executes this command.
+    /// Executes this command
     /// </summary>
     void Execute();
   }
 
+  public interface IQueryCommand : IDatabaseCommand
+  {
+    IReader ExecuteReader();
+  }
+
+  public interface IReader : IDisposable
+  {
+    IReadOnlyDictionary<string, string> Values { get; }
+  }
 
   class FakeNonQueryCommand : INonQueryCommand
   {
@@ -115,5 +107,45 @@ namespace OnlineShop
     public bool WasExecuted { get; private set; } = false;
 
     #endregion
+  }
+
+  class FakeQueryCommand : IQueryCommand // TODO: Complete Interface
+  {
+    public IReadOnlyDictionary<string, object> Parameters => throw new NotImplementedException();
+
+    public void AddParameter(string name, object value)
+    {
+      throw new NotImplementedException();
+    }
+
+    public void Dispose()
+    {
+      throw new NotImplementedException();
+    }
+
+    public IReader ExecuteReader()
+    {
+      throw new NotImplementedException();
+    }
+  }
+
+  class FakeDataBase : IDatabase
+  {
+    public INonQueryCommand CreateNonQueryCommand(string commandText)
+    {
+      return new FakeNonQueryCommand();
+    }
+
+    public void Dispose()
+    {
+      WasDisposed = true;
+    }
+
+    public IQueryCommand CreateQueryCommand(string commandText)
+    {
+      return new FakeQueryCommand();
+    }
+
+    public bool WasDisposed { get; private set; } = false;
   }
 }

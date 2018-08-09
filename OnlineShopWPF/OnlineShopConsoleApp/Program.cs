@@ -11,29 +11,30 @@ namespace OnlineShopConsoleApp
   {
     static void Main(string[] args)
     {
-      HardDrive hd = new HardDrive(11, "ssd");
+      SqliteDatabase db = new SqliteDatabase(Shop.file);
       CPU cpu = new CPU(4, 4.4, "INTEL CORE i7");
-      Product p = new Product("Dell G3 17", 829.99);
+      cpu.WriteToDatabase(db);
+      int id = cpu.GetId(db);
     }
 
-    static void CreateHPNotebook()
-    {
-      //OMEN by HP 17 Gaming Notebook
-      Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
-      CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
-      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
-      HardDrive h = new HardDrive(256, "ssd");
+    //static void CreateHPNotebook()
+    //{
+    //  //OMEN by HP 17 Gaming Notebook
+    //  Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
+    //  CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
+    //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
+    //  HardDrive h = new HardDrive(256, "ssd");
      
-    }
+    //}
 
-    static void CreateDellNotebook()
-    {
-      //OMEN by HP 17 Gaming Notebook
-      Product p = new Product("Dell G3 17", 828.99);
-      CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
-      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
-      HardDrive h = new HardDrive(128, "ssd");
+    //static void CreateDellNotebook()
+    //{
+    //  //OMEN by HP 17 Gaming Notebook
+    //  Product p = new Product("Dell G3 17", 828.99);
+    //  CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
+    //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
+    //  HardDrive h = new HardDrive(128, "ssd");
       
-    }
+    //}
   }
 }
