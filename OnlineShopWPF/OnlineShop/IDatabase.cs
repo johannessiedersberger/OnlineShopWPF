@@ -59,7 +59,9 @@ namespace OnlineShop
 
   public interface IReader : IDisposable
   {
-    IReadOnlyDictionary<string, string> Values { get; }
+    IReadOnlyDictionary<string, object> Values { get; }
+
+    object this[int i] { get; }
   }
 
   class FakeNonQueryCommand : INonQueryCommand

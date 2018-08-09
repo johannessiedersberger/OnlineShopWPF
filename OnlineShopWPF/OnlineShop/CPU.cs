@@ -51,7 +51,15 @@ namespace OnlineShop
       {
         getID.AddParameter("$name", Name);
         IReader reader = getID.ExecuteReader();
+        int id = int.Parse(reader[0].ToString());
+        return int.Parse(reader[0].ToString());
+      }
+    }
 
+    public int ID
+    {
+      get
+      {
         return 0;
       }
     }

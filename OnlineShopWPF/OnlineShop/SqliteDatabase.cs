@@ -11,15 +11,22 @@ using System.ComponentModel;
 
 namespace OnlineShop
 {
+
+  /// <summary>
+  /// Database that uses SQLITE
+  /// </summary>
   public class SqliteDatabase : IDatabase
   {
     /// <summary>
-    /// Connection to the Database
+    /// Source of the Database
     /// </summary>
     public string ConnectionString { get; private set; }
 
-    public SQLiteConnection Connection { get;private set;}
-     
+    /// <summary>
+    /// Connection to the Database
+    /// </summary>
+    public SQLiteConnection Connection { get; private set; }
+
     /// <summary>
     /// Creates the Connection to the Database
     /// </summary>
@@ -43,6 +50,11 @@ namespace OnlineShop
       return command;
     }
 
+    /// <summary>
+    /// Creats a new SqliteNonQueryCommand
+    /// </summary>
+    /// <param name="commandText">the command</param>
+    /// <returns></returns>
     public INonQueryCommand CreateNonQueryCommand(string commandText)
     {
       var sqliteCommand = new SqliteNonQueryCommand(this);
@@ -62,12 +74,12 @@ namespace OnlineShop
   public class SqliteQueryCommand : IQueryCommand
   {
     public string CommandText { get; set; }
-    public SqliteDatabase _db;
-    private SQLiteCommand _command;
+    public SqliteDatabase DB { get; private set; }
+    public SQLiteCommand Command { get; private set; }
 
     public SqliteQueryCommand(SqliteDatabase db)
     {
-      _db = db;
+      DB = db;
     }
 
     public IReadOnlyDictionary<string, object> Parameters
@@ -86,19 +98,19 @@ namespace OnlineShop
 
     public void Dispose()
     {
-      _db.Dispose();
+      DB.Dispose();
     }
 
     public IReader ExecuteReader()
     {
-      _command = new SQLiteCommand(_db.Connection);
-      _command.CommandText = CommandText;
-      foreach(var p in Parameters)
+      Command = new SQLiteCommand(DB.Connection);
+      Command.CommandText = CommandText;
+      foreach (var p in Parameters)
       {
-        _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
+        Command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
-      
-      return new SqliteDataReader(_command);
+
+      return new SqliteDataReader(Command);
     }
   }
 
@@ -109,13 +121,22 @@ namespace OnlineShop
     public SqliteDataReader(SQLiteCommand command)
     {
       _command = command;
-      SQLiteDataReader reader = _command.ExecuteReader();
-      _values = ToDictionary(reader.GetValues());
     }
 
-    public static IDictionary<string, string> ToDictionary(NameValueCollection col)
+    public object this[int i]
     {
-      IDictionary<string, string> dict = new Dictionary<string, string>();
+      get
+      {
+        SQLiteDataReader reader = _command.ExecuteReader();
+        reader.Read();
+        return reader[i];
+      }
+    }
+
+    public static IDictionary<string, object> ToDictionary(NameValueCollection col)
+    {
+      IDictionary<string, object> dict = new Dictionary<string, object>();
+
       foreach (var k in col.AllKeys)
       {
         dict.Add(k, col[k]);
@@ -123,11 +144,11 @@ namespace OnlineShop
       return dict;
     }
 
-    public IReadOnlyDictionary<string,string> Values
+    public IReadOnlyDictionary<string, object> Values
     {
-      get { return new ReadOnlyDictionary<string, string>(_values); }
+      get { return new ReadOnlyDictionary<string, object>(_values); }
     }
-    private readonly IDictionary<string,string> _values = new Dictionary<string, string>();
+    private readonly IDictionary<string, object> _values = new Dictionary<string, object>();
 
     public void Dispose()
     {
@@ -169,7 +190,7 @@ namespace OnlineShop
     {
       _command = new SQLiteCommand(_db.Connection);
       _command.CommandText = CommandText;
-      foreach(var p in Parameters)
+      foreach (var p in Parameters)
       {
         _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
