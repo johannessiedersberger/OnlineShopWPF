@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,8 @@ namespace OnlineShopTest
 {
   public class FakeDataBase : IDatabase
   {
-    public List<FakeNonQueryCommand> NonQueries { get; private set; }
-    public List<FakeQueryCommand> Queryies { get; private set; }
+    public List<FakeNonQueryCommand> NonQueries { get; private set; } = new List<FakeNonQueryCommand>();
+    public List<FakeQueryCommand> Queryies { get; private set; } = new List<FakeQueryCommand>();
 
     public INonQueryCommand CreateNonQueryCommand(string commandText)
     {

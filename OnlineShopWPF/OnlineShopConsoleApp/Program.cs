@@ -12,7 +12,7 @@ namespace OnlineShopConsoleApp
     static void Main(string[] args)
     {
       SqliteDatabase db = new SqliteDatabase(Shop.file);
-      CPU cpu = new CPU(db, 4, 4.4, "INTEL CORE i7");
+      CPU cpu = new CPU(4, 4.4, "INTEL CORE i7");
       cpu.WriteToDatabase(db);
       int id = cpu.Id;
     }

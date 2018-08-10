@@ -31,12 +31,11 @@ namespace OnlineShop
     /// <param name="count">The number of kernels</param>
     /// <param name="clockRate">The clock rate in ghz </param>
     /// <param name="name">The name of the cpu </param>
-    public CPU(IDatabase db, int count, double clockRate, string name)
+    public CPU(int count, double clockRate, string name)
     {
       Count = count;
       ClockRate = clockRate;
       Name = name;
-      Database = db;
     }
 
     private const string CommandSelectID = "SELECT cpu_id FROM Cpu WHERE name = $name";
@@ -48,6 +47,9 @@ namespace OnlineShop
     {
       get
       {
+        if (Database == null)
+          throw new NullReferenceException("The Database does not exist");
+
         using (var getID = Database.CreateQueryCommand(CommandSelectID))
         {
           getID.AddParameter("$name", Name);
@@ -63,11 +65,12 @@ namespace OnlineShop
     /// <param name="db"></param>
     public void WriteToDatabase(IDatabase db)
     {
+      Database = db;
       using (var createCPU = db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);
-        createCPU.AddParameter("$count", Count.ToString());
-        createCPU.AddParameter("$clockRate", ClockRate.ToString());
+        createCPU.AddParameter("$count", Count);
+        createCPU.AddParameter("$clockRate", ClockRate);
         createCPU.AddParameter("$name", Name);
         createCPU.Execute();
       }
