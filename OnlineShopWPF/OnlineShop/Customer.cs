@@ -1,84 +1,114 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Data;
-//namespace OnlineShop
-//{
-//  public class CustomerData
-//  {
-//    public string Email;
-//    public string Password;
-//    public string FirstName;
-//    public string LastName;
-//    public string StreetName;
-//    public int StreetNumber;
-//    public string City;
-//    public int ZipCode;
-//    public int CreditCardNumber;
-//    public int PhoneNumber;
-//  }
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data;
+namespace OnlineShop
+{
+  /// <summary>
+  /// Stores the complete Customer Data
+  /// </summary>
+  public class CustomerData
+  {
+    /// <summary>
+    /// The Customer Email
+    /// </summary>
+    public string Email;
+    /// <summary>
+    /// The Customer Password
+    /// </summary>
+    public string Password;
+    /// <summary>
+    /// The Customers First name
+    /// </summary>
+    public string FirstName;
+    /// <summary>
+    /// The Customers Last name
+    /// </summary>
+    public string LastName;
+    /// <summary>
+    /// The Customers street name
+    /// </summary>
+    public string StreetName;
+    /// <summary>
+    /// The Customers Street number
+    /// </summary>
+    public int StreetNumber;
+    /// <summary>
+    /// The Customers City
+    /// </summary>
+    public string City;
+    /// <summary>
+    /// The Customers ZipCode
+    /// </summary>
+    public int ZipCode;
+    /// <summary>
+    /// The Customers Creditcardnumber
+    /// </summary>
+    public int CreditCardNumber;
+    /// <summary>
+    /// The Customers Phone Number
+    /// </summary>
+    public int PhoneNumber;
+  }
 
-//  public class Customer
-//  {
-//    public CustomerData CustomerData { get; private set; }
+  public class Customer
+  {
+    /// <summary>
+    /// Stores the complete Data from The Customer
+    /// </summary>
+    public CustomerData CustomerData { get; private set; }
 
-//    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+    private IDatabase _database;
 
-//    public Customer(CustomerData customerData)
-//    {
-//      CustomerData = customerData;
+    public Customer(IDatabase database, CustomerData customerData)
+    {
+      CustomerData = customerData;
+      _database = database;
+
+    }
+
+    public void WriteToDataBase(IDatabase db)
+    {
+      using (var createCustomer = _database.CreateNonQueryCommand(CommandAddCustomer))
+      {
+        createCustomer.AddParameter("$id", null);
+        createCustomer.AddParameter("$email", CustomerData.Email);
+        createCustomer.AddParameter("$password", CustomerData.Password);
+        createCustomer.AddParameter("$firstName", CustomerData.FirstName);
+        createCustomer.AddParameter("$lastName", CustomerData.LastName);
+        createCustomer.AddParameter("$streetName", CustomerData.StreetName);
+        createCustomer.AddParameter("$streetNumber", CustomerData.StreetNumber.ToString());
+        createCustomer.AddParameter("$city", CustomerData.City);
+        createCustomer.AddParameter("$zipCode", CustomerData.ZipCode.ToString());
+        createCustomer.AddParameter("$creditCardNumber", CustomerData.CreditCardNumber.ToString());
+        createCustomer.AddParameter("$phone", CustomerData.PhoneNumber.ToString());
+        createCustomer.Execute();
+      }
+    }
+
+    private const string CommandAddCustomer
+      = "INSERT INTO Customers(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
+                              " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
 
 
-//      if (GetId(customerData.Email) != 0)
-//        return;
+    /// <summary>
+    /// Gets the ID from the Customer
+    /// </summary>
+    public int Id
+    {
+      get
+      {
+        using (var getID = _database.CreateQueryCommand(CommandSelectID))
+        {
+          getID.AddParameter("$email", CustomerData.Email);
+          IReader reader = getID.ExecuteReader();
+          return Convert.ToInt16(reader[0]);
+        }
+      }
+    }
 
-//      using (var createCustomer = database.CreateQueryCommand(CommandAddCustomer))
-//      {
-//        database.Open();
-//        createCustomer.Parameters.Add(database.CreateParameter("$id", null));
-//        createCustomer.Parameters.Add(database.CreateParameter("$email", customerData.Email));
-//        createCustomer.Parameters.Add(database.CreateParameter("$password", customerData.Password));
-//        createCustomer.Parameters.Add(database.CreateParameter("$firstName", customerData.FirstName));
-//        createCustomer.Parameters.Add(database.CreateParameter("$lastName", customerData.LastName));
-//        createCustomer.Parameters.Add(database.CreateParameter("$streetName", customerData.StreetName));
-//        createCustomer.Parameters.Add(database.CreateParameter("$streetNumber", customerData.StreetNumber.ToString()));
-//        createCustomer.Parameters.Add(database.CreateParameter("$city", customerData.City));
-//        createCustomer.Parameters.Add(database.CreateParameter("$zipCode", customerData.ZipCode.ToString()));
-//        createCustomer.Parameters.Add(database.CreateParameter("$creditCardNumber", customerData.CreditCardNumber.ToString()));
-//        createCustomer.Parameters.Add(database.CreateParameter("$phone", customerData.PhoneNumber.ToString()));
-//        createCustomer.ExecuteNonQuery();
-//        database.Dispose();
-//      }
-//    }
-
-//    private const string CommandAddCustomer
-//      = "INSERT INTO Customers(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
-//                              " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
-
-//    /// <summary>
-//    /// Returns the id from the Databse 
-//    /// </summary>
-//    /// <param name="memory"></param>
-//    /// <param name="type"></param>
-//    /// <returns></returns>
-//    public int GetId(string email)
-//    {
-//      using (var getID = database.CreateQueryCommand(CommandSelectID))
-//      {
-//        database.Open();
-//        getID.Parameters.Add(database.CreateParameter("$email", email));
-//        IDataReader reader = getID.ExecuteReader();
-
-//        int id = 0;
-//        while (reader.Read())
-//          id = int.Parse(reader[0].ToString());
-//        database.Dispose();
-//        return id;
-//      }
-//    }
-
-//    private const string CommandSelectID = "SELECT customer_id FROM Customer WHERE email = $email";
-//  }
-//}
+    private const string CommandSelectID = "SELECT customer_id FROM Customer WHERE email = $email";
+  }
+}

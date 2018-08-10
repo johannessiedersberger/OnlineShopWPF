@@ -23,49 +23,42 @@ namespace OnlineShop
     /// </summary>
     public string Name { get; private set; }
 
+    public IDatabase Database { get; private set; }
+
     /// <summary>
-    /// 
+    /// Saves the Parameters as members
     /// </summary>
     /// <param name="count">The number of kernels</param>
     /// <param name="clockRate">The clock rate in ghz </param>
     /// <param name="name">The name of the cpu </param>
-    public CPU(int count, double clockRate, string name)
+    public CPU(IDatabase db, int count, double clockRate, string name)
     {
       Count = count;
       ClockRate = clockRate;
       Name = name;
+      Database = db;
     }
 
-    public const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
+    private const string CommandSelectID = "SELECT cpu_id FROM Cpu WHERE name = $name";
 
     /// <summary>
-    /// Returns the id from the Databse
-    /// If The Object does not exist in the database, the method returns 0
+    /// Gets the ID from the CPU
     /// </summary>
-    /// <param name="memory"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public int GetId(IDatabase db)
-    {
-      using (var getID = db.CreateQueryCommand(CommandSelectID))
-      {
-        getID.AddParameter("$name", Name);
-        IReader reader = getID.ExecuteReader();
-        int id = int.Parse(reader[0].ToString());
-        return int.Parse(reader[0].ToString());
-      }
-    }
-
-    public int ID
+    public int Id
     {
       get
       {
-        return 0;
+        using (var getID = Database.CreateQueryCommand(CommandSelectID))
+        {
+          getID.AddParameter("$name", Name);
+          IReader reader = getID.ExecuteReader();
+          return Convert.ToInt16(reader[0]);
+        }
       }
     }
 
     /// <summary>
-    /// 
+    /// Writes the CPU into the Database
     /// </summary>
     /// <param name="db"></param>
     public void WriteToDatabase(IDatabase db)
@@ -80,7 +73,7 @@ namespace OnlineShop
       }
     }
 
-    private const string CommandSelectID = "SELECT cpu_id FROM Cpu WHERE name = $name";
+    private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
 
   }
 }

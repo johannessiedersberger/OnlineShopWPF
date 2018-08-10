@@ -83,8 +83,8 @@ namespace OnlineShop
     /// <summary>
     /// The Sqlite Database Object
     /// </summary>
-    public SqliteDatabase DB { get; private set; }
-    
+    private SqliteDatabase _db;
+
     private SQLiteCommand _command;
 
     /// <summary>
@@ -93,7 +93,7 @@ namespace OnlineShop
     /// <param name="db"></param>
     public SqliteQueryCommand(SqliteDatabase db)
     {
-      DB = db;
+      _db = db;
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ namespace OnlineShop
     /// </summary>
     public void Dispose()
     {
-      DB.Dispose();
+      _db.Dispose();
     }
 
     /// <summary>
@@ -132,7 +132,7 @@ namespace OnlineShop
     /// <returns></returns>
     public IReader ExecuteReader()
     {
-      _command = new SQLiteCommand(DB.Connection);
+      _command = new SQLiteCommand(_db.Connection);
       _command.CommandText = CommandText;
       foreach (var p in Parameters)
       {
@@ -149,31 +149,25 @@ namespace OnlineShop
   public class SqliteDataReader : IReader
   {
     private SQLiteCommand _command;
-
+    private SQLiteDataReader _reader;
     /// <summary>
     /// Saves the command as a member
+    /// Executes the reader 
+    /// Saves The Values of the reader in the Dictionary
     /// </summary>
     /// <param name="command"></param>
     public SqliteDataReader(SQLiteCommand command)
     {
       _command = command;
+      _reader = _command.ExecuteReader();
+      _values = ToDictionary(_reader.GetValues());
     }
 
     /// <summary>
-    /// Gets the data from the column by the index
+    /// Converts a NameValueCollection to a Dictionary
     /// </summary>
-    /// <param name="i"></param>
+    /// <param name="col"></param>
     /// <returns></returns>
-    public object this[int i]
-    {
-      get
-      {
-        SQLiteDataReader reader = _command.ExecuteReader();
-        reader.Read();
-        return reader[i];
-      }
-    }
-
     public static IDictionary<string, object> ToDictionary(NameValueCollection col)
     {
       IDictionary<string, object> dict = new Dictionary<string, object>();
@@ -185,11 +179,28 @@ namespace OnlineShop
       return dict;
     }
 
+    /// <summary>
+    /// Contains the Values that were 
+    /// </summary>
     public IReadOnlyDictionary<string, object> Values
     {
       get { return new ReadOnlyDictionary<string, object>(_values); }
     }
     private readonly IDictionary<string, object> _values = new Dictionary<string, object>();
+
+    /// <summary>
+    /// Gets the data from the column by the index
+    /// </summary>
+    /// <param name="i"></param>
+    /// <returns></returns>
+    public object this[int i]
+    {
+      get
+      {    
+        _reader.Read(); 
+        return _reader.GetValue(i);
+      }
+    }
 
     public void Dispose()
     {
@@ -207,7 +218,7 @@ namespace OnlineShop
     /// </summary>
     public string CommandText { get; set; }
     private SqliteDatabase _db;
-    private SQLiteCommand _command;
+
 
     /// <summary>
     /// Save the database as a member
@@ -253,7 +264,7 @@ namespace OnlineShop
     /// </summary>
     public void Execute()
     {
-      _command = new SQLiteCommand(_db.Connection);
+      SQLiteCommand _command = new SQLiteCommand(_db.Connection);
       _command.CommandText = CommandText;
       foreach (var p in Parameters)
       {
@@ -262,5 +273,4 @@ namespace OnlineShop
       _command.ExecuteNonQuery();
     }
   }
-
 }
