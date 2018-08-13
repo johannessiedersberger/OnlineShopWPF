@@ -108,5 +108,11 @@ namespace OnlineShopTest
       Assert.That(graphic.Id, Throws.TypeOf(typeof(NullReferenceException)));
     }
     #endregion
+
+    #region HardDrive
+    [Test]
+
+
+    #endregion
   }
 }

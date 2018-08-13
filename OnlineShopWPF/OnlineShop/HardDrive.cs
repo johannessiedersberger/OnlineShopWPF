@@ -1,75 +1,97 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Data.SQLite;
-//using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SQLite;
+using System.Data;
 
-//namespace OnlineShop
-//{
-//  public class HardDrive
-//  {
-//    /// <summary>
-//    /// The Memory of the HardDisk in GB
-//    /// </summary>
-//    public int Memory { get; private set; }
-//    /// <summary>
-//    /// The type of the HardDisk (SSD or HDD)
-//    /// </summary>
-//    public string Type { get; private set; }
+namespace OnlineShop
+{
+  /// <summary>
+  /// The HardDirve 
+  /// </summary>
+  public class HardDrive
+  {
+    /// <summary>
+    /// The Memory of the HardDisk in GB
+    /// </summary>
+    public int Memory { get; private set; }
+    /// <summary>
+    /// The type of the HardDisk (SSD or HDD)
+    /// </summary>
+    public string Type { get; private set; }
 
-//    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+    private IDatabase _database;
 
-//    /// <summary>
-//    /// Creates a HardDrive in the Database
-//    /// </summary>
-//    /// <param name="memory"></param>
-//    /// <param name="type"></param>
-//    public HardDrive(int memory, string type)
-//    {
-//      Memory = memory;
-//      Type = type;
+    /// <summary>
+    /// Creates a HardDrive in the Database
+    /// </summary>
+    /// <param name="memory"></param>
+    /// <param name="type"></param>
+    public HardDrive(int memory, string type)
+    {
+      Memory = memory;
+      Type = type 
+    }
 
-//      if (GetId(memory, type) != 0)
-//        return;
+    public void WriteToDatabase(IDatabase db)
+    {
+      _database = db;
+      using (var createHardDrive = _database.CreateNonQueryCommand(CommandAddHardDrive))
+      {
+        createHardDrive.AddParameter("$id", null);
+        createHardDrive.AddParameter("$type", Type);
+        createHardDrive.AddParameter("$memory", Memory);
+        createHardDrive.Execute();
+      }
+    }
 
-//      using (var createHardDrive = database.CreateQueryCommand(CommandAddHardDrive))
-//      {
-//        database.Open();
-//        createHardDrive.Parameters.Add(database.CreateParameter("$id", null));
-//        createHardDrive.Parameters.Add(database.CreateParameter("$type", type));
-//        createHardDrive.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
-//        createHardDrive.ExecuteNonQuery();
-//        database.Dispose();
-//      }
-//    }
+    private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
 
-//    private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
+    /// <summary>
+    /// Returns the id from the Databse 
+    /// </summary>
+    /// <param name="memory"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public int GetId(int memory, string type)
+    {
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
+      {
+        _database.Open();
+        getID.Parameters.Add(_database.CreateParameter("$memory", memory.ToString()));
+        getID.Parameters.Add(_database.CreateParameter("$type", type));
+        IDataReader reader = getID.ExecuteReader();
 
-//    /// <summary>
-//    /// Returns the id from the Databse 
-//    /// </summary>
-//    /// <param name="memory"></param>
-//    /// <param name="type"></param>
-//    /// <returns></returns>
-//    public int GetId(int memory, string type)
-//    {
-//      using (var getID = database.CreateQueryCommand(CommandSelectID))
-//      {
-//        database.Open();
-//        getID.Parameters.Add(database.CreateParameter("$memory", memory.ToString()));
-//        getID.Parameters.Add(database.CreateParameter("$type", type));
-//        IDataReader reader = getID.ExecuteReader();
-        
-//        int id = 0;
-//        while (reader.Read())
-//          id = int.Parse(reader[0].ToString());
-//        database.Dispose();
-//        return id;     
-//      }
-//    }
+        int id = 0;
+        while (reader.Read())
+          id = int.Parse(reader[0].ToString());
+        _database.Dispose();
+        return id;
+      }
+    }
 
-//    private const string CommandSelectID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
-//  }
-//}
+    /// <summary>
+    /// Gets the ID from the Graphic-Card
+    /// </summary>
+    public int Id
+    {
+      get
+      {
+        if (_database == null)
+          throw new NullReferenceException("No Database exists");
+
+        using (var getID = _database.CreateQueryCommand(CommandSelectID))
+        {
+          getID.AddParameter("$memory", Memory);
+          getID.AddParameter("$type", Type);
+          IReader reader = getID.ExecuteReader();
+          return Convert.ToInt16(reader[0]);
+        }
+      }
+    }
+
+    private const string CommandSelectID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
+  }
+}
