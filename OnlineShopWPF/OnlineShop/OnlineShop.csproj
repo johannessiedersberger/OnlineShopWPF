@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="CPU.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="DataException.cs" />
     <Compile Include="Graphic.cs" />
     <Compile Include="HardDrive.cs" />
     <Compile Include="IDatabase.cs" />

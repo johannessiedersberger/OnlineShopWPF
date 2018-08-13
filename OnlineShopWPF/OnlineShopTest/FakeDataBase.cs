@@ -74,9 +74,10 @@ namespace OnlineShopTest
 
     #region Execute
 
-    public void Execute()
+    public int Execute()
     {
       WasExecuted = true;
+      return 0;
     }
 
     public bool WasExecuted { get; private set; } = false;

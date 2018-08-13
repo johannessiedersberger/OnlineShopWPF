@@ -262,7 +262,7 @@ namespace OnlineShop
     /// <summary>
     /// Executes the SqliteQuery
     /// </summary>
-    public void Execute()
+    public int Execute()
     {
       SQLiteCommand _command = new SQLiteCommand(_db.Connection);
       _command.CommandText = CommandText;
@@ -270,7 +270,7 @@ namespace OnlineShop
       {
         _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
-      _command.ExecuteNonQuery();
+      return _command.ExecuteNonQuery();
     }
   }
 }

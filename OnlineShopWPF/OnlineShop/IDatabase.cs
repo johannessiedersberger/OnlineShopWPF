@@ -49,7 +49,7 @@ namespace OnlineShop
     /// <summary>
     /// Executes this command
     /// </summary>
-    void Execute();
+    int Execute();
   }
 
   public interface IQueryCommand : IDatabaseCommand

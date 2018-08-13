@@ -25,7 +25,7 @@ namespace OnlineShop
     private IDatabase _database;
 
     /// <summary>
-    /// Creates a HardDrive in the Database
+    /// Assign the Member variables 
     /// </summary>
     /// <param name="memory"></param>
     /// <param name="type"></param>
@@ -35,6 +35,10 @@ namespace OnlineShop
       Type = type; 
     }
 
+    /// <summary>
+    /// Writes the HardDrive to the DataBase
+    /// </summary>
+    /// <param name="db"></param>
     public void WriteToDatabase(IDatabase db)
     {
       _database = db;

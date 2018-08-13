@@ -1,74 +1,77 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Data.SQLite;
-//using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SQLite;
+using System.Data;
 
-//namespace OnlineShop
-//{
-//  public class Product
-//  {
-//    /// <summary>
-//    /// The Name of the Product
-//    /// </summary>
-//    public string Name { get; private set; }
-//    /// <summary>
-//    /// The Price of the Product
-//    /// </summary>
-//    public double Price { get; private set; }
+namespace OnlineShop
+{
+  /// <summary>
+  /// The Products that could be bought in the shop
+  /// </summary>
+  public class Product
+  {
+    /// <summary>
+    /// The Name of the Product
+    /// </summary>
+    public string Name { get; private set; }
+    /// <summary>
+    /// The Price of the Product
+    /// </summary>
+    public double Price { get; private set; }
 
-//    private IDatabase database = new SqliteDatabase("OnlineShop.db");
+    private IDatabase _database;
 
-//    /// <summary>
-//    /// Creates the Product in the Database
-//    /// </summary>
-//    /// <param name="name">The name of the Product</param>
-//    /// <param name="price">The price of the Product</param>
-//    public Product(string name, double price)
-//    {
-//      Name = name;
-//      Price = price;
+    /// <summary>
+    /// Assigns the member variables
+    /// </summary>
+    /// <param name="name">The name of the Product</param>
+    /// <param name="price">The price of the Product</param>
+    public Product(string name, double price)
+    {
+      Name = name;
+      Price = price;
+    }
 
-//      if (GetId(name) != 0)
-//        return;
+    /// <summary>
+    /// Writes the Product to the Database
+    /// </summary>
+    /// <param name="database">The database that contains the Products</param>
+    public void WriteToDataBase(IDatabase database)
+    {
+      _database = database;
+      using (var createProduct = _database.CreateNonQueryCommand(CommandAddProduct))
+      {
+        createProduct.AddParameter("$id", null);
+        createProduct.AddParameter("$name", Name);
+        createProduct.AddParameter("$price", Price);
+        createProduct.Execute();
+      }
+    }
 
-//      using (var createProduct = database.CreateQueryCommand(CommandAddProduct))
-//      {
-//        database.Open();
-//        createProduct.Parameters.Add(database.CreateParameter("$id", null));
-//        createProduct.Parameters.Add(database.CreateParameter("$name", name));
-//        createProduct.Parameters.Add(database.CreateParameter("$price", price.ToString()));
-//        createProduct.ExecuteNonQuery();
-//        database.Dispose();
-//      }
-//    }
+    private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
+    
+    /// <summary>
+    /// Gets the ID from the Product
+    /// </summary>
+    public int ID
+    {
+      get
+      {
+        if (_database == null)
+          throw new NullReferenceException("No Database exists");
 
-//    private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
+        using (var getID = _database.CreateQueryCommand(CommandSelectID))
+        {
+          getID.AddParameter("$name", Name);
+          IReader reader = getID.ExecuteReader();
+          return Convert.ToInt16(reader[0]);
+        }
+      }
+    }
 
-//    /// <summary>
-//    /// Returns the id from the Databse 
-//    /// </summary>
-//    /// <param name="memory"></param>
-//    /// <param name="type"></param>
-//    /// <returns></returns>
-//    public int GetId(string name)
-//    {
-//      using (var getID = database.CreateQueryCommand(CommandSelectID))
-//      {
-//        database.Open();
-//        getID.Parameters.Add(database.CreateParameter("$name", name));
-//        IDataReader reader = getID.ExecuteReader();
-
-//        int id = 0;
-//        while (reader.Read())
-//          id = int.Parse(reader[0].ToString());
-//        database.Dispose();
-//        return id;
-//      }
-//    }
-
-//    private const string CommandSelectID = "SELECT product_id FROM Products WHERE name = $name";
-//  }
-//}
+    private const string CommandSelectID = "SELECT product_id FROM Products WHERE name = $name";
+  }
+}
