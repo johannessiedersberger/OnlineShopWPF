@@ -29,7 +29,7 @@ namespace OnlineShop
     /// <summary>
     /// The Database that contains the cpu
     /// </summary>
-    public IDatabase Database { get; private set; }
+    private IDatabase _database;
 
     /// <summary>
     /// Saves the Parameters as members
@@ -53,10 +53,10 @@ namespace OnlineShop
     {
       get
       {
-        if (Database == null)
+        if (_database == null)
           throw new NullReferenceException("The Database does not exist");
 
-        using (var getID = Database.CreateQueryCommand(CommandSelectID))
+        using (var getID = _database.CreateQueryCommand(CommandSelectID))
         {
           getID.AddParameter("$name", Name);
           IReader reader = getID.ExecuteReader();
@@ -71,7 +71,7 @@ namespace OnlineShop
     /// <param name="db">The Database that contains the cpu</param>
     public void WriteToDatabase(IDatabase db)
     {
-      Database = db;
+      _database = db;
       using (var createCPU = db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);

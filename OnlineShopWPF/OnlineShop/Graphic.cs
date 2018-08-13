@@ -28,17 +28,24 @@ namespace OnlineShop
     /// </summary>
     /// <param name="vram">The video RAM of the Graphic-Card</param>
     /// <param name="name">The name of the Graphic-card</param>
-    public Graphic(IDatabase db, int vram, string name)
+    public Graphic(int vram, string name)
     {
       VRAM = vram;
       Name = name;
-      _database = db;
+    }
 
+    /// <summary>
+    /// Writes the Cpu to the databse
+    /// </summary>
+    /// <param name="db">The Database that will contain the cpu</param>
+    public void WriteToDatabase(IDatabase db)
+    {
+      _database = db;
       using (var createGraphic = _database.CreateNonQueryCommand(CommandAddGraphic))
       {
         createGraphic.AddParameter("$id", null);
-        createGraphic.AddParameter("$vram", vram.ToString());
-        createGraphic.AddParameter("$name", name);
+        createGraphic.AddParameter("$vram", VRAM);
+        createGraphic.AddParameter("$name", Name);
         createGraphic.Execute();
       }
     }
@@ -52,6 +59,9 @@ namespace OnlineShop
     {
       get
       {
+        if (_database == null)
+          throw new NullReferenceException("No Database exists");
+
         using(var getID = _database.CreateQueryCommand(CommandSelectID))
         {
           getID.AddParameter("$name", Name);
