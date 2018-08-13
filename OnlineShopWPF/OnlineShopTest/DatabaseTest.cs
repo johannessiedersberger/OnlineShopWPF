@@ -105,14 +105,61 @@ namespace OnlineShopTest
       Graphic graphic = new Graphic(vram, name);
 
       //when /then
-      Assert.That(graphic.Id, Throws.TypeOf(typeof(NullReferenceException)));
+      Assert.That(() => graphic.Id, Throws.TypeOf(typeof(NullReferenceException)));
     }
     #endregion
 
     #region HardDrive
     [Test]
+    public void TestAddHardDrive()
+    {
+      //Given
+      int memory = 4;
+      string type = "ssd";
+      FakeDataBase fakeDB = new FakeDataBase();
+      HardDrive hardDrive= new HardDrive(memory, type);
+      //When
+      hardDrive.WriteToDatabase(fakeDB);
+      //Then
+      Assert.That(fakeDB.NonQueries[0].Parameters["$id"], Is.EqualTo(null));
+      Assert.That(fakeDB.NonQueries[0].Parameters["$type"], Is.EqualTo(type));
+      Assert.That(fakeDB.NonQueries[0].Parameters["$memory"], Is.EqualTo(memory));
+      Assert.That(fakeDB.NonQueries[0].WasExecuted, Is.EqualTo(true));
 
+      Assert.That(hardDrive.Memory, Is.EqualTo(memory));
+      Assert.That(hardDrive.Type, Is.EqualTo(type));
+    }
+
+    [Test]
+    public void TestHardDriveID()
+    {
+      //Given 
+      int memory = 128;
+      string type = "ssd";
+
+      FakeDataBase fakeDB = new FakeDataBase();
+      HardDrive hardDrive = new HardDrive(memory, type);
+      hardDrive.WriteToDatabase(fakeDB);
+      //when /then
+      Assert.That(hardDrive.Id, Is.EqualTo(0));
+    }
+
+    [Test]
+    public void TestHardDriveIDExpception()
+    {
+      //Given 
+      int memory = 128;
+      string type = "ssd";
+
+      FakeDataBase fakeDB = new FakeDataBase();
+      HardDrive harddrive = new HardDrive(memory, type);
+
+      //when /then
+      Assert.That(() => harddrive.Id, Throws.TypeOf(typeof(NullReferenceException)));
+    }
 
     #endregion
+
+
   }
 }

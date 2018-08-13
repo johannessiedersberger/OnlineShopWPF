@@ -32,7 +32,7 @@ namespace OnlineShop
     public HardDrive(int memory, string type)
     {
       Memory = memory;
-      Type = type 
+      Type = type; 
     }
 
     public void WriteToDatabase(IDatabase db)
@@ -48,29 +48,6 @@ namespace OnlineShop
     }
 
     private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
-
-    /// <summary>
-    /// Returns the id from the Databse 
-    /// </summary>
-    /// <param name="memory"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public int GetId(int memory, string type)
-    {
-      using (var getID = _database.CreateQueryCommand(CommandSelectID))
-      {
-        _database.Open();
-        getID.Parameters.Add(_database.CreateParameter("$memory", memory.ToString()));
-        getID.Parameters.Add(_database.CreateParameter("$type", type));
-        IDataReader reader = getID.ExecuteReader();
-
-        int id = 0;
-        while (reader.Read())
-          id = int.Parse(reader[0].ToString());
-        _database.Dispose();
-        return id;
-      }
-    }
 
     /// <summary>
     /// Gets the ID from the Graphic-Card
