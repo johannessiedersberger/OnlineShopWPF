@@ -15,7 +15,7 @@ namespace OnlineShop
   /// <summary>
   /// Database that uses SQLITE
   /// </summary>
-  public class SqliteDatabase : IDatabase
+  public class MySqliteDatabase : IDatabase
   {
     /// <summary>
     /// Source of the Database
@@ -31,7 +31,7 @@ namespace OnlineShop
     /// Creates the Connection to the Database
     /// </summary>
     /// <param name="fileName"></param>
-    public SqliteDatabase(string fileName)
+    public MySqliteDatabase(string fileName)
     {
       ConnectionString = fileName;
       Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", Shop.file));
@@ -45,7 +45,7 @@ namespace OnlineShop
     /// <returns></returns>
     public IQueryCommand CreateQueryCommand(string commandText)
     {
-      var command = new SqliteQueryCommand(this);
+      var command = new MySqliteQueryCommand(this);
       command.CommandText = commandText;
       return command;
     }
@@ -57,7 +57,7 @@ namespace OnlineShop
     /// <returns></returns>
     public INonQueryCommand CreateNonQueryCommand(string commandText)
     {
-      var sqliteCommand = new SqliteNonQueryCommand(this);
+      var sqliteCommand = new MySqliteNonQueryCommand(this);
       sqliteCommand.CommandText = commandText;
       return sqliteCommand;
     }
@@ -74,7 +74,7 @@ namespace OnlineShop
   /// <summary>
   /// SqliteQuery that returns a value
   /// </summary>
-  public class SqliteQueryCommand : IQueryCommand
+  public class MySqliteQueryCommand : IQueryCommand
   {
     /// <summary>
     /// The SqliteQueryCommand
@@ -83,7 +83,7 @@ namespace OnlineShop
     /// <summary>
     /// The Sqlite Database Object
     /// </summary>
-    private SqliteDatabase _db;
+    private MySqliteDatabase _db;
 
     private SQLiteCommand _command;
 
@@ -91,7 +91,7 @@ namespace OnlineShop
     /// Saves the Database as a memeber
     /// </summary>
     /// <param name="db"></param>
-    public SqliteQueryCommand(SqliteDatabase db)
+    public MySqliteQueryCommand(MySqliteDatabase db)
     {
       _db = db;
     }
@@ -139,14 +139,14 @@ namespace OnlineShop
         _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
 
-      return new SqliteDataReader(_command);
+      return new MySqliteDataReader(_command);
     }
   }
 
   /// <summary>
   /// SqliteReader that returns the data which was selected by the query
   /// </summary>
-  public class SqliteDataReader : IReader
+  public class MySqliteDataReader : IReader
   {
     private SQLiteCommand _command;
     private SQLiteDataReader _reader;
@@ -156,7 +156,7 @@ namespace OnlineShop
     /// Saves The Values of the reader in the Dictionary
     /// </summary>
     /// <param name="command"></param>
-    public SqliteDataReader(SQLiteCommand command)
+    public MySqliteDataReader(SQLiteCommand command)
     {
       _command = command;
       _reader = _command.ExecuteReader();
@@ -211,20 +211,20 @@ namespace OnlineShop
   /// <summary>
   /// Sqlite Command that changes the database
   /// </summary>
-  public class SqliteNonQueryCommand : INonQueryCommand
+  public class MySqliteNonQueryCommand : INonQueryCommand
   {
     /// <summary>
     /// The SqliteCommand 
     /// </summary>
     public string CommandText { get; set; }
-    private SqliteDatabase _db;
+    private MySqliteDatabase _db;
 
 
     /// <summary>
     /// Save the database as a member
     /// </summary>
     /// <param name="db"></param>
-    public SqliteNonQueryCommand(SqliteDatabase db)
+    public MySqliteNonQueryCommand(MySqliteDatabase db)
     {
       _db = db;
     }

@@ -86,11 +86,18 @@ namespace OnlineShopTest
 
   public class FakeQueryCommand : IQueryCommand // TODO: Complete Interface
   {
-    public IReadOnlyDictionary<string, object> Parameters => throw new NotImplementedException();
+    public IReadOnlyDictionary<string, object> Parameters
+    {
+      get
+      {
+        return new ReadOnlyDictionary<string, object>(_parameters);
+      }
+    }
+    private IDictionary<string, object> _parameters = new Dictionary<string, object>();
 
     public void AddParameter(string name, object value)
     {
-      throw new NotImplementedException();
+      _parameters.Add(name, value);
     }
 
     #region IDispoable implementation
@@ -103,9 +110,25 @@ namespace OnlineShopTest
 
     public IReader ExecuteReader()
     {
-      throw new NotImplementedException();
+      return new FakeDataReader();
     }
   }
 
+  public class FakeDataReader : IReader
+  {
+    public object this[int i]
+    {
+      get
+      {
+        return 0;
+      }
+    }
 
+    public IReadOnlyDictionary<string, object> Values { get; private set; } = new Dictionary<string, object>();
+
+    public void Dispose()
+    {
+      
+    }
+  }
 }

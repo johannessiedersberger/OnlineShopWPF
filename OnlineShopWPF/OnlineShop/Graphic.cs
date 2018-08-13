@@ -8,6 +8,9 @@ using System.Data;
 
 namespace OnlineShop
 {
+  /// <summary>
+  /// A Graphic Card froma Notebook
+  /// </summary>
   public class Graphic
   {
     /// <summary>

@@ -8,6 +8,9 @@ using System.Data;
 
 namespace OnlineShop
 {
+  /// <summary>
+  /// A CPU from a Notebook
+  /// </summary>
   public class CPU
   {
     /// <summary>
@@ -23,6 +26,9 @@ namespace OnlineShop
     /// </summary>
     public string Name { get; private set; }
 
+    /// <summary>
+    /// The Database that contains the cpu
+    /// </summary>
     public IDatabase Database { get; private set; }
 
     /// <summary>
@@ -62,7 +68,7 @@ namespace OnlineShop
     /// <summary>
     /// Writes the CPU into the Database
     /// </summary>
-    /// <param name="db"></param>
+    /// <param name="db">The Database that contains the cpu</param>
     public void WriteToDatabase(IDatabase db)
     {
       Database = db;

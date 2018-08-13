@@ -29,11 +29,23 @@ namespace OnlineShopTest
     }
 
     [Test]
-    public void TestGetCPUID()
+    public void TestGetCPUIDException()
     {
+      //Given
       CPU cpu = new CPU(4, 3.7, "INTEL CORE i7");
-
+      //When /Then
+      Assert.That(() => cpu.Id, Throws.TypeOf(typeof(NullReferenceException)));
     }
 
+    [Test]
+    public void TestGetCPUID()
+    {
+      //Given
+      FakeDataBase fakeDB = new FakeDataBase();
+      CPU cpu = new CPU(4, 3.7, "INTEL CORE i7");
+      cpu.WriteToDatabase(fakeDB);
+      //When /Then
+      Assert.That(cpu.Id, Is.EqualTo(0));
+    }
   }
 }
