@@ -88,5 +88,7 @@ namespace OnlineShop
     }
 
     private const string Delete = "DELTE FROM Products WHERE product_id = $id";
+
+
   }
 }

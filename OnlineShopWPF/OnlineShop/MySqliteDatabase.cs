@@ -196,9 +196,16 @@ namespace OnlineShop
     public object this[int i]
     {
       get
-      {    
-        _reader.Read(); 
-        return _reader.GetValue(i);
+      {
+        _reader.Read();
+        try // Returns null if the reader can't find a row
+        {
+          return _reader[i];
+        }
+        catch
+        {
+          return null;
+        }
       }
     }
 

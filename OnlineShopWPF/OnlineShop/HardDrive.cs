@@ -53,6 +53,18 @@ namespace OnlineShop
 
     private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
 
+    public bool CheckIfHardDriveExists(IDatabase db)
+    {
+
+      using (var getID = db.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$memory", Memory);
+        getID.AddParameter("$type", Type);
+        IReader reader = getID.ExecuteReader();
+        return reader[0] != null;
+      }
+    }
+
     /// <summary>
     /// Gets the ID from the Graphic-Card
     /// </summary>

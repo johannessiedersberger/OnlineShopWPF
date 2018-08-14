@@ -11,8 +11,9 @@ namespace OnlineShopConsoleApp
   {
     static void Main(string[] args)
     {
-
-      CreateHPNotebook();
+      MySqliteDatabase db = new MySqliteDatabase(Shop.file);
+      HardDrive hd = new HardDrive(1284, "ssd");
+      bool b = hd.CheckIfHardDriveExists(db);
     }
 
     static void CreateHPNotebook()
@@ -41,7 +42,6 @@ namespace OnlineShopConsoleApp
     //  CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
     //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
     //  HardDrive h = new HardDrive(128, "ssd");
-
     //}
   }
 }
