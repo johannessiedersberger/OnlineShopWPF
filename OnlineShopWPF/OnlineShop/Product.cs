@@ -73,5 +73,20 @@ namespace OnlineShop
     }
 
     private const string CommandSelectID = "SELECT product_id FROM Products WHERE name = $name";
+
+    /// <summary>
+    /// Delets a Product from The Database
+    /// </summary>
+    /// <param name="id">The id from the product which sould be removed</param>
+    public void DeleteProduct(int id)
+    {
+      using (var delete = _database.CreateNonQueryCommand(Delete))
+      {
+        delete.AddParameter("$id", id);
+        delete.Execute();
+      }
+    }
+
+    private const string Delete = "DELTE FROM Products WHERE product_id = $id";
   }
 }

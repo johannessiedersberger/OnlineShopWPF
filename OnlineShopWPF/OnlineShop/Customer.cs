@@ -69,6 +69,10 @@ namespace OnlineShop
 
     }
 
+    /// <summary>
+    /// Writes the Customer to the Database
+    /// </summary>
+    /// <param name="db">The Database which contains the customers</param>
     public void WriteToDataBase(IDatabase db)
     {
       using (var createCustomer = _database.CreateNonQueryCommand(CommandAddCustomer))

@@ -81,9 +81,13 @@ namespace OnlineShop
         createNotebook.AddParameter("$ramMemory", RamMemory);
         createNotebook.AddParameter("$avgBatteryTime", AverageBatteryTime);
         createNotebook.AddParameter("$os", Os);
+
         int rowsAffected = createNotebook.Execute();
         if (rowsAffected != 1)
+        {
           throw new DataException();
+        }
+          
       }
     }
 

@@ -77,7 +77,7 @@ namespace OnlineShopTest
     public int Execute()
     {
       WasExecuted = true;
-      return 0;
+      return 1;
     }
 
     public bool WasExecuted { get; private set; } = false;
