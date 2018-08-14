@@ -42,6 +42,8 @@ namespace OnlineShop
     public void WriteToDatabase(IDatabase db)
     {
       _database = db;
+      if (DoesHardDriveAlreadyExist())
+        return;
       using (var createHardDrive = _database.CreateNonQueryCommand(CommandAddHardDrive))
       {
         createHardDrive.AddParameter("$id", null);
@@ -53,10 +55,10 @@ namespace OnlineShop
 
     private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
 
-    public bool CheckIfHardDriveExists(IDatabase db)
+    private bool DoesHardDriveAlreadyExist()
     {
 
-      using (var getID = db.CreateQueryCommand(CommandSelectID))
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
       {
         getID.AddParameter("$memory", Memory);
         getID.AddParameter("$type", Type);

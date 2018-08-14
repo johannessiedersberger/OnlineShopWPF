@@ -72,6 +72,8 @@ namespace OnlineShop
     {
       _database = db;
 
+      if (DoesNotebookAlreadyExist())
+        return;
       using (var createNotebook = _database.CreateNonQueryCommand(CommandCreateNotebook))
       {
         createNotebook.AddParameter("$id", ProductId);
@@ -90,8 +92,18 @@ namespace OnlineShop
           
       }
     }
-
     private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
+    private bool DoesNotebookAlreadyExist()
+    {
+
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$id", ProductId);
+        IReader reader = getID.ExecuteReader();
+        return reader[0] != null;
+      }
+    }
+    private const string CommandSelectID = "SELECT product_id FROM Notebooks WHERE product_id = $id";
   }
 }
 

@@ -42,6 +42,8 @@ namespace OnlineShop
     public void WriteToDataBase(IDatabase database)
     {
       _database = database;
+      if (DoesProductAlreadyExist())
+        return;
       using (var createProduct = _database.CreateNonQueryCommand(CommandAddProduct))
       {
         createProduct.AddParameter("$id", null);
@@ -52,7 +54,17 @@ namespace OnlineShop
     }
 
     private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
-    
+
+    private bool DoesProductAlreadyExist()
+    {
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$name", Name);
+        IReader reader = getID.ExecuteReader();
+        return reader[0] != null;
+      }
+    }
+
     /// <summary>
     /// Gets the ID from the Product
     /// </summary>

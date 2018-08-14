@@ -11,9 +11,8 @@ namespace OnlineShopConsoleApp
   {
     static void Main(string[] args)
     {
-      MySqliteDatabase db = new MySqliteDatabase(Shop.file);
-      HardDrive hd = new HardDrive(1284, "ssd");
-      bool b = hd.CheckIfHardDriveExists(db);
+      CreateHPNotebook();
+    
     }
 
     static void CreateHPNotebook()

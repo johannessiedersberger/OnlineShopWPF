@@ -64,7 +64,7 @@ namespace OnlineShop
         }
       }
     }
-
+    
     /// <summary>
     /// Writes the CPU into the Database
     /// </summary>
@@ -72,6 +72,8 @@ namespace OnlineShop
     public void WriteToDatabase(IDatabase db)
     {
       _database = db;
+      if (DoesCPUAlreadyExist())
+        return;
       using (var createCPU = db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);
@@ -84,5 +86,14 @@ namespace OnlineShop
 
     private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
 
+    private bool DoesCPUAlreadyExist()
+    {
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$name", Name);
+        IReader reader = getID.ExecuteReader();
+        return reader[0] != null;
+      }
+    }
   }
 }

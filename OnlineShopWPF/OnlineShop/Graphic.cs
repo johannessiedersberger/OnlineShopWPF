@@ -41,6 +41,8 @@ namespace OnlineShop
     public void WriteToDatabase(IDatabase db)
     {
       _database = db;
+      if (DoesGraphicAlreadyExist())
+        return;
       using (var createGraphic = _database.CreateNonQueryCommand(CommandAddGraphic))
       {
         createGraphic.AddParameter("$id", null);
@@ -51,6 +53,17 @@ namespace OnlineShop
     }
 
     private const string CommandAddGraphic = "INSERT INTO Graphics(graphic_id, vram, name) VALUES($id,$vram,$name)";
+
+    private bool DoesGraphicAlreadyExist()
+    {
+
+      using (var getID = _database.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$name", Name);
+        IReader reader = getID.ExecuteReader();
+        return reader[0] != null;
+      }
+    }
 
     /// <summary>
     /// Gets the ID from the Graphic-Card

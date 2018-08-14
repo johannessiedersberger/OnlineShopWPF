@@ -121,7 +121,7 @@ namespace OnlineShopTest
     {
       get
       {
-        return 0;
+        return null;
       }
     }
 
