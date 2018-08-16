@@ -7,6 +7,14 @@ using System.Data.SQLite;
 
 namespace OnlineShop
 {
+
+  public static class OS
+  {
+    public static string windows = "windows";
+    public static string linux = "linux";
+    public static string macos = "macos";
+  }
+
   /// <summary>
   /// Notebook
   /// </summary>

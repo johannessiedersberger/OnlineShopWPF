@@ -28,7 +28,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByPrice = "SELECT p.product_id, p.name, p.price FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByPrice = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
 
     public static IReader GetNotebooksByRAM(double min, double max)
     {
@@ -40,7 +40,31 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByRAM = "SELECT p.product_id, p.name, p.price FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.ram_memory BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByRAM = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.ram_memory BETWEEN $min AND $max";
+
+    public static IReader GetNotebooksByOS(string os)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByOS))
+      {
+        getNotebook.AddParameter("$os", os);
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByOS = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.os = $os";
+
+    public static IReader GetNotebooksByBatteryTime(double min, double max)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByBatteryTime))
+      {
+        getNotebook.AddParameter("$min", min);
+        getNotebook.AddParameter("$max", max);
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByBatteryTime = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.average_battery_time BETWEEN $min AND $max";
+
     #endregion
     #region headphones
     public static IReader GetHeadPhonesByPrice(double min, double max)

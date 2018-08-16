@@ -17,7 +17,7 @@ namespace OnlineShopConsoleApp
       CreateBeatsHeadPhone(db);
       CreateSonyHeadPhoone(db);
 
-      IReader r = Shop.GetNotebooksByRAM(17, 20);
+      IReader r = Shop.GetNotebooksByBatteryTime(800,1000);
       while(r.Read())
         Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
     }
@@ -68,7 +68,7 @@ namespace OnlineShopConsoleApp
       g.WriteToDatabase(db);
       h.WriteToDatabase(db);
       //Notebook
-      Notebook notebook = new Notebook(p.ID, g.Id, c.Id, h.Id, 16, 720, "windows");
+      Notebook notebook = new Notebook(p.ID, g.Id, c.Id, h.Id, 16, 920, "windows");
       notebook.WriteToDataBase(db);
     }
   }
