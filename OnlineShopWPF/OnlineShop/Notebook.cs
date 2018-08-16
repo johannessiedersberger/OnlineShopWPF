@@ -101,7 +101,7 @@ namespace OnlineShop
         getID.AddParameter("$id", ProductId);
         IReader reader = getID.ExecuteReader();
         reader.Read();
-        return reader[0] != null;
+        return reader.HasRows;
       }
     }
     private const string CommandSelectID = "SELECT product_id FROM Notebooks WHERE product_id = $id";

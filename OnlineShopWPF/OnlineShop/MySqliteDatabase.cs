@@ -166,6 +166,11 @@ namespace OnlineShop
       return _reader.Read();
     }
 
+    public bool HasRows
+    {
+      get { return _reader.HasRows; }
+    }
+
     /// <summary>
     /// Converts a NameValueCollection to a Dictionary
     /// </summary>
@@ -203,7 +208,6 @@ namespace OnlineShop
     {
       get
       {
-        //_reader.Read();
         try // Returns null if the reader can't find a row
         {
           return _reader[i];

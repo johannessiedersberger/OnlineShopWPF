@@ -17,8 +17,10 @@ namespace OnlineShopConsoleApp
       CreateBeatsHeadPhone(db);
       IReader r = Shop.GetNotebooksByPrice(900, 3000);
       while(r.Read())
-        Console.WriteLine(r[0] +""+ r[1] +""+ r[2]);
-      
+        Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
+      IReader hp = Shop.GetHeadPhonesByPrice(0, 300);
+      while (r.Read())
+        Console.WriteLine(hp[0] + " " + hp[1] + " " + hp[2]);
     }
 
     static void CreateBeatsHeadPhone(MySqliteDatabase db)

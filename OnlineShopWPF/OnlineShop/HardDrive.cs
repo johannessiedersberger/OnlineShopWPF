@@ -64,7 +64,7 @@ namespace OnlineShop
         getID.AddParameter("$type", Type);
         IReader reader = getID.ExecuteReader();
         reader.Read();
-        return reader[0] != null;
+        return reader.HasRows;
       }
     }
 

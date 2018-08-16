@@ -39,7 +39,7 @@ namespace OnlineShop
       }
     }
 
-    private const string CommandAddHeadPhone = "INSERT INTO HeadPhones(product_id, wireless, microphone_included) VALUES($id,$wireless,$microphone)";
+    private const string CommandAddHeadPhone = "INSERT INTO Headphones(product_id, wireless, microphone_included) VALUES($id,$wireless,$microphone)";
 
     private bool DoesHeadPhoneAlreadyExist()
     {
@@ -49,11 +49,11 @@ namespace OnlineShop
         getID.AddParameter("$id", ProductId);
         IReader reader = getID.ExecuteReader();
         reader.Read();
-        return reader[0] != null;
+        return reader.HasRows;
       }
     }
 
 
-    private const string CommandSelectID = "SELECT product_id FROM HeadPhones WHERE product_id = $id";
+    private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
   }
 }
