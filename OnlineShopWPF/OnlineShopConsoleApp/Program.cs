@@ -15,12 +15,11 @@ namespace OnlineShopConsoleApp
       CreateHPNotebook(db);
       CreateDellNotebook(db);
       CreateBeatsHeadPhone(db);
-      IReader r = Shop.GetNotebooksByPrice(900, 3000);
+      CreateSonyHeadPhoone(db);
+
+      IReader r = Shop.GetNotebooksByRAM(17, 20);
       while(r.Read())
         Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
-      IReader hp = Shop.GetHeadPhonesByPrice(0, 300);
-      while (hp.Read())
-        Console.WriteLine(hp[0] + " " + hp[1] + " " + hp[2]);
     }
 
     static void CreateBeatsHeadPhone(MySqliteDatabase db)
@@ -28,6 +27,14 @@ namespace OnlineShopConsoleApp
       Product p = new Product("Beats by Dr. Dre Beats Studio3 Wireless Kopfhörer, Mattschwarz", 247.00);
       p.WriteToDataBase(db);
       HeadPhone h = new HeadPhone(p.ID, true, false);
+      h.WriteToDatabase(db);
+    }
+
+    static void CreateSonyHeadPhoone(MySqliteDatabase db)
+    {
+      Product p = new Product("SONY WH-1000XM2, Over-ear Kopfhörer, Near Field Communication, Headsetfunktion, Bluetooth, Schwarz", 259.00);
+      p.WriteToDataBase(db);
+      HeadPhone h = new HeadPhone(p.ID, true, true);
       h.WriteToDatabase(db);
     }
 
