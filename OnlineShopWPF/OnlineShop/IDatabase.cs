@@ -61,6 +61,7 @@ namespace OnlineShop
   {
     IReadOnlyDictionary<string, object> Values { get; }
 
+    bool Read();
     object this[int i] { get; }
   }
 }

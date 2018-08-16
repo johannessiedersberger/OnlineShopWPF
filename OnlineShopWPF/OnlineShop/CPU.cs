@@ -60,6 +60,7 @@ namespace OnlineShop
         {
           getID.AddParameter("$name", Name);
           IReader reader = getID.ExecuteReader();
+          reader.Read();
           return Convert.ToInt16(reader[0]);
         }
       }
@@ -92,6 +93,7 @@ namespace OnlineShop
       {
         getID.AddParameter("$name", Name);
         IReader reader = getID.ExecuteReader();
+        reader.Read();
         return reader[0] != null;
       }
     }

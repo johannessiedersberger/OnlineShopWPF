@@ -100,6 +100,7 @@ namespace OnlineShop
       {
         getID.AddParameter("$id", ProductId);
         IReader reader = getID.ExecuteReader();
+        reader.Read();
         return reader[0] != null;
       }
     }

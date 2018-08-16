@@ -63,6 +63,7 @@ namespace OnlineShop
         getID.AddParameter("$memory", Memory);
         getID.AddParameter("$type", Type);
         IReader reader = getID.ExecuteReader();
+        reader.Read();
         return reader[0] != null;
       }
     }
@@ -82,6 +83,7 @@ namespace OnlineShop
           getID.AddParameter("$memory", Memory);
           getID.AddParameter("$type", Type);
           IReader reader = getID.ExecuteReader();
+          reader.Read();
           return Convert.ToInt16(reader[0]);
         }
       }

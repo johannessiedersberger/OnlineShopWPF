@@ -11,7 +11,6 @@ using System.ComponentModel;
 
 namespace OnlineShop
 {
-
   /// <summary>
   /// Database that uses SQLITE
   /// </summary>
@@ -160,7 +159,11 @@ namespace OnlineShop
     {
       _command = command;
       _reader = _command.ExecuteReader();
-      _values = ToDictionary(_reader.GetValues());
+    }
+
+    public bool Read()
+    {
+      return _reader.Read();
     }
 
     /// <summary>
@@ -184,7 +187,10 @@ namespace OnlineShop
     /// </summary>
     public IReadOnlyDictionary<string, object> Values
     {
-      get { return new ReadOnlyDictionary<string, object>(_values); }
+      get
+      {
+        return new ReadOnlyDictionary<string, object>(_values);
+      }
     }
     private readonly IDictionary<string, object> _values = new Dictionary<string, object>();
 
@@ -197,12 +203,12 @@ namespace OnlineShop
     {
       get
       {
-        _reader.Read();
+        //_reader.Read();
         try // Returns null if the reader can't find a row
         {
           return _reader[i];
         }
-        catch
+        catch(Exception e)
         {
           return null;
         }

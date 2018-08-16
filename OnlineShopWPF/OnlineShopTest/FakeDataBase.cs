@@ -124,6 +124,10 @@ namespace OnlineShopTest
         return null;
       }
     }
+    public bool Read()
+    {
+      return false;
+    }
 
     public IReadOnlyDictionary<string, object> Values { get; private set; } = new Dictionary<string, object>();
 
