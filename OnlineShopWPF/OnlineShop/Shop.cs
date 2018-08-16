@@ -27,7 +27,6 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByPrice = "SELECT product_id, name, price FROM Products WHERE price BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByPrice = "SELECT p.product_id, p.name, price FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
   }
- 
 }

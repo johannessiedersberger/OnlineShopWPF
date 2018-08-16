@@ -64,6 +64,7 @@
     <Compile Include="DataException.cs" />
     <Compile Include="Graphic.cs" />
     <Compile Include="HardDrive.cs" />
+    <Compile Include="HeadPhone.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="Notebook.cs" />
     <Compile Include="Product.cs" />

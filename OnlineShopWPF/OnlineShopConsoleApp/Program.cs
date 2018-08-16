@@ -14,10 +14,20 @@ namespace OnlineShopConsoleApp
       MySqliteDatabase db = new MySqliteDatabase(Shop.file);
       CreateHPNotebook(db);
       CreateDellNotebook(db);
-      IReader r = Shop.GetNotebooksByPrice(1000, 900);
+      CreateBeatsHeadPhone(db);
+      IReader r = Shop.GetNotebooksByPrice(900, 3000);
       while(r.Read())
         Console.WriteLine(r[0] +""+ r[1] +""+ r[2]);
       
+    }
+
+    static void CreateBeatsHeadPhone(MySqliteDatabase db)
+    {
+      Product p = new Product("Beats by Dr. Dre Beats Studio3 Wireless Kopfhörer, Mattschwarz", 247.00);
+      p.WriteToDataBase(db);
+      HeadPhone h = new HeadPhone(p.ID, true, false);
+      h.WriteToDatabase(db);
+
     }
 
     static void CreateHPNotebook(MySqliteDatabase db)
