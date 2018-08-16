@@ -19,7 +19,7 @@ namespace OnlineShopConsoleApp
       while(r.Read())
         Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
       IReader hp = Shop.GetHeadPhonesByPrice(0, 300);
-      while (r.Read())
+      while (hp.Read())
         Console.WriteLine(hp[0] + " " + hp[1] + " " + hp[2]);
     }
 
@@ -29,7 +29,6 @@ namespace OnlineShopConsoleApp
       p.WriteToDataBase(db);
       HeadPhone h = new HeadPhone(p.ID, true, false);
       h.WriteToDatabase(db);
-
     }
 
     static void CreateHPNotebook(MySqliteDatabase db)

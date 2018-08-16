@@ -208,14 +208,7 @@ namespace OnlineShop
     {
       get
       {
-        try // Returns null if the reader can't find a row
-        {
-          return _reader[i];
-        }
-        catch(Exception e)
-        {
-          return null;
-        }
+        return _reader[i];
       }
     }
 

@@ -17,6 +17,7 @@ namespace OnlineShop
 
     public HeadPhone(int productId, bool wireless, bool microphone)
     {
+      ProductId = productId;
       Wireless = wireless;
       MicrophoneIncluded = microphone;
     }
@@ -32,7 +33,7 @@ namespace OnlineShop
         return;
       using (var createHeadPhone = _database.CreateNonQueryCommand(CommandAddHeadPhone))
       {
-        createHeadPhone.AddParameter("$id", null);
+        createHeadPhone.AddParameter("$id", ProductId);
         createHeadPhone.AddParameter("$wireless", Wireless);
         createHeadPhone.AddParameter("$microphone", MicrophoneIncluded);
         createHeadPhone.Execute();

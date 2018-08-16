@@ -27,7 +27,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByPrice = "SELECT p.product_id, p.name, price FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByPrice = "SELECT p.product_id, p.name, p.price FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
 
     public static IReader GetHeadPhonesByPrice(double min, double max)
     {
@@ -39,6 +39,6 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetHeadPhonesByPrice = "SELECT p.product_id, p.name, price FROM Products As p INNER JOIN Headphones AS h ON p.product_id = h.product_id WHERE price BETWEEN $min AND $max";
+    private const string CommandGetHeadPhonesByPrice = "SELECT p.product_id, p.name, p.price FROM Products As p INNER JOIN Headphones AS h ON p.product_id = h.product_id WHERE price BETWEEN $min AND $max";
   }
 }
