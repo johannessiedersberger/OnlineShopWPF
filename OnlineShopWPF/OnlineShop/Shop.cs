@@ -169,6 +169,47 @@ namespace OnlineShop
               "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
               "WHERE C.count BETWEEN $min AND $max ";
 
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given cpu clock rate 
+    /// </summary>
+    /// <param name="min">min clock rate</param>
+    /// <param name="max">max clock rate</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByCPUClockRate(double min, double max)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUClockRate))
+      {
+        getNotebook.AddParameter("$min", min);
+        getNotebook.AddParameter("$max", max);
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByCPUClockRate =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
+              "WHERE C.clock_rate BETWEEN $min AND $max ";
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given manufacturer
+    /// </summary>
+    /// <param name="name">manufacturer</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByCPUName(string name)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUName))
+      {
+        getNotebook.AddParameter("$name", "%"+name+"%");
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByCPUName =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
+              "WHERE C.name LIKE $name ";
 
     #endregion
 
