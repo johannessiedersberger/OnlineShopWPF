@@ -126,10 +126,10 @@ namespace OnlineShop
               "WHERE H.memory BETWEEN $min AND $max ";
 
     /// <summary>
-    /// Executes a Query that selects all Notebooks with the given memory size  
+    /// Executes a Query that selects all Notebooks with the given Ram Size  
     /// </summary>
-    /// <param name="min">min memory</param>
-    /// <param name="max">max memory</param>
+    /// <param name="min">min vram</param>
+    /// <param name="max">max vram</param>
     /// <returns> Reader Object with the selected Notebooks</returns>
     public static IReader GetNotebooksByVideoRAM(double min, double max)
     {
@@ -146,6 +146,28 @@ namespace OnlineShop
           "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
               "INNER JOIN Graphics G ON N.graphic_id = G.graphic_id " +
               "WHERE G.vram BETWEEN $min AND $max ";
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given cpu count 
+    /// </summary>
+    /// <param name="min">min count</param>
+    /// <param name="max">max count</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByCPUCount(double min, double max)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUCount))
+      {
+        getNotebook.AddParameter("$min", min);
+        getNotebook.AddParameter("$max", max);
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByCPUCount =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
+              "WHERE C.count BETWEEN $min AND $max ";
 
 
     #endregion
