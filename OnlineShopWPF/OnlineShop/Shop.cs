@@ -231,6 +231,25 @@ namespace OnlineShop
               "INNER JOIN Graphics G ON N.graphic_id = G.graphic_id " +
               "WHERE G.name LIKE $name";
 
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given manufacturer
+    /// </summary>
+    /// <param name="name">manufacturer</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByManufacturer(string name)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByManufacturer))
+      {
+        getNotebook.AddParameter("$name", "%" + name + "%");
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByManufacturer =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "WHERE p.name LIKE $name";
+
     #endregion
 
     #region headphones
