@@ -17,7 +17,7 @@ namespace OnlineShopConsoleApp
       CreateBeatsHeadPhone(db);
       CreateSonyHeadPhoone(db);
 
-      IReader r = Shop.GetNotebooksByCPUName("T");
+      IReader r = Shop.GetNotebooksByGraphicName("nvidia");
       while(r.Read())
         Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
     }

@@ -192,7 +192,7 @@ namespace OnlineShop
               "WHERE C.clock_rate BETWEEN $min AND $max ";
 
     /// <summary>
-    /// Executes a Query that selects all Notebooks with the given manufacturer
+    /// Executes a Query that selects all Notebooks with the given cpu-manufacturer
     /// </summary>
     /// <param name="name">manufacturer</param>
     /// <returns> Reader Object with the selected Notebooks</returns>
@@ -210,6 +210,26 @@ namespace OnlineShop
           "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
               "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
               "WHERE C.name LIKE $name ";
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given graphic-card manufacturer
+    /// </summary>
+    /// <param name="name">manufacturer</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByGraphicName(string name)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByGraphicName))
+      {
+        getNotebook.AddParameter("$name", "%" + name + "%");
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByGraphicName =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN Graphics G ON N.graphic_id = G.graphic_id " +
+              "WHERE G.name LIKE $name";
 
     #endregion
 
