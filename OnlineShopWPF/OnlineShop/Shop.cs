@@ -124,7 +124,29 @@ namespace OnlineShop
           "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
               "INNER JOIN HardDrives H ON N.hard_drive_id = H.hard_drive_id " +
               "WHERE H.memory BETWEEN $min AND $max ";
-      
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given memory size  
+    /// </summary>
+    /// <param name="min">min memory</param>
+    /// <param name="max">max memory</param>
+    /// <returns> Reader Object with the selected Notebooks</returns>
+    public static IReader GetNotebooksByVideoRAM(double min, double max)
+    {
+      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByVideoRAM))
+      {
+        getNotebook.AddParameter("$min", min);
+        getNotebook.AddParameter("$max", max);
+        IReader reader = getNotebook.ExecuteReader();
+        return reader;
+      }
+    }
+    private const string CommandGetNotebooksByVideoRAM =
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN Graphics G ON N.graphic_id = G.graphic_id " +
+              "WHERE G.vram BETWEEN $min AND $max ";
+
 
     #endregion
 

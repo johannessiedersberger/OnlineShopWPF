@@ -131,6 +131,14 @@ namespace OnlineShopTest
 
     public IReadOnlyDictionary<string, object> Values { get; private set; } = new Dictionary<string, object>();
 
+    public bool HasRows
+    {
+      get
+      {
+        return true;
+      }
+    }
+
     public void Dispose()
     {
       
