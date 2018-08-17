@@ -8,6 +8,9 @@ using System.Globalization;
 
 namespace OnlineShop
 {
+  /// <summary>
+  /// The OnlineShop that filters the products
+  /// </summary>
   public class Shop
   {
     /// <summary>
@@ -34,7 +37,10 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByPrice = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE price BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByPrice = 
+      "SELECT * FROM Products As p " +
+        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE price BETWEEN $min AND $max";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given ram-memory range
@@ -52,7 +58,10 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByRAM = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.ram_memory BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByRAM = 
+      "SELECT * FROM Products As p " +
+        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE n.ram_memory BETWEEN $min AND $max";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given OS
@@ -68,7 +77,10 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByOS = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.os = $os";
+    private const string CommandGetNotebooksByOS =
+      "SELECT * FROM Products As p" +
+        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE n.os = $os";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given battery time range
@@ -86,7 +98,10 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByBatteryTime = "SELECT * FROM Products As p INNER JOIN Notebooks AS n ON p.product_id = n.product_id WHERE n.average_battery_time BETWEEN $min AND $max";
+    private const string CommandGetNotebooksByBatteryTime =
+      "SELECT * FROM Products As p " +
+        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE n.average_battery_time BETWEEN $min AND $max";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given memory size  
@@ -104,13 +119,16 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksHardDriveSize = "SELECT * FROM Products As p" +
-      " INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-      "INNER JOIN HardDrives AS h  WHERE h.memory BETWEEN $min AND $max";
+    private const string CommandGetNotebooksHardDriveSize = 
+      "SELECT * FROM Products P " +
+          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
+              "INNER JOIN HardDrives H ON N.hard_drive_id = H.hard_drive_id " +
+              "WHERE H.memory BETWEEN $min AND $max ";
+      
 
     #endregion
-    #region headphones
 
+    #region headphones
     /// <summary>
     /// Executes a Query that selects all Headphones by the price
     /// </summary>
@@ -127,7 +145,10 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetHeadPhonesByPrice = "SELECT p.product_id, p.name, p.price FROM Products As p INNER JOIN Headphones AS h ON p.product_id = h.product_id WHERE price BETWEEN $min AND $max";
+    private const string CommandGetHeadPhonesByPrice = 
+      "SELECT p.product_id, p.name, p.price FROM Products As p " +
+        "INNER JOIN Headphones AS h ON p.product_id = h.product_id " +
+        "WHERE price BETWEEN $min AND $max";
     #endregion
   }
 }
