@@ -17,7 +17,7 @@ namespace OnlineShopConsoleApp
       CreateBeatsHeadPhone(db);
       CreateSonyHeadPhoone(db);
 
-      IReader r = Shop.GetNotebooksByBatteryTime(800,1000);
+      IReader r = Shop.GetNotebooksByHardDriveSize(100,200);
       while(r.Read())
         Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
     }
