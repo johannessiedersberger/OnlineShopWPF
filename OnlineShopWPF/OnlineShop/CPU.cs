@@ -44,58 +44,6 @@ namespace OnlineShop
       Name = name;
     }
 
-    private const string CommandSelectID = "SELECT cpu_id FROM Cpu WHERE name = $name";
-
-    /// <summary>
-    /// Gets the ID from the CPU
-    /// </summary>
-    public int Id
-    {
-      get
-      {
-        if (_database == null)
-          throw new NullReferenceException("The Database does not exist");
-
-        using (var getID = _database.CreateQueryCommand(CommandSelectID))
-        {
-          getID.AddParameter("$name", Name);
-          IReader reader = getID.ExecuteReader();
-          reader.Read();
-          return Convert.ToInt16(reader[0]);
-        }
-      }
-    }
     
-    /// <summary>
-    /// Writes the CPU into the Database
-    /// </summary>
-    /// <param name="db">The Database that contains the cpu</param>
-    public void WriteToDatabase(IDatabase db)
-    {
-      _database = db;
-      if (DoesCPUAlreadyExist())
-        return;
-      using (var createCPU = db.CreateNonQueryCommand(CommandAddCPU))
-      {
-        createCPU.AddParameter("$id", null);
-        createCPU.AddParameter("$count", Count);
-        createCPU.AddParameter("$clockRate", ClockRate);
-        createCPU.AddParameter("$name", Name);
-        createCPU.Execute();
-      }
-    }
-
-    private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
-
-    private bool DoesCPUAlreadyExist()
-    {
-      using (var getID = _database.CreateQueryCommand(CommandSelectID))
-      {
-        getID.AddParameter("$name", Name);
-        IReader reader = getID.ExecuteReader();
-        reader.Read();
-        return reader.HasRows;
-      }
-    }
   }
 }

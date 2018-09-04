@@ -6,7 +6,164 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  class DatabaseFactory
+  public class DatabaseFactory
   {
+    private IDatabase _db;
+    public DatabaseFactory(IDatabase db)
+    {
+      _db = db;
+    }
+
+    #region graphic
+    /// <summary>
+    /// Writes the Cpu to the databse
+    /// </summary>
+    /// <param name="db">The Database that will contain the cpu</param>
+    public void WriteGraphicCardToDatabase(int vram, string name)
+    {
+      if (DoesGraphicAlreadyExist(name))
+        return;
+      using (var createGraphic = _db.CreateNonQueryCommand(CommandAddGraphic))
+      {
+        createGraphic.AddParameter("$id", null);
+        createGraphic.AddParameter("$vram", vram);
+        createGraphic.AddParameter("$name", name);
+        createGraphic.Execute();
+      }
+    }
+
+    private const string CommandAddGraphic = "INSERT INTO Graphics(graphic_id, vram, name) VALUES($id,$vram,$name)";
+
+    private bool DoesGraphicAlreadyExist(string name)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectGraphicID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+
+    /// <summary>
+    /// Gets the ID from the Graphic-Card
+    /// </summary>
+    public int GetGraphicCardId(string name)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectGraphicID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+
+        while (reader.TryReadNextRow(out var row))
+          return int.Parse(row[0].ToString());
+        throw new InvalidOperationException("The given Graphic card could not be found");
+      }
+    }
+
+    private const string CommandSelectGraphicID = "SELECT graphic_id FROM Graphics WHERE name = $name";
+    #endregion
+
+    #region hardDrive
+    /// <summary>
+    /// Writes the HardDrive to the DataBase
+    /// </summary>
+    public void WriteHardDriveToDatabase(string type, int memory)
+    {
+      if (DoesHardDriveAlreadyExist(type, memory))
+        return;
+      using (var createHardDrive = _db.CreateNonQueryCommand(CommandAddHardDrive))
+      {
+        createHardDrive.AddParameter("$id", null);
+        createHardDrive.AddParameter("$type", type);
+        createHardDrive.AddParameter("$memory", memory);
+        createHardDrive.Execute();
+      }
+    }
+
+    private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
+
+    public bool DoesHardDriveAlreadyExist(string type, int memory)
+    {
+
+      using (var getID = _db.CreateQueryCommand(CommandSelectIHardDriveID))
+      {
+        getID.AddParameter("$memory", memory);
+        getID.AddParameter("$type", type);
+        IReader reader = getID.ExecuteReader();
+
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+
+    /// <summary>
+    /// Gets the ID from the HardDrive
+    /// </summary>
+    public int GetHardDriveId(string type, int memory)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectIHardDriveID))
+      {
+        getID.AddParameter("$memory", memory);
+        getID.AddParameter("$type", type);
+        IReader reader = getID.ExecuteReader();
+
+        while (reader.TryReadNextRow(out var row))
+          return int.Parse(row[0].ToString());
+        throw new InvalidOperationException("The Given gaphic card could not be found");
+      }
+    }
+
+    private const string CommandSelectIHardDriveID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
+    #endregion
+
+    #region cpu
+    private const string CommandSelectCPUID = "SELECT cpu_id FROM Cpu WHERE name = $name";
+
+    /// <summary>
+    /// Gets the ID from the CPU
+    /// </summary>
+    public int GetCpuId(string name)
+    {
+
+      using (var getID = _db.CreateQueryCommand(CommandSelectCPUID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+        while (reader.TryReadNextRow(out var row))
+          return int.Parse(row[0].ToString());
+        throw new InvalidOperationException("The Given cpu could not be found");
+      }
+
+    }
+
+    /// <summary>
+    /// Writes the CPU into the Database
+    /// </summary>
+    /// <param name="db">The Database that contains the cpu</param>
+    public void WriteCPUToDatabase(int count, double clockRate, string name)
+    {
+      if (DoesCPUAlreadyExist(name))
+        return;
+      using (var createCPU = _db.CreateNonQueryCommand(CommandAddCPU))
+      {
+        createCPU.AddParameter("$id", null);
+        createCPU.AddParameter("$count", count);
+        createCPU.AddParameter("$clockRate", clockRate);
+        createCPU.AddParameter("$name", name);
+        createCPU.Execute();
+      }
+    }
+
+    private const string CommandAddCPU = "INSERT INTO Cpu(cpu_id, count, clock_rate, name) VALUES($id,$count,$clockRate,$name) ";
+
+    public bool DoesCPUAlreadyExist(string name)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectCPUID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+    #endregion
   }
 }

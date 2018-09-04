@@ -35,60 +35,6 @@ namespace OnlineShop
       Type = type; 
     }
 
-    /// <summary>
-    /// Writes the HardDrive to the DataBase
-    /// </summary>
-    /// <param name="db"></param>
-    public void WriteToDatabase(IDatabase db)
-    {
-      _database = db;
-      if (DoesHardDriveAlreadyExist())
-        return;
-      using (var createHardDrive = _database.CreateNonQueryCommand(CommandAddHardDrive))
-      {
-        createHardDrive.AddParameter("$id", null);
-        createHardDrive.AddParameter("$type", Type);
-        createHardDrive.AddParameter("$memory", Memory);
-        createHardDrive.Execute();
-      }
-    }
-
-    private const string CommandAddHardDrive = "INSERT INTO HardDrives(hard_drive_id, type, memory) VALUES($id,$type,$memory)";
-
-    private bool DoesHardDriveAlreadyExist()
-    {
-
-      using (var getID = _database.CreateQueryCommand(CommandSelectID))
-      {
-        getID.AddParameter("$memory", Memory);
-        getID.AddParameter("$type", Type);
-        IReader reader = getID.ExecuteReader();
-        reader.Read();
-        return reader.HasRows;
-      }
-    }
-
-    /// <summary>
-    /// Gets the ID from the Graphic-Card
-    /// </summary>
-    public int Id
-    {
-      get
-      {
-        if (_database == null)
-          throw new NullReferenceException("No Database exists");
-
-        using (var getID = _database.CreateQueryCommand(CommandSelectID))
-        {
-          getID.AddParameter("$memory", Memory);
-          getID.AddParameter("$type", Type);
-          IReader reader = getID.ExecuteReader();
-          reader.Read();
-          return Convert.ToInt16(reader[0]);
-        }
-      }
-    }
-
-    private const string CommandSelectID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
+    
   }
 }
