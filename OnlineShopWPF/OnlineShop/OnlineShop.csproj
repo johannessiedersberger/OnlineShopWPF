@@ -66,6 +66,7 @@
     <Compile Include="HardDrive.cs" />
     <Compile Include="HeadPhone.cs" />
     <Compile Include="IDatabase.cs" />
+    <Compile Include="ISubQuery.cs" />
     <Compile Include="Notebook.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Shop.cs" />

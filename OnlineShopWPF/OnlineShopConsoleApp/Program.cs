@@ -16,10 +16,7 @@ namespace OnlineShopConsoleApp
       CreateDellNotebook(db);
       CreateBeatsHeadPhone(db);
       CreateSonyHeadPhoone(db);
-
-      IReader r = Shop.GetNotebooksByManufacturer("HP");
-      while(r.Read())
-        Console.WriteLine(r[0] +" "+ r[1] +" "+ r[2]);
+      
     }
 
     static void CreateBeatsHeadPhone(MySqliteDatabase db)
@@ -39,9 +36,9 @@ namespace OnlineShopConsoleApp
     }
 
     static void CreateHPNotebook(MySqliteDatabase db)
-    {     
+    {
       //OMEN by HP 17 Gaming Notebook
-      Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
+      Product p = new Product("OMEN by HP 17 Gaming Notebook 2.0", 1070);
       CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
       Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
       HardDrive h = new HardDrive(256, "ssd");
@@ -53,7 +50,10 @@ namespace OnlineShopConsoleApp
       //Notebook
       Notebook notebook = new Notebook(p.ID, g.Id, c.Id, h.Id, 16, 720, "windows");
       notebook.WriteToDataBase(db);
+      Graphic gr = notebook.GraphicCard;
     }
+
+
 
     static void CreateDellNotebook(MySqliteDatabase db)
     {

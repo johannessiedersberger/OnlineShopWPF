@@ -161,57 +161,48 @@ namespace OnlineShop
       _reader = _command.ExecuteReader();
     }
 
-    public bool Read()
-    {
-      return _reader.Read();
-    }
-
-    public bool HasRows
-    {
-      get { return _reader.HasRows; }
-    }
-
     /// <summary>
-    /// Converts a NameValueCollection to a Dictionary
+    /// Returns the names of the columns
     /// </summary>
-    /// <param name="col"></param>
-    /// <returns></returns>
-    public static IDictionary<string, object> ToDictionary(NameValueCollection col)
-    {
-      IDictionary<string, object> dict = new Dictionary<string, object>();
-
-      foreach (var k in col.AllKeys)
-      {
-        dict.Add(k, col[k]);
-      }
-      return dict;
-    }
-
-    /// <summary>
-    /// Contains the Values that were 
-    /// </summary>
-    public IReadOnlyDictionary<string, object> Values
+    public string[] ColumnNames
     {
       get
       {
-        return new ReadOnlyDictionary<string, object>(_values);
+        List<string> names = new List<string>(); 
+        for (int i = 0; _reader.Read();i++)
+        {
+          names.Add(_reader.GetName(i));
+        }
+        return names.ToArray();
       }
     }
-    private readonly IDictionary<string, object> _values = new Dictionary<string, object>();
-
+ 
     /// <summary>
-    /// Gets the data from the column by the index
+    /// Reads the next row
     /// </summary>
-    /// <param name="i"></param>
-    /// <returns></returns>
-    public object this[int i]
-    {
-      get
+    /// <param name="row"></param>
+    /// <returns>the query result</returns>
+    public bool TryReadNextRow(out object[] row)
+    {    
+      if (_reader.HasRows)
       {
-        return _reader[i];
+        List<object> objects = new List<object>();
+        for (int i = 0; _reader.Read(); i++)
+        {
+          objects.Add(_reader[i]);
+        }
+        row = objects.ToArray();
+        return true;
       }
+      else
+      {
+        row = null;
+        return false;
+      }      
     }
-
+    /// <summary>
+    /// Dispose
+    /// </summary>
     public void Dispose()
     {
       _command.Dispose();

@@ -7,48 +7,47 @@ using System.Data.SQLite;
 
 namespace OnlineShop
 {
-
   public static class OS
   {
     public static string windows = "windows";
     public static string linux = "linux";
     public static string macos = "macos";
   }
-
+                                                
   /// <summary>
   /// Notebook
   /// </summary>
   public class Notebook
   {
-    /// <summary>
-    /// The ID of the product
-    /// </summary>
-    public int ProductId { get; private set; }
-    /// <summary>
-    /// The id of the Graphic Card
-    /// </summary>
-    public int GraphicId { get; private set; }
-    /// <summary>
-    /// The id of the cpu
-    /// </summary>
-    public int CpuId { get; private set; }
-    /// <summary>
-    /// The ID of the hard drive
-    /// </summary>
-    public int HardDriveId { get; private set; }
-    /// <summary>
-    /// The Ram Memory of the Notebook
-    /// </summary>
-    public int RamMemory { get; private set; }
-    /// <summary>
-    /// The average Battery time of the notebook
-    /// </summary>
-    public int AverageBatteryTime { get; private set; }
-    /// <summary>
-    /// The Os of the notebook
-    /// </summary>
-    public string Os { get; private set; }
+   
+    public Graphic GraphicCard
+    {
+      
+      get
+      {
+        if (DoesNotebookAlreadyExist() == false)
+          throw new InvalidOperationException("The Notebook has to be written to the database");
 
+        using (var getGrahpic = _database.CreateQueryCommand(CommandGetGraphicCard))
+        {
+          getGrahpic.AddParameter("$graphicId", _graphicId);
+          IReader r = getGrahpic.ExecuteReader();
+          
+          return null;
+
+        }
+      }
+    }
+    private const string CommandGetGraphicCard = "SELECT * FROM Graphics WHERE graphic_id = $graphicId";
+
+
+    private int _productId;
+    private int _graphicId;
+    private int _cpuId;
+    private int _hardDriveId;
+    private int RamMemory;
+    private int AverageBatteryTime;
+    private string Os;
     private IDatabase _database;
 
     /// <summary>
@@ -63,10 +62,10 @@ namespace OnlineShop
     /// <param name="os">the os</param>
     public Notebook(int productId, int graphicId, int cpuId, int hardDriveId, int ramMemory, int avgBatteryTime, string os)
     {
-      ProductId = productId;
-      GraphicId = graphicId;
-      CpuId = cpuId;
-      HardDriveId = hardDriveId;
+      _productId = productId;
+      _graphicId = graphicId;
+      _cpuId = cpuId;
+      _hardDriveId = hardDriveId;
       RamMemory = ramMemory;
       AverageBatteryTime = avgBatteryTime;
       Os = os;
@@ -84,10 +83,10 @@ namespace OnlineShop
         return;
       using (var createNotebook = _database.CreateNonQueryCommand(CommandCreateNotebook))
       {
-        createNotebook.AddParameter("$id", ProductId);
-        createNotebook.AddParameter("$graphicId", GraphicId);
-        createNotebook.AddParameter("$cpuId", CpuId);
-        createNotebook.AddParameter("$hardDriveId", HardDriveId);
+        createNotebook.AddParameter("$id", _productId);
+        createNotebook.AddParameter("$graphicId", _graphicId);
+        createNotebook.AddParameter("$cpuId", _cpuId);
+        createNotebook.AddParameter("$hardDriveId", _hardDriveId);
         createNotebook.AddParameter("$ramMemory", RamMemory);
         createNotebook.AddParameter("$avgBatteryTime", AverageBatteryTime);
         createNotebook.AddParameter("$os", Os);
@@ -96,17 +95,19 @@ namespace OnlineShop
         if (rowsAffected != 1)
         {
           throw new DataException();
-        }
-          
+        }        
       }
     }
+
     private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
     private bool DoesNotebookAlreadyExist()
     {
+      if (_database == null)
+        return false;
 
       using (var getID = _database.CreateQueryCommand(CommandSelectID))
       {
-        getID.AddParameter("$id", ProductId);
+        getID.AddParameter("$id", _productId);
         IReader reader = getID.ExecuteReader();
         reader.Read();
         return reader.HasRows;

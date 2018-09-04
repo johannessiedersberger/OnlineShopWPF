@@ -21,6 +21,27 @@ namespace OnlineShop
     static MySqliteDatabase _database = new MySqliteDatabase(file);
 
     #region notebook
+
+    private const string CommandGetNotebooks = "SELECT * FROM Products As p ";
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given price range
+    /// </summary>
+    /// <param name="min">min price</param>
+    /// <param name="max">max price</param>
+    /// <returns>Reader Object with the selected Notebooks</returns>
+    public static ISubQuery GetNotebooksByPriceSubQuery(double min, double max)
+    {
+      MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
+      getNotebook.AddParameter("$min", min);
+      getNotebook.AddParameter("$max", max);
+      return getNotebook;
+
+    }
+    private const string CommandGetNotebooksByPriceSubQuery =
+        " INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE price BETWEEN $min AND $max";
+
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given price range
     /// </summary>
@@ -37,7 +58,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByPrice = 
+    private const string CommandGetNotebooksByPrice =
       "SELECT * FROM Products As p " +
         "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
         "WHERE price BETWEEN $min AND $max";
@@ -58,7 +79,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksByRAM = 
+    private const string CommandGetNotebooksByRAM =
       "SELECT * FROM Products As p " +
         "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
         "WHERE n.ram_memory BETWEEN $min AND $max";
@@ -119,7 +140,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetNotebooksHardDriveSize = 
+    private const string CommandGetNotebooksHardDriveSize =
       "SELECT * FROM Products P " +
           "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
               "INNER JOIN HardDrives H ON N.hard_drive_id = H.hard_drive_id " +
@@ -200,7 +221,7 @@ namespace OnlineShop
     {
       using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUName))
       {
-        getNotebook.AddParameter("$name", "%"+name+"%");
+        getNotebook.AddParameter("$name", "%" + name + "%");
         IReader reader = getNotebook.ExecuteReader();
         return reader;
       }
@@ -269,7 +290,7 @@ namespace OnlineShop
         return reader;
       }
     }
-    private const string CommandGetHeadPhonesByPrice = 
+    private const string CommandGetHeadPhonesByPrice =
       "SELECT p.product_id, p.name, p.price FROM Products As p " +
         "INNER JOIN Headphones AS h ON p.product_id = h.product_id " +
         "WHERE price BETWEEN $min AND $max";

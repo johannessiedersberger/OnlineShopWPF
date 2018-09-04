@@ -29,6 +29,9 @@ namespace OnlineShop
 
   }
 
+  /// <summary>
+  /// A Database command
+  /// </summary>
   public interface IDatabaseCommand : IDisposable
   {
     /// <summary>
@@ -44,6 +47,9 @@ namespace OnlineShop
     IReadOnlyDictionary<string, object> Parameters { get; }
   }
 
+  /// <summary>
+  /// A SqlQueryCommand that returns nothing
+  /// </summary>
   public interface INonQueryCommand : IDatabaseCommand
   {
     /// <summary>
@@ -52,17 +58,32 @@ namespace OnlineShop
     int Execute();
   }
 
+  /// <summary>
+  /// A Sql Query Command that returns something
+  /// </summary>
   public interface IQueryCommand : IDatabaseCommand
   {
+    /// <summary>
+    /// Executes the Reader 
+    /// </summary>
+    /// <returns></returns>
     IReader ExecuteReader();
   }
 
+  /// <summary>
+  /// Reads the Data of a Query 
+  /// </summary>
   public interface IReader : IDisposable
   {
-    IReadOnlyDictionary<string, object> Values { get; }
-
-    bool Read();
-    bool HasRows { get; }
-    object this[int i] { get; }
+    /// <summary>
+    /// Returns true if the query returns something and sets am object array with the result of the query
+    /// </summary>
+    /// <param name="row"></param>
+    /// <returns>returns true if the query returns something</returns>
+    bool TryReadNextRow(out object[] row);
+    /// <summary>
+    /// Returns An Array with the Column names
+    /// </summary>
+    string[] ColumnNames { get; }
   }
 }
