@@ -14,6 +14,105 @@ namespace OnlineShop
       _db = db;
     }
 
+    #region headphones
+    /// <summary>
+    /// Writes the HardDrive to the DataBase
+    /// </summary>
+    /// <param name="db"></param>
+    public void WriteHeadPhoneToDatabase(int productId, bool wireless, bool microphone)
+    {
+      if (DoesHeadPhoneAlreadyExist(productId))
+        return;
+      using (var createHeadPhone = _db.CreateNonQueryCommand(CommandAddHeadPhone))
+      {
+        createHeadPhone.AddParameter("$id", productId);
+        createHeadPhone.AddParameter("$wireless", wireless);
+        createHeadPhone.AddParameter("$microphone", microphone);
+        createHeadPhone.Execute();
+      }
+    }
+
+    private const string CommandAddHeadPhone = "INSERT INTO Headphones(product_id, wireless, microphone_included) VALUES($id,$wireless,$microphone)";
+
+    private bool DoesHeadPhoneAlreadyExist(int productId)
+    {
+
+      using (var getID = _db.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$id", productId);
+        IReader reader = getID.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+
+
+    private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
+    #endregion
+
+    #region products
+    /// <summary>
+    /// Writes the Product to the Database
+    /// </summary>
+    /// <param name="database">The database that contains the Products</param>
+    public void WriteProductToDataBase(string name, double price)
+    {
+      if (DoesProductAlreadyExist(name))
+        return;
+      using (var createProduct = _db.CreateNonQueryCommand(CommandAddProduct))
+      {
+        createProduct.AddParameter("$id", null);
+        createProduct.AddParameter("$name", name);
+        createProduct.AddParameter("$price", price);
+        createProduct.Execute();
+      }
+    }
+
+    private const string CommandAddProduct = "INSERT INTO Products(product_id, name, price) VALUES($id, $name, $price) ";
+
+    private bool DoesProductAlreadyExist(string name)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+
+    /// <summary>
+    /// Gets the ID from the Product
+    /// </summary>
+    public int GetProductId(string name)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectID))
+      {
+        getID.AddParameter("$name", name);
+        IReader reader = getID.ExecuteReader();
+        while (reader.TryReadNextRow(out var row))
+          return int.Parse(row[0].ToString());
+        throw new InvalidOperationException("The Given product could not be found");
+      }
+
+    }
+
+    private const string CommandSelectProductId = "SELECT product_id FROM Products WHERE name = $name";
+
+    /// <summary>
+    /// Delets a Product from The Database
+    /// </summary>
+    /// <param name="id">The id from the product which sould be removed</param>
+    public void DeleteProduct(int id)
+    {
+      using (var delete = _db.CreateNonQueryCommand(Delete))
+      {
+        delete.AddParameter("$id", id);
+        delete.Execute();
+      }
+    }
+
+    private const string Delete = "DELTE FROM Products WHERE product_id = $id";
+    #endregion
+
     #region graphic
     /// <summary>
     /// Writes the Cpu to the databse

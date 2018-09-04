@@ -22,7 +22,7 @@ namespace OnlineShopConsoleApp
       dbF.WriteCPUToDatabase(4, 9.9, "INTEL CORE i9 8800k");
       Console.WriteLine("CPU ID " + dbF.GetCpuId("INTEL CORE i9 8800k"));
 
-
+      dbF.WriteProductToDataBase("Headphone", 100);
     }
 
     //static void CreateBeatsHeadPhone(DatabaseFactory db)
