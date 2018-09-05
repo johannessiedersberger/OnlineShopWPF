@@ -22,25 +22,7 @@ namespace OnlineShop
 
     #region notebook
 
-    private const string CommandGetNotebooks = "SELECT * FROM Products As p ";
-
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given price range
-    /// </summary>
-    /// <param name="min">min price</param>
-    /// <param name="max">max price</param>
-    /// <returns>Reader Object with the selected Notebooks</returns>
-    public static ISubQuery GetNotebooksByPriceSubQuery(double min, double max)
-    {
-      MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$min", min);
-      getNotebook.AddParameter("$max", max);
-      return getNotebook;
-
-    }
-    private const string CommandGetNotebooksByPriceSubQuery =
-        " INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-        "WHERE price BETWEEN $min AND $max";
+    
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given price range

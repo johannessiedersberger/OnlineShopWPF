@@ -22,8 +22,6 @@ namespace OnlineShop
     /// </summary>
     public double Price { get; private set; }
 
-    private IDatabase _database;
-
     /// <summary>
     /// Assigns the member variables
     /// </summary>

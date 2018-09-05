@@ -33,7 +33,7 @@ namespace OnlineShop
     public MySqliteDatabase(string fileName)
     {
       ConnectionString = fileName;
-      Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", Shop.file));
+      Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", fileName));
       Connection.Open();
     }
 
@@ -168,29 +168,32 @@ namespace OnlineShop
     {
       get
       {
-        List<string> names = new List<string>(); 
-        for (int i = 0; _reader.Read();i++)
+        List<string> names = new List<string>();
+        for (int i = 0; _reader.Read(); i++)
         {
           names.Add(_reader.GetName(i));
         }
         return names.ToArray();
       }
     }
- 
+
     /// <summary>
     /// Reads the next row
     /// </summary>
     /// <param name="row"></param>
     /// <returns>the query result</returns>
     public bool TryReadNextRow(out object[] row)
-    {    
+    {
       if (_reader.HasRows)
       {
         List<object> objects = new List<object>();
-        for (int i = 0; _reader.Read(); i++)
+
+        while (_reader.Read())
         {
-          objects.Add(_reader[i]);
+          objects.Add(_reader["*"]);
+          //objects.Add(_reader["graphic_id"]);
         }
+
         row = objects.ToArray();
         return true;
       }
@@ -198,8 +201,9 @@ namespace OnlineShop
       {
         row = null;
         return false;
-      }      
+      }
     }
+
     /// <summary>
     /// Dispose
     /// </summary>

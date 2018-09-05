@@ -19,7 +19,7 @@ namespace OnlineShop
     /// Writes the HardDrive to the DataBase
     /// </summary>
     /// <param name="db"></param>
-    public void WriteHeadPhoneToDatabase(int productId, bool wireless, bool microphone)
+    public void AddNewHeadPhoneToDatabase(int productId, bool wireless, bool microphone)
     {
       if (DoesHeadPhoneAlreadyExist(productId))
         return;
@@ -54,7 +54,7 @@ namespace OnlineShop
     /// Writes the Product to the Database
     /// </summary>
     /// <param name="database">The database that contains the Products</param>
-    public void WriteProductToDataBase(string name, double price)
+    public void AddProductToDataBase(string name, double price)
     {
       if (DoesProductAlreadyExist(name))
         return;
@@ -118,7 +118,7 @@ namespace OnlineShop
     /// Writes the Cpu to the databse
     /// </summary>
     /// <param name="db">The Database that will contain the cpu</param>
-    public void WriteGraphicCardToDatabase(int vram, string name)
+    public void AddGraphicToDataBase(int vram, string name)
     {
       if (DoesGraphicAlreadyExist(name))
         return;
@@ -164,9 +164,9 @@ namespace OnlineShop
 
     #region hardDrive
     /// <summary>
-    /// Writes the HardDrive to the DataBase
+    /// Adds a new hard drive to the database.
     /// </summary>
-    public void WriteHardDriveToDatabase(string type, int memory)
+    public void AddNewHardDriveToDatabase(string type, int memory)
     {
       if (DoesHardDriveAlreadyExist(type, memory))
         return;
@@ -238,7 +238,7 @@ namespace OnlineShop
     /// Writes the CPU into the Database
     /// </summary>
     /// <param name="db">The Database that contains the cpu</param>
-    public void WriteCPUToDatabase(int count, double clockRate, string name)
+    public void AddNewCpuToDatabase(int count, double clockRate, string name)
     {
       if (DoesCPUAlreadyExist(name))
         return;
@@ -264,5 +264,168 @@ namespace OnlineShop
       }
     }
     #endregion
+
+    #region notebooks
+    /// <summary>
+    /// Writes the Notebook to the Database
+    /// </summary>
+    /// <param name="db">the database that will contain the cpu</param>
+    public void AddNewNotebookToDatabase(int productId, int graphicId, int cpuId, int hardDriveid, int ramMemory, int avgBatteryTime, string os)
+    {
+      if (DoesNotebookAlreadyExist(productId))
+        return;
+      using (var createNotebook = _db.CreateNonQueryCommand(CommandCreateNotebook))
+      {
+        createNotebook.AddParameter("$id", productId);
+        createNotebook.AddParameter("$graphicId", graphicId);
+        createNotebook.AddParameter("$cpuId", cpuId);
+        createNotebook.AddParameter("$hardDriveId", hardDriveid);
+        createNotebook.AddParameter("$ramMemory", ramMemory);
+        createNotebook.AddParameter("$avgBatteryTime", avgBatteryTime);
+        createNotebook.AddParameter("$os", os);
+
+        int rowsAffected = createNotebook.Execute();
+        if (rowsAffected != 1)
+        {
+          throw new DataException();
+        }
+      }
+    }
+
+    private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
+    public bool DoesNotebookAlreadyExist(int productId)
+    {
+      using (var getID = _db.CreateQueryCommand(CommandSelectNotebookId))
+      {
+        getID.AddParameter("$id", productId);
+        IReader reader = getID.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+    private const string CommandSelectNotebookId = "SELECT product_id FROM Notebooks WHERE product_id = $id";
+    #endregion
+
+    #region notebookQueries
+    private const string CommandGetNotebooks = "SELECT * FROM Notebooks";
+
+
+    /// <summary>
+    /// Executes a Query in the Database and returns a list of notebooks
+    /// </summary>
+    /// <param name="priceRange"></param>
+    /// <param name="ramMemoryRange"></param>
+    /// <param name="hdMemoryRange"></param>
+    /// <param name="vramRange"></param>
+    /// <param name="batteryTimeRange"></param>
+    /// <param name="os"></param>
+    /// <param name="graphicCardName"></param>
+    /// <param name="cpuName"></param>
+    /// <param name="cpuCount"></param>
+    /// <param name="notebookManufacturer"></param>
+    /// <returns></returns>
+    public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
+    {
+     
+      
+      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
+      {
+        
+        IReader reader = getNotebook.ExecuteReader();
+        while (reader.TryReadNextRow(out object[] row))
+        {
+          int i = 0;
+          foreach (object obj in row)
+          {
+            Console.WriteLine(row[i++]);
+          }
+        }
+      }
+      return null;
+    }
+
+    /// <summary>
+    /// Executes a Query that selects all Notebooks with the given price range
+    /// </summary>
+    /// <param name="min">min price</param>
+    /// <param name="max">max price</param>
+    /// <returns>Reader Object with the selected Notebooks</returns>
+    public static ISubQuery GetNotebooksByPriceSubQuery(double min, double max)
+    {
+      MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
+      getNotebook.AddParameter("$min", min);
+      getNotebook.AddParameter("$max", max);
+      return getNotebook;
+
+    }
+    private const string CommandGetNotebooksByPriceSubQuery =
+        " INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
+        "WHERE price BETWEEN $min AND $max";
+
+    #endregion
+  }
+  public class PriceRange
+  {
+    public PriceRange(double min, double max)
+    {
+      Min = min;
+      Max = max;
+    }
+    public double Max;
+    public double Min;
+  }
+  public class RamMemoryRange
+  {
+    public RamMemoryRange(double min, double max)
+    {
+      Min = min;
+      Max = max;
+    }
+    public double Max;
+    public double Min;
+  }
+  public class HardDriveMemoryRange
+  {
+    public HardDriveMemoryRange(double min, double max)
+    {
+      Min = min;
+      Max = max;
+    }
+    public double Max;
+    public double Min;
+  }
+  public class VideoRamRange
+  {
+    public VideoRamRange(double min, double max)
+    {
+      Min = min;
+      Max = max;
+    }
+    public double Max;
+    public double Min;
+  }
+  public class BatteryTimeRange
+  {
+    public BatteryTimeRange(double min, double max)
+    {
+      Min = min;
+      Max = max;
+    }
+    public double Max;
+    public double Min;
+  }
+  public class NotebookSearchData
+  {
+    public PriceRange priceRange;
+    public RamMemoryRange ramMemoryRange;
+    public HardDriveMemoryRange hdMemoryRange;
+    public VideoRamRange vramRange;
+    public BatteryTimeRange batteryTimeRange;
+    public string notebookManufacturer;
+    public string os;
+    public string graphicCardName;
+    public string cpuName;
+    public int cpuCount;
+    public double cpuClockRate;
+
   }
 }
