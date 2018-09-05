@@ -71,7 +71,7 @@ namespace OnlineShop
 
     private bool DoesProductAlreadyExist(string name)
     {
-      using (var getID = _db.CreateQueryCommand(CommandSelectID))
+      using (var getID = _db.CreateQueryCommand(CommandSelectProductId))
       {
         getID.AddParameter("$name", name);
         IReader reader = getID.ExecuteReader();
@@ -84,7 +84,7 @@ namespace OnlineShop
     /// </summary>
     public int GetProductId(string name)
     {
-      using (var getID = _db.CreateQueryCommand(CommandSelectID))
+      using (var getID = _db.CreateQueryCommand(CommandSelectProductId))
       {
         getID.AddParameter("$name", name);
         IReader reader = getID.ExecuteReader();
@@ -110,7 +110,7 @@ namespace OnlineShop
       }
     }
 
-    private const string Delete = "DELTE FROM Products WHERE product_id = $id";
+    private const string Delete = "DELETE FROM Products WHERE product_id = $id";
     #endregion
 
     #region graphic
