@@ -187,13 +187,15 @@ namespace OnlineShop
       if (_reader.HasRows)
       {
         List<object> objects = new List<object>();
-
+        
         while (_reader.Read())
         {
-          objects.Add(_reader["*"]);
-          //objects.Add(_reader["graphic_id"]);
+          for (int i = 0; i < _reader.FieldCount; i++)
+          {
+            objects.Add(_reader[i]);
+          }        
         }
-
+        
         row = objects.ToArray();
         return true;
       }
@@ -202,6 +204,8 @@ namespace OnlineShop
         row = null;
         return false;
       }
+      
+
     }
 
     /// <summary>

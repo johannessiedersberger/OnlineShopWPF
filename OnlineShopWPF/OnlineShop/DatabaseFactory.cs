@@ -324,12 +324,9 @@ namespace OnlineShop
     /// <param name="notebookManufacturer"></param>
     /// <returns></returns>
     public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
-    {
-     
-      
+    { 
       using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
-      {
-        
+      {  
         IReader reader = getNotebook.ExecuteReader();
         while (reader.TryReadNextRow(out object[] row))
         {
