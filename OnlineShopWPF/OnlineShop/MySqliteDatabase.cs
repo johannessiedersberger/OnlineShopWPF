@@ -186,17 +186,24 @@ namespace OnlineShop
     {
       if (_reader.HasRows)
       {
-        List<object> objects = new List<object>();
-        
+        //List<object> objects = new List<object>();
+
+        //while (_reader.Read())
+        //{
+        //  for (int i = 0; i < _reader.FieldCount; i++)
+        //  {
+        //    objects.Add(_reader[]);
+        //  }        
+        //}
+
+        //row = objects.ToArray();
+        row = Array.Empty<object>();
         while (_reader.Read())
         {
-          for (int i = 0; i < _reader.FieldCount; i++)
-          {
-            objects.Add(_reader[i]);
-          }        
+          row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetValue).ToList().ToArray();
+          return true;
         }
-        
-        row = objects.ToArray();
+          
         return true;
       }
       else

@@ -306,27 +306,28 @@ namespace OnlineShop
     #endregion
 
     #region notebookQueries
-    private const string CommandGetNotebooks = "SELECT * FROM Notebooks";
+   
 
 
-    /// <summary>
-    /// Executes a Query in the Database and returns a list of notebooks
-    /// </summary>
-    /// <param name="priceRange"></param>
-    /// <param name="ramMemoryRange"></param>
-    /// <param name="hdMemoryRange"></param>
-    /// <param name="vramRange"></param>
-    /// <param name="batteryTimeRange"></param>
-    /// <param name="os"></param>
-    /// <param name="graphicCardName"></param>
-    /// <param name="cpuName"></param>
-    /// <param name="cpuCount"></param>
-    /// <param name="notebookManufacturer"></param>
-    /// <returns></returns>
+   
     public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
-    { 
+    {
+      string CommandGetNotebooks = "SELECT * FROM Products AS p";
+      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);
+      foreach(ISubQuery subquery in subQueries)
+      {
+        CommandGetNotebooks += subquery.subQueryText;
+      }
       using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
-      {  
+      {
+        foreach(ISubQuery subQuery in subQueries)
+        {
+          foreach (KeyValuePair<string, object> parameter in subQuery.Parameters)
+          {
+            getNotebook.AddParameter(parameter.Key, parameter.Value);
+          }
+        }
+        
         IReader reader = getNotebook.ExecuteReader();
         while (reader.TryReadNextRow(out object[] row))
         {
@@ -340,17 +341,24 @@ namespace OnlineShop
       return null;
     }
 
+    private List<ISubQuery> GetSubQueries(NotebookSearchData searchData)
+    {
+      var subQueries = new List<ISubQuery>();
+      if(searchData.priceRange != null)
+      {
+        subQueries.Add(GetNotebooksByPriceSubQuery(searchData.priceRange));
+      }
+      return subQueries;
+    }
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given price range
     /// </summary>
-    /// <param name="min">min price</param>
-    /// <param name="max">max price</param>
     /// <returns>Reader Object with the selected Notebooks</returns>
-    public static ISubQuery GetNotebooksByPriceSubQuery(double min, double max)
+    public static ISubQuery GetNotebooksByPriceSubQuery(PriceRange range)
     {
       MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$min", min);
-      getNotebook.AddParameter("$max", max);
+      getNotebook.AddParameter("$min", range.Min);
+      getNotebook.AddParameter("$max", range.Max);
       return getNotebook;
 
     }

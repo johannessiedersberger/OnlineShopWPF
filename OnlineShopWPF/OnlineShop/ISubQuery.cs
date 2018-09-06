@@ -9,7 +9,7 @@ namespace OnlineShop
 {
   public interface ISubQuery
   {
-    string subQuery { get; }
+    string subQueryText { get; }
     void AddParameter(string name, object value);
     /// <summary>
     /// Gets the read only collection of parameters.
@@ -21,9 +21,9 @@ namespace OnlineShop
   {
     public MySqliteSubQuery(string subQuery)
     {
-      this.subQuery = subQuery;
+      this.subQueryText = subQuery;
     }
-    public string subQuery { get; }
+    public string subQueryText { get; }
 
     public void AddParameter(string name, object value)
     {
