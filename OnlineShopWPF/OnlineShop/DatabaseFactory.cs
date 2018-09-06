@@ -307,26 +307,14 @@ namespace OnlineShop
 
     #region notebookQueries
    
-
-
-   
     public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
     {
       string CommandGetNotebooks = "SELECT * FROM Products AS p";
-      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);
-      foreach(ISubQuery subquery in subQueries)
+      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);    
+
+      using (var getNotebook = _db.CreateQueryCommand(CompleteQueryText(CommandGetNotebooks, subQueries)))
       {
-        CommandGetNotebooks += subquery.subQueryText;
-      }
-      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
-      {
-        foreach(ISubQuery subQuery in subQueries)
-        {
-          foreach (KeyValuePair<string, object> parameter in subQuery.Parameters)
-          {
-            getNotebook.AddParameter(parameter.Key, parameter.Value);
-          }
-        }
+        SetQueryParameters(getNotebook, subQueries);
         
         IReader reader = getNotebook.ExecuteReader();
         while (reader.TryReadNextRow(out object[] row))
@@ -336,9 +324,7 @@ namespace OnlineShop
           {
             Console.WriteLine(row[i++]);
           }
-          
-        }
-        
+        }       
       }
       return null;
     }
@@ -352,6 +338,28 @@ namespace OnlineShop
       }
       return subQueries;
     }
+
+    private string CompleteQueryText(string startQueryText, List<ISubQuery> subQueries)
+    {
+      string completeCommandText = startQueryText;
+      foreach (ISubQuery subquery in subQueries)
+      {
+        completeCommandText += subquery.subQueryText;
+      }
+      return completeCommandText;
+    }
+
+    private void SetQueryParameters(IQueryCommand mainQuery, List<ISubQuery> subQueries)
+    {
+      foreach (ISubQuery subQuery in subQueries)
+      {
+        foreach (KeyValuePair<string, object> parameter in subQuery.Parameters)
+        {
+          mainQuery.AddParameter(parameter.Key, parameter.Value);
+        }
+      }
+    }
+
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given price range
     /// </summary>

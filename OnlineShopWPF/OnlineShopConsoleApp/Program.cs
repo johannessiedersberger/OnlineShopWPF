@@ -30,7 +30,7 @@ namespace OnlineShopConsoleApp
 
       dbF.GetNotebooks(new NotebookSearchData
       {
-        priceRange = new PriceRange(0, 10000)
+        priceRange = new PriceRange(0, 1000)
       });
     }
 
