@@ -171,7 +171,7 @@ namespace OnlineShop
         var row = new List<string>();
         while (_reader.Read())
         {
-          row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetName).ToList();          
+          row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetName).ToList();
         }
         return row.ToArray();
       }
@@ -184,24 +184,24 @@ namespace OnlineShop
     /// <returns>the query result</returns>
     public bool TryReadNextRow(out object[] row)
     {
+      _reader.Read();
+
       if (_reader.HasRows)
       {
-        row = Array.Empty<object>();
-        while (_reader.Read())
+        var columns = new object[_reader.FieldCount];
+        for (int i = 0; i < columns.Length; i++)
         {
-          row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetValue).ToList().ToArray();
-          return true;
+          columns[i] = _reader[i];
         }
-          
+
+        row = columns;
         return true;
       }
       else
       {
-        row = null;
+        row = default(object[]);
         return false;
       }
-      
-
     }
 
     /// <summary>

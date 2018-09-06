@@ -336,10 +336,7 @@ namespace OnlineShop
           {
             Console.WriteLine(row[i++]);
           }
-          foreach (string s in reader.ColumnNames)
-          {
-            Console.WriteLine(s);
-          }
+          
         }
         
       }
