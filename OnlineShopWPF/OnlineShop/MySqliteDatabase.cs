@@ -168,12 +168,12 @@ namespace OnlineShop
     {
       get
       {
-        List<string> names = new List<string>();
-        for (int i = 0; _reader.Read(); i++)
+        var row = new List<string>();
+        while (_reader.Read())
         {
-          names.Add(_reader.GetName(i));
+          row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetName).ToList();          
         }
-        return names.ToArray();
+        return row.ToArray();
       }
     }
 
@@ -186,17 +186,6 @@ namespace OnlineShop
     {
       if (_reader.HasRows)
       {
-        //List<object> objects = new List<object>();
-
-        //while (_reader.Read())
-        //{
-        //  for (int i = 0; i < _reader.FieldCount; i++)
-        //  {
-        //    objects.Add(_reader[]);
-        //  }        
-        //}
-
-        //row = objects.ToArray();
         row = Array.Empty<object>();
         while (_reader.Read())
         {
