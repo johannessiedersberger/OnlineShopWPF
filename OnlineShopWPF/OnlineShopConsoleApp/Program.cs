@@ -28,9 +28,9 @@ namespace OnlineShopConsoleApp
       //Console.WriteLine(dbF.DoesNotebookAlreadyExist(dbF.GetProductId("ULTRA GAMING NOTEBOOK")));
      
 
-      dbF.GetNotebooks(new NotebookSearchData
+      var notebooks = dbF.GetNotebooks(new NotebookSearchData
       {
-        priceRange = new PriceRange(0, 1000)
+        priceRange = new PriceRange(0, 10000)
       });
     }
 

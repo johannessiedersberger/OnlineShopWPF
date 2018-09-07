@@ -143,6 +143,16 @@ namespace OnlineShop
       }
     }
 
+    public Graphic GetGraphicCard(int graphicId)
+    {
+      using (var getGraphicCard = _db.CreateQueryCommand(CommandSelectGraphicID))
+      {
+        getGraphicCard.AddParameter("$name", name);
+        IReader reader = getGraphicCard.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
+
     /// <summary>
     /// Gets the ID from the Graphic-Card
     /// </summary>
@@ -309,25 +319,29 @@ namespace OnlineShop
    
     public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
     {
-      string CommandGetNotebooks = "SELECT * FROM Products AS p";
-      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);    
-
+      string CommandGetNotebooks = "SELECT p.product_id,graphic_id,cpu_id,hard_drive_id,ram_memory,average_battery_time, os,price,name FROM Products AS p";
+      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);
+      var notebooks = new List<Notebook>();
       using (var getNotebook = _db.CreateQueryCommand(CompleteQueryText(CommandGetNotebooks, subQueries)))
       {
         SetQueryParameters(getNotebook, subQueries);
-        
+
+        var notebookRows = new List<string>();
         IReader reader = getNotebook.ExecuteReader();
         while (reader.TryReadNextRow(out object[] row))
         {
-          int i = 0;
-          foreach (object obj in row)
+          for (int i = 0; i < row.Length; i++)
           {
-            Console.WriteLine(row[i++]);
+            notebookRows.Add(row[i].ToString());
           }
-        }       
-      }
-      return null;
+          notebooks.Add(new Notebook(int.Parse(notebookRows[0]), int.Parse(notebookRows[1]), int.Parse(notebookRows[2]), int.Parse(notebookRows[3]),
+            int.Parse(notebookRows[4]), int.Parse(notebookRows[5]), notebookRows[6]));
+        }
+        return notebooks;
+      }      
     }
+
+    
 
     private List<ISubQuery> GetSubQueries(NotebookSearchData searchData)
     {
@@ -360,11 +374,7 @@ namespace OnlineShop
       }
     }
 
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given price range
-    /// </summary>
-    /// <returns>Reader Object with the selected Notebooks</returns>
-    public static ISubQuery GetNotebooksByPriceSubQuery(PriceRange range)
+    private static ISubQuery GetNotebooksByPriceSubQuery(PriceRange range)
     {
       MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
       getNotebook.AddParameter("$min", range.Min);

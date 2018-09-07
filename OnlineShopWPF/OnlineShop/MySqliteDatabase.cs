@@ -169,8 +169,10 @@ namespace OnlineShop
       get
       {
         var row = new List<string>();
-        while (_reader.Read())
+        //_reader.Read();
+        if (_reader.HasRows)
         {
+         
           row = Enumerable.Range(0, _reader.FieldCount).Select(_reader.GetName).ToList();
         }
         return row.ToArray();
