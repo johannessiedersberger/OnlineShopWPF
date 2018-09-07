@@ -143,13 +143,23 @@ namespace OnlineShop
       }
     }
 
+    private const string CommandGetGraphicCard = "SELECT vram,name FROM Graphics WHERE $graphic_id = graphic_id";
+
     public Graphic GetGraphicCard(int graphicId)
     {
-      using (var getGraphicCard = _db.CreateQueryCommand(CommandSelectGraphicID))
+      using (var getGraphicCard = _db.CreateQueryCommand(CommandGetGraphicCard))
       {
-        getGraphicCard.AddParameter("$name", name);
+        getGraphicCard.AddParameter("$graphic_id", graphicId);
         IReader reader = getGraphicCard.ExecuteReader();
-        return reader.TryReadNextRow(out object[] row);
+        var result = new List<string>();
+        while(reader.TryReadNextRow(out object[] row))
+        {
+          for (int i = 0; i < row.Length; i++)
+          {
+            result.Add(row[i].ToString());
+          }
+        }
+        return new Graphic(int.Parse(result[0]), result[1]);
       }
     }
 

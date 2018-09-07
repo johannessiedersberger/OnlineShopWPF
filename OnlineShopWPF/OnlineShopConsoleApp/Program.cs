@@ -12,7 +12,7 @@ namespace OnlineShopConsoleApp
     static void Main(string[] args)
     {
       DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
-      
+
       //dbF.AddGraphicToDataBase(4, "NVIDIA TITAN X");
       //Console.WriteLine("GraphicID " + dbF.GetGraphicCardId("NVIDIA TITAN X"));
 
@@ -26,8 +26,8 @@ namespace OnlineShopConsoleApp
 
       //dbF.AddNewNotebookToDatabase(dbF.GetProductId("ULTRA GAMING NOTEBOOK"), dbF.GetGraphicCardId("NVIDIA TITAN X"), dbF.GetCpuId("INTEL CORE i9 8800k"), dbF.GetHardDriveId("ssd", 1011), 128, 10000, "windows");
       //Console.WriteLine(dbF.DoesNotebookAlreadyExist(dbF.GetProductId("ULTRA GAMING NOTEBOOK")));
-     
 
+      var v = dbF.GetGraphicCard(dbF.GetGraphicCardId("NVIDIA TITAN X"));
       var notebooks = dbF.GetNotebooks(new NotebookSearchData
       {
         priceRange = new PriceRange(0, 10000)
