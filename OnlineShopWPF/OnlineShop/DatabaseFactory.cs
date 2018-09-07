@@ -78,6 +78,25 @@ namespace OnlineShop
         return reader.TryReadNextRow(out object[] row);
       }
     }
+    private const string CommandGetProduct = "SELECT name, price FROM PRODUCTS WHERE $product_id = product_id";
+
+    public Product GetProduct(int productId)
+    {
+      using(var getProduct = _db.CreateQueryCommand(CommandGetProduct))
+      {
+        getProduct.AddParameter("$product_id", productId);
+        IReader reader = getProduct.ExecuteReader();
+        var result = new List<string>();
+        while(reader.TryReadNextRow(out object[] row))
+        {
+          for (int i = 0; i < row.Length; i++)
+          {
+            result.Add(row[i].ToString());
+          }
+        }
+        return new Product(result[0], double.Parse(result[1]));
+      }
+    }
 
     /// <summary>
     /// Gets the ID from the Product
@@ -214,6 +233,26 @@ namespace OnlineShop
       }
     }
 
+    private const string CommandGetHardDrive = "SELECT memory, type FROM HardDrives WHERE $hard_drive_id = hard_drive_id";
+
+    public HardDrive GetHardDrive(int hardDriveId)
+    {
+      using(var getHardDrive = _db.CreateQueryCommand(CommandGetHardDrive))
+      {
+        getHardDrive.AddParameter("$hard_drive_id", hardDriveId);
+        IReader reader = getHardDrive.ExecuteReader();
+        var result = new List<string>();
+        while(reader.TryReadNextRow(out object[] row))
+        {
+          for (int i = 0; i < row.Length; i++)
+          {
+            result.Add(row[i].ToString());
+          }
+        }
+        return new HardDrive(int.Parse(result[0]), result[1]);
+      }
+    }
+
     /// <summary>
     /// Gets the ID from the HardDrive
     /// </summary>
@@ -281,6 +320,24 @@ namespace OnlineShop
         getID.AddParameter("$name", name);
         IReader reader = getID.ExecuteReader();
         return reader.TryReadNextRow(out object[] row);
+      }
+    }
+    private const string CommandGetCPU = "SELECT count,clock_rate,name FROM CPU WHERE $cpu_id = cpu_id ";
+    public CPU GetCPU(int cpuId)
+    {
+      using(var getCPU = _db.CreateQueryCommand(CommandGetCPU))
+      {
+        getCPU.AddParameter("cpu_id", cpuId);
+        IReader reader = getCPU.ExecuteReader();
+        var result = new List<string>();
+        while(reader.TryReadNextRow(out object[] row))
+        {
+          for (int i = 0; i < row.Length; i++)
+          {
+            result.Add(row[i].ToString());
+          }
+        }
+        return new CPU(int.Parse(result[0]), double.Parse(result[1]), result[2]);
       }
     }
     #endregion

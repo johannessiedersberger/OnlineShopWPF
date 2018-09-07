@@ -27,7 +27,10 @@ namespace OnlineShopConsoleApp
       //dbF.AddNewNotebookToDatabase(dbF.GetProductId("ULTRA GAMING NOTEBOOK"), dbF.GetGraphicCardId("NVIDIA TITAN X"), dbF.GetCpuId("INTEL CORE i9 8800k"), dbF.GetHardDriveId("ssd", 1011), 128, 10000, "windows");
       //Console.WriteLine(dbF.DoesNotebookAlreadyExist(dbF.GetProductId("ULTRA GAMING NOTEBOOK")));
 
-      var v = dbF.GetGraphicCard(dbF.GetGraphicCardId("NVIDIA TITAN X"));
+      var graphicCard = dbF.GetGraphicCard(dbF.GetGraphicCardId("NVIDIA TITAN X"));
+      var hardDrive = dbF.GetHardDrive(dbF.GetHardDriveId("ssd", 1011));
+      var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
+      var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
       var notebooks = dbF.GetNotebooks(new NotebookSearchData
       {
         priceRange = new PriceRange(0, 10000)
