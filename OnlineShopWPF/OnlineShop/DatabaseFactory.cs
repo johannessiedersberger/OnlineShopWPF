@@ -45,7 +45,6 @@ namespace OnlineShop
       }
     }
 
-
     private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
     #endregion
 
@@ -383,40 +382,43 @@ namespace OnlineShop
     #endregion
 
     #region notebookQueries
-   
+
     public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
     {
-      string CommandGetNotebooks = "SELECT p.product_id,graphic_id,cpu_id,hard_drive_id,ram_memory,average_battery_time, os,price,name FROM Products AS p";
-      List<ISubQuery> subQueries = GetSubQueries(notebookSearchData);
+      string CommandGetNotebooks = "SELECT Notebooks.product_id, graphic_id, cpu_id, hard_drive_id, Notebooks.ram_memory, Notebooks.average_battery_time, Notebooks.os FROM " +
+        "  (SELECT product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE count > 4 INTERSECT " +
+        "  SELECT product_id FROM Notebooks AS n INNER Join HardDrives As h ON n.hard_drive_id = h.hard_drive_id WHERE h.memory > 1 INTERSECT " +
+        "  SELECT product_id FROM Notebooks AS n INNER JOIN Graphics As g ON n.graphic_id = g.graphic_id WHERE vram > 0) AS PID " +
+        "  INNER JOIN Notebooks ON PID.product_id = Notebooks.product_id ";
+        
+        
       var notebooks = new List<Notebook>();
-      using (var getNotebook = _db.CreateQueryCommand(CompleteQueryText(CommandGetNotebooks, subQueries)))
+      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
       {
-        SetQueryParameters(getNotebook, subQueries);
-
-        var notebookRows = new List<string>();
         IReader reader = getNotebook.ExecuteReader();
         while (reader.TryReadNextRow(out object[] row))
         {
+          var notebookRows = new List<string>();
           for (int i = 0; i < row.Length; i++)
           {
             notebookRows.Add(row[i].ToString());
+            //Console.WriteLine(row[i]);
           }
-          notebooks.Add(new Notebook(int.Parse(notebookRows[0]), int.Parse(notebookRows[1]), int.Parse(notebookRows[2]), int.Parse(notebookRows[3]),
-            int.Parse(notebookRows[4]), int.Parse(notebookRows[5]), notebookRows[6]));
+          notebooks.Add(new Notebook(int.Parse(notebookRows[0]), int.Parse(notebookRows[1]), int.Parse(notebookRows[2]), int.Parse(notebookRows[3]), int.Parse(notebookRows[4]), int.Parse(notebookRows[5]), notebookRows[6]));
         }
         return notebooks;
-      }      
+      }
     }
-
-    
 
     private List<ISubQuery> GetSubQueries(NotebookSearchData searchData)
     {
       var subQueries = new List<ISubQuery>();
-      if(searchData.priceRange != null)
-      {
+
+      if (searchData.priceRange != null)
         subQueries.Add(GetNotebooksByPriceSubQuery(searchData.priceRange));
-      }
+      if (searchData.cpuCount != 0)
+        subQueries.Add(GetNotebooksByCpuCount(searchData.cpuCount));
+
       return subQueries;
     }
 
@@ -425,7 +427,7 @@ namespace OnlineShop
       string completeCommandText = startQueryText;
       foreach (ISubQuery subquery in subQueries)
       {
-        completeCommandText += subquery.subQueryText;
+        completeCommandText += subquery.JoinText;
       }
       return completeCommandText;
     }
@@ -440,78 +442,56 @@ namespace OnlineShop
         }
       }
     }
-
-    private static ISubQuery GetNotebooksByPriceSubQuery(PriceRange range)
+    #region subqueries
+    private static ISubQuery GetNotebooksByPriceSubQuery(Range range)
     {
       MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$min", range.Min);
-      getNotebook.AddParameter("$max", range.Max);
+      getNotebook.AddParameter("$minPrice", range.Min);
+      getNotebook.AddParameter("$maxPrice", range.Max);
       return getNotebook;
 
     }
-    private const string CommandGetNotebooksByPriceSubQuery =
-        " INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-        "WHERE price BETWEEN $min AND $max";
 
+    private const string CommandGetNotebooksByPriceSubQuery =
+        " WHERE price BETWEEN $minPrice AND $maxPrice";
+
+
+    private static ISubQuery GetNotebooksByCpuCount(int cpuCount)
+    {
+      MySqliteSubQuery getNotebook = new MySqliteSubQuery(CommandGetNotebooksByCpuCount);
+      getNotebook.AddParameter("$cpuCount", cpuCount);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByCpuCount =
+      " INNER JOIN CPU AS c ON p.cpu_id = n.product_id " +
+        " WHERE n.ram_memory BETWEEN $minRam AND $maxRam";
     #endregion
+    #endregion
+
+
   }
-  public class PriceRange
+
+  #region dataClasses
+
+  public class Range
   {
-    public PriceRange(double min, double max)
+    public double Min { get; private set; }
+    public double Max { get; private set; }
+    public Range(double min, double max)
     {
       Min = min;
       Max = max;
     }
-    public double Max;
-    public double Min;
   }
-  public class RamMemoryRange
-  {
-    public RamMemoryRange(double min, double max)
-    {
-      Min = min;
-      Max = max;
-    }
-    public double Max;
-    public double Min;
-  }
-  public class HardDriveMemoryRange
-  {
-    public HardDriveMemoryRange(double min, double max)
-    {
-      Min = min;
-      Max = max;
-    }
-    public double Max;
-    public double Min;
-  }
-  public class VideoRamRange
-  {
-    public VideoRamRange(double min, double max)
-    {
-      Min = min;
-      Max = max;
-    }
-    public double Max;
-    public double Min;
-  }
-  public class BatteryTimeRange
-  {
-    public BatteryTimeRange(double min, double max)
-    {
-      Min = min;
-      Max = max;
-    }
-    public double Max;
-    public double Min;
-  }
+
+
   public class NotebookSearchData
   {
-    public PriceRange priceRange;
-    public RamMemoryRange ramMemoryRange;
-    public HardDriveMemoryRange hdMemoryRange;
-    public VideoRamRange vramRange;
-    public BatteryTimeRange batteryTimeRange;
+    public Range priceRange;
+    public Range ramMemoryRange;
+    public Range hdMemoryRange;
+    public Range vramRange;
+    public Range batteryTimeRange;
     public string notebookManufacturer;
     public string os;
     public string graphicCardName;
@@ -520,4 +500,5 @@ namespace OnlineShop
     public double cpuClockRate;
 
   }
+  #endregion
 }

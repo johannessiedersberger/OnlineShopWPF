@@ -19,13 +19,13 @@ namespace OnlineShop
   /// </summary>
   public class Notebook
   {
-    private int _productId;
-    private int _graphicId;
-    private int _cpuId;
-    private int _hardDriveId;
-    private int RamMemory;
-    private int AverageBatteryTime;
-    private string Os;
+    public int ProductId { get; private set; }
+    public int GraphicId { get; private set; }
+    public int CpuId { get; private set; }
+    public int HardDriveId { get; private set; }
+    public int RamMemory { get; private set; }
+    public int AverageBatteryTime { get; private set; }
+    public string Os { get; private set; }
 
     /// <summary>
     /// Creates a new notebook in the databse
@@ -39,10 +39,10 @@ namespace OnlineShop
     /// <param name="os">the os</param>
     public Notebook(int productId, int graphicId, int cpuId, int hardDriveId, int ramMemory, int avgBatteryTime, string os)
     {
-      _productId = productId;
-      _graphicId = graphicId;
-      _cpuId = cpuId;
-      _hardDriveId = hardDriveId;
+      ProductId = productId;
+      GraphicId = graphicId;
+      CpuId = cpuId;
+      HardDriveId = hardDriveId;
       RamMemory = ramMemory;
       AverageBatteryTime = avgBatteryTime;
       Os = os;

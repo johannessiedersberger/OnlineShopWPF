@@ -33,8 +33,14 @@ namespace OnlineShopConsoleApp
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
       var notebooks = dbF.GetNotebooks(new NotebookSearchData
       {
-        priceRange = new PriceRange(0, 10000)
+        priceRange = new Range(0, 10000),
+        ramMemoryRange = new Range(0, 99)
+        
       });
+      foreach(Notebook notebook in notebooks)
+      {
+        Console.WriteLine(dbF.GetProduct(notebook.ProductId).Name);
+      }
     }
 
     //static void CreateBeatsHeadPhone(DatabaseFactory db)
