@@ -14,21 +14,12 @@ namespace OnlineShop
     public Range batteryTimeRange;
     public string os;
     
-    //CPU
-    public string cpuName;
-    public Range cpuClockRate;
-    public Range cpuCount;
-    
-    //HardDrive
-    public Range hdMemoryRange;
-    public string hdType;
-    
-    //Graphic
-    public Range vramRange;
-    public string graphicCardName;
+    public CPUQueryParams CPUQueryParams;
 
-   
+    public HardDriveQueryParams HardDriveQueryParams;
+
+    public GraphicQueryParams GraphicQueryParams;
+
     
-   
   }
 }

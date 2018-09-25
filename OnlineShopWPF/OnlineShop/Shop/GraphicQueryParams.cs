@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class ProductQueryParams
+  public class GraphicQueryParams
   {
-    public string Name;
-    public Range Price;
+    public Range vramRange;
+    public string graphicCardName;
   }
 }

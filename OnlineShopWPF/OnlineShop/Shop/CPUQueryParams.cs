@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class ProductQueryParams
+  public class CPUQueryParams
   {
-    public string Name;
-    public Range Price;
+    public string cpuName;
+    public Range cpuClockRate;
+    public Range cpuCount;
   }
 }

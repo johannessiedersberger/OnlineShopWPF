@@ -14,13 +14,15 @@ namespace OnlineShop
       _db = db;
     }
 
-    //public List<Product> FindMatchingProducts(ProductQueryParams param)
-    //{
-    //  if(param is NotebookQueryParams)
-    //  {
-    //    return FindMatchingNotebooks((NotebookQueryParams)param);
-    //  }
-    //}
+    
+    public List<Product> FindMatchingProducts(ProductQueryParams param)
+    {
+      if (param is NotebookQueryParams)
+      {
+        return FindMatchingNotebooks((NotebookQueryParams)param);
+      }
+      return null;
+    }
 
     #region headphones
     /// <summary>
@@ -417,37 +419,58 @@ namespace OnlineShop
       }
     }
 
-    private List<IQueryPart> GetQueryParts(NotebookQueryParams searchData)
+    private List<IQueryPart> GetQueryParts(NotebookQueryParams param)
     {
       var subQueries = new List<IQueryPart>();
-
-      //Notebook
-      if (searchData.priceRange != null)
-        subQueries.Add(GetNotebooksByPriceQuery(searchData.priceRange));
-      if (searchData.os != null)
-        subQueries.Add(GetNotebooksByOsQuery(searchData.os));
-      if (searchData.batteryTimeRange != null)
-        subQueries.Add(GetNotebooksByBatteryTimeQuery(searchData.batteryTimeRange));
-      if (searchData.ramMemoryRange != null)
-        subQueries.Add(GetNotebooksByRAMQuery(searchData.ramMemoryRange));
-      //CPU
-      if (searchData.cpuCount != null)
-        subQueries.Add(GetNotebooksByCpuCountQuery(searchData.cpuCount));   
-      if (searchData.cpuName != null)
-        subQueries.Add(GetNotebooksByCPUNameQuery(searchData.cpuName));
-      if (searchData.cpuClockRate != null)
-        subQueries.Add(GetNotebooksByCPUClockRateQuery(searchData.cpuClockRate));
-      //HardDrive
-      if (searchData.hdMemoryRange != null)
-        subQueries.Add(GetNotebooksByhardDriveMemory(searchData.hdMemoryRange));
-      if (searchData.hdType != null)
-        subQueries.Add(GetNotebooksByhardDriveType(searchData.hdType));
-      //Graphic
-      if (searchData.graphicCardName != null)
-        subQueries.Add(GetNotebooksByGraphicCardName(searchData.graphicCardName));
-      if (searchData.vramRange != null)
-        subQueries.Add(GetNotebooksByVRAMMemory(searchData.vramRange));
+      CheckGraphic(subQueries, param);
+      CheckCPU(subQueries, param);
+      CheckHardDrive(subQueries, param);
+      CheckNotebook(subQueries, param);
       return subQueries;
+    }
+
+    private static void CheckGraphic(List<IQueryPart> queryParts, NotebookQueryParams param)
+    {
+      if (param.GraphicQueryParams == null)
+        return;
+      if (param.GraphicQueryParams.graphicCardName != null)
+        queryParts.Add(GetNotebooksByGraphicCardName(param.GraphicQueryParams.graphicCardName));
+      if (param.GraphicQueryParams.vramRange != null)
+        queryParts.Add(GetNotebooksByVRAMMemory(param.GraphicQueryParams.vramRange));
+    }
+
+    private static void CheckHardDrive(List<IQueryPart> queryParts, NotebookQueryParams param)
+    {
+      if (param.HardDriveQueryParams == null)
+        return;
+      if (param.HardDriveQueryParams.hdMemoryRange != null)
+        queryParts.Add(GetNotebooksByhardDriveMemory(param.HardDriveQueryParams.hdMemoryRange));
+      if (param.HardDriveQueryParams.hdType != null)
+        queryParts.Add(GetNotebooksByhardDriveType(param.HardDriveQueryParams.hdType));
+    }
+
+    private static void CheckCPU(List<IQueryPart> queryParts, NotebookQueryParams param)
+    {
+      if (param.CPUQueryParams == null)
+        return;
+      if (param.CPUQueryParams.cpuCount != null)
+        queryParts.Add(GetNotebooksByCpuCountQuery(param.CPUQueryParams.cpuCount));
+      if (param.CPUQueryParams.cpuName != null)
+        queryParts.Add(GetNotebooksByCPUNameQuery(param.CPUQueryParams.cpuName));
+      if (param.CPUQueryParams.cpuClockRate != null)
+        queryParts.Add(GetNotebooksByCPUClockRateQuery(param.CPUQueryParams.cpuClockRate));
+    }
+
+    private static void CheckNotebook(List<IQueryPart> queryParts, NotebookQueryParams param)
+    {
+      if (param.priceRange != null)
+        queryParts.Add(GetNotebooksByPriceQuery(param.priceRange));
+      if (param.os != null)
+        queryParts.Add(GetNotebooksByOsQuery(param.os));
+      if (param.batteryTimeRange != null)
+        queryParts.Add(GetNotebooksByBatteryTimeQuery(param.batteryTimeRange));
+      if (param.ramMemoryRange != null)
+        queryParts.Add(GetNotebooksByRAMQuery(param.ramMemoryRange));
     }
     private string CreateQueryText(List<IQueryPart> parts)
     {

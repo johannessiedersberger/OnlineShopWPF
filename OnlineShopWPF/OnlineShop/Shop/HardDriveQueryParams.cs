@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class ProductQueryParams
+  public class HardDriveQueryParams
   {
-    public string Name;
-    public Range Price;
+    public Range hdMemoryRange;
+    public string hdType;
   }
 }

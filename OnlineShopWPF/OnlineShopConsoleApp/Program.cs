@@ -18,18 +18,8 @@ namespace OnlineShopConsoleApp
       var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
       var notebooks = dbF.FindMatchingNotebooks(new NotebookQueryParams
-      {       
-        priceRange = new Range(0, 100000),
-        cpuCount = new Range(0, 8),
-        batteryTimeRange = new Range(0, 10000),
-        cpuName = "INTEL",
-        cpuClockRate = new Range(0, 11),
-        ramMemoryRange = new Range(0, 1000),
-        os = "windows",
-        hdMemoryRange = new Range(0, 2000),
-        hdType = "ssd",
-        graphicCardName = "nvidia",
-        vramRange = new Range(0, 4),
+      {
+        GraphicQueryParams = new GraphicQueryParams { graphicCardName = "NVIDIA", vramRange = new Range(0, 2) }
       });
       foreach(Product notebookProduct in notebooks)
       {

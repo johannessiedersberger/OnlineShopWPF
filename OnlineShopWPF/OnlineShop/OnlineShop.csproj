@@ -62,6 +62,7 @@
     <Compile Include="IDatabase\ISubQuery.cs" />
     <Compile Include="MySqliteDB\MySqliteSubQuery.cs" />
     <Compile Include="Products\CPU.cs" />
+    <Compile Include="Shop\CPUQueryParams.cs" />
     <Compile Include="Shop\Customer.cs" />
     <Compile Include="Shop\DatabaseFactory.cs" />
     <Compile Include="Shop\DataException.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="MySqliteDB\MySqliteNonQueryCommand.cs" />
     <Compile Include="MySqliteDB\MySqliteQueryCommand.cs" />
     <Compile Include="Products\Notebook.cs" />
+    <Compile Include="Shop\GraphicQueryParams.cs" />
+    <Compile Include="Shop\HardDriveQueryParams.cs" />
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
