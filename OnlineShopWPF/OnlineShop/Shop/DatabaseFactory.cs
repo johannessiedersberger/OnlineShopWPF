@@ -423,6 +423,8 @@ namespace OnlineShop
         subQueries.Add(GetNotebooksByCPUNameQuery(searchData.cpuName));
       if (searchData.cpuClockRate != null)
         subQueries.Add(GetNotebooksByCPUClockRateQuery(searchData.cpuClockRate));
+      if (searchData.ramMemoryRange != null)
+        subQueries.Add(GetNotebooksByRAMQuery(searchData.ramMemoryRange));
 
       return subQueries;
     }
@@ -448,8 +450,9 @@ namespace OnlineShop
         }
       }
     }
-   
+
     #region subqueries
+    #region notebook
     private static IQueryPart GetNotebooksByPriceQuery(Range range)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
@@ -457,20 +460,8 @@ namespace OnlineShop
       getNotebook.AddParameter("$maxPrice", range.Max);
       return getNotebook;
     }
-
     private const string CommandGetNotebooksByPriceSubQuery =
         "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
-
-
-    private static IQueryPart GetNotebooksByCpuCountQuery(Range cpuCount)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByCpuCount);
-      getNotebook.AddParameter("$minCount", cpuCount.Min);
-      getNotebook.AddParameter("$maxCount", cpuCount.Max);
-      return getNotebook;
-    }
-    private const string CommandGetNotebooksByCpuCount =
-      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.count BETWEEN $minCount AND $maxCount";
 
     private static IQueryPart GetNotebooksByBatteryTimeQuery(Range time)
     {
@@ -481,6 +472,32 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksByBatteryTime =
       "SELECT n.product_id FROM Notebooks AS n WHERE n.average_battery_time BETWEEN $minTime AND $maxTime";
+
+
+    private static IQueryPart GetNotebooksByRAMQuery(Range ram)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByRAM);
+      getNotebook.AddParameter("$minRam", ram.Min);
+      getNotebook.AddParameter("$maxRam", ram.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByRAM =
+      "SELECT n.product_id FROM Notebooks AS n WHERE n.ram_memory BETWEEN $minRam AND $maxRam";
+
+
+    #endregion
+    #region cpu
+    private static IQueryPart GetNotebooksByCpuCountQuery(Range cpuCount)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByCpuCount);
+      getNotebook.AddParameter("$minCount", cpuCount.Min);
+      getNotebook.AddParameter("$maxCount", cpuCount.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByCpuCount =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.count BETWEEN $minCount AND $maxCount";
+
+   
 
     private static IQueryPart GetNotebooksByCPUNameQuery(string name)
     {
@@ -501,6 +518,8 @@ namespace OnlineShop
     private const string CommandGetNotebooksCpuClockRate =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.clock_rate BETWEEN $minClockRate AND $maxClockRate";
     #endregion
+
+    #endregion
     #endregion
 
 
@@ -508,9 +527,9 @@ namespace OnlineShop
 
   #region dataClasses
 
-  
 
 
- 
+
+
   #endregion
 }

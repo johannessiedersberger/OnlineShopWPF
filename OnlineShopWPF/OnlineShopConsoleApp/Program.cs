@@ -38,6 +38,7 @@ namespace OnlineShopConsoleApp
         batteryTimeRange = new Range(0, 10000),
         cpuName = "INTEL",
         cpuClockRate = new Range(0, 11),
+        ramMemoryRange = new Range(0, 100)
         
       });
       foreach(Notebook notebook in notebooks)

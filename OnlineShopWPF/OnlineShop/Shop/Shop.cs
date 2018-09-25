@@ -24,47 +24,8 @@ namespace OnlineShop
 
     
 
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given price range
-    /// </summary>
-    /// <param name="min">min price</param>
-    /// <param name="max">max price</param>
-    /// <returns>Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByPrice(double min, double max)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByPrice))
-      {
-        getNotebook.AddParameter("$min", min);
-        getNotebook.AddParameter("$max", max);
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByPrice =
-      "SELECT * FROM Products As p " +
-        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-        "WHERE price BETWEEN $min AND $max";
 
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given ram-memory range
-    /// </summary>
-    /// <param name="min">min ram</param>
-    /// <param name="max">max ram</param>
-    /// <returns>Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByRAM(double min, double max)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByRAM))
-      {
-        getNotebook.AddParameter("$min", min);
-        getNotebook.AddParameter("$max", max);
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByRAM =
-      "SELECT * FROM Products As p " +
-        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-        "WHERE n.ram_memory BETWEEN $min AND $max";
+    
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given OS
@@ -85,26 +46,6 @@ namespace OnlineShop
         "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
         "WHERE n.os = $os";
 
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given battery time range
-    /// </summary>
-    /// <param name="min">min battery time</param>
-    /// <param name="max">max battery</param>
-    /// <returns> Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByBatteryTime(double min, double max)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByBatteryTime))
-      {
-        getNotebook.AddParameter("$min", min);
-        getNotebook.AddParameter("$max", max);
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByBatteryTime =
-      "SELECT * FROM Products As p " +
-        "INNER JOIN Notebooks AS n ON p.product_id = n.product_id " +
-        "WHERE n.average_battery_time BETWEEN $min AND $max";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given memory size  
@@ -149,70 +90,6 @@ namespace OnlineShop
           "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
               "INNER JOIN Graphics G ON N.graphic_id = G.graphic_id " +
               "WHERE G.vram BETWEEN $min AND $max ";
-
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given cpu count 
-    /// </summary>
-    /// <param name="min">min count</param>
-    /// <param name="max">max count</param>
-    /// <returns> Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByCPUCount(double min, double max)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUCount))
-      {
-        getNotebook.AddParameter("$min", min);
-        getNotebook.AddParameter("$max", max);
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByCPUCount =
-      "SELECT * FROM Products P " +
-          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
-              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
-              "WHERE C.count BETWEEN $min AND $max ";
-
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given cpu clock rate 
-    /// </summary>
-    /// <param name="min">min clock rate</param>
-    /// <param name="max">max clock rate</param>
-    /// <returns> Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByCPUClockRate(double min, double max)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUClockRate))
-      {
-        getNotebook.AddParameter("$min", min);
-        getNotebook.AddParameter("$max", max);
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByCPUClockRate =
-      "SELECT * FROM Products P " +
-          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
-              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
-              "WHERE C.clock_rate BETWEEN $min AND $max ";
-
-    /// <summary>
-    /// Executes a Query that selects all Notebooks with the given cpu-manufacturer
-    /// </summary>
-    /// <param name="name">manufacturer</param>
-    /// <returns> Reader Object with the selected Notebooks</returns>
-    public static IReader GetNotebooksByCPUName(string name)
-    {
-      using (var getNotebook = _database.CreateQueryCommand(CommandGetNotebooksByCPUName))
-      {
-        getNotebook.AddParameter("$name", "%" + name + "%");
-        IReader reader = getNotebook.ExecuteReader();
-        return reader;
-      }
-    }
-    private const string CommandGetNotebooksByCPUName =
-      "SELECT * FROM Products P " +
-          "INNER JOIN Notebooks N ON P.product_id = N.product_id " +
-              "INNER JOIN Cpu C ON N.cpu_id = C.cpu_id " +
-              "WHERE C.name LIKE $name ";
 
     /// <summary>
     /// Executes a Query that selects all Notebooks with the given graphic-card manufacturer
