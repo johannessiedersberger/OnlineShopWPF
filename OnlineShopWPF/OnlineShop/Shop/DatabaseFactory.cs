@@ -409,6 +409,21 @@ namespace OnlineShop
         return notebooks;
       }
     }
+    private List<IQueryPart> GetQueryParts(NotebookSearchData searchData)
+    {
+      var subQueries = new List<IQueryPart>();
+
+      if (searchData.priceRange != null)
+        subQueries.Add(GetNotebooksByPriceQuery(searchData.priceRange));
+      if (searchData.cpuCount != null)
+        subQueries.Add(GetNotebooksByCpuCountQuery(searchData.cpuCount));
+      if (searchData.batteryTimeRange != null)
+        subQueries.Add(GetNotebooksByBatteryTimeQuery(searchData.batteryTimeRange));
+      if (searchData.cpuName != null)
+        subQueries.Add(GetNotebooksByCPUNameQuery(searchData.cpuName));
+
+      return subQueries;
+    }
 
     private string CreateQueryText(List<IQueryPart> parts)
     {
@@ -421,19 +436,6 @@ namespace OnlineShop
       }
       return query;
     }
-
-    private List<IQueryPart> GetQueryParts(NotebookSearchData searchData)
-    {
-      var subQueries = new List<IQueryPart>();
-
-      if (searchData.priceRange != null)
-        subQueries.Add(GetNotebooksByPriceSubQuery(searchData.priceRange));
-      if (searchData.cpuCount != null)
-        subQueries.Add(GetNotebooksByCpuCount(searchData.cpuClockRate));
-
-      return subQueries;
-    }
-
     private void SetQueryParameters(IQueryCommand mainQuery, List<IQueryPart> subQueries)
     {
       foreach (IQueryPart subQuery in subQueries)
@@ -444,8 +446,9 @@ namespace OnlineShop
         }
       }
     }
+   
     #region subqueries
-    private static IQueryPart GetNotebooksByPriceSubQuery(Range range)
+    private static IQueryPart GetNotebooksByPriceQuery(Range range)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
       getNotebook.AddParameter("$minPrice", range.Min);
@@ -457,15 +460,34 @@ namespace OnlineShop
         "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
 
 
-    private static IQueryPart GetNotebooksByCpuCount(Range cpuCount)
+    private static IQueryPart GetNotebooksByCpuCountQuery(Range cpuCount)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByCpuCount);
       getNotebook.AddParameter("$minCount", cpuCount.Min);
-      getNotebook.AddParameter("$maxCount", cpuCount.Min);
+      getNotebook.AddParameter("$maxCount", cpuCount.Max);
       return getNotebook;
     }
     private const string CommandGetNotebooksByCpuCount =
-      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE count BETWEEN $minCount AND $maxCount";
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.count BETWEEN $minCount AND $maxCount";
+
+    private static IQueryPart GetNotebooksByBatteryTimeQuery(Range time)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByBatteryTime);
+      getNotebook.AddParameter("$minTime", time.Min);
+      getNotebook.AddParameter("$maxTime", time.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByBatteryTime =
+      "SELECT n.product_id FROM Notebooks AS n WHERE n.average_battery_time BETWEEN $minTime AND $maxTime";
+
+    private static IQueryPart GetNotebooksByCPUNameQuery(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByCpuName);
+      getNotebook.AddParameter("$name", "%" + name + "%");
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByCpuName =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.name LIKE $name";
     #endregion
     #endregion
 

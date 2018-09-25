@@ -33,8 +33,10 @@ namespace OnlineShopConsoleApp
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
       var notebooks = dbF.GetNotebooks(new NotebookSearchData
       {
-        priceRange = new Range(0, 10000),
-        ramMemoryRange = new Range(0, 99)
+        priceRange = new Range(0, 100000),
+        cpuCount = new Range(0, 8),
+        batteryTimeRange = new Range(0, 10000),
+        cpuName = "INTEL"
         
       });
       foreach(Notebook notebook in notebooks)
