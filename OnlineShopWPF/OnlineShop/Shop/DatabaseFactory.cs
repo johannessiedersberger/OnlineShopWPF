@@ -20,6 +20,10 @@ namespace OnlineShop
       {
         return FindMatchingNotebooks((NotebookQueryParams)param);
       }
+      if(param is ProductQueryParams)
+      {
+        return FindMatchingProduct(param);
+      }
       return null;
     }
 
@@ -394,9 +398,35 @@ namespace OnlineShop
 
     #region notebookQueries
 
+    private List<Product> FindMatchingProduct(ProductQueryParams productQueryParams)
+    {
+      List<IQueryPart> querieParts = GetQuerypartsProduct(productQueryParams);
+
+      string CommandGetNotebooks = string.Format("SELECT * FROM " +
+        "  ( {0} ) AS PID " +
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", CreateQueryText(querieParts));
+
+      var products = new List<Product>();
+      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
+      {
+        SetQueryParameters(getNotebook, querieParts);
+        IReader reader = getNotebook.ExecuteReader();
+        while (reader.TryReadNextRow(out object[] row))
+        {
+          var productRows = new List<string>();
+          for (int i = 0; i < row.Length; i++)
+          {
+            productRows.Add(row[i].ToString());
+          }
+          products.Add(new Product(int.Parse(productRows[1]), productRows[2], double.Parse(productRows[3])));
+        }
+        return products;
+      }
+    }
+
     private List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData)
     {
-      List<IQueryPart> querieParts = GetQueryParts(notebookSearchData);
+      List<IQueryPart> querieParts = GetQueryPartsNotebook(notebookSearchData);
 
       string CommandGetNotebooks =string.Format( "SELECT * FROM " +
         "  ( {0} ) AS PID " +
@@ -420,7 +450,7 @@ namespace OnlineShop
       }
     }
 
-    private List<IQueryPart> GetQueryParts(NotebookQueryParams param)
+    private List<IQueryPart> GetQueryPartsNotebook(NotebookQueryParams param)
     {
       var subQueries = new List<IQueryPart>();
       CheckGraphic(subQueries, param);
@@ -428,8 +458,22 @@ namespace OnlineShop
       CheckHardDrive(subQueries, param);
       CheckNotebook(subQueries, param);
       CheckProductDataInNotebooks(subQueries, param);
-      return subQueries;
-      
+      return subQueries;     
+    }
+
+    private List<IQueryPart> GetQuerypartsProduct(ProductQueryParams param)
+    {
+      var querieParts = new List<IQueryPart>();
+      CheckProduct(querieParts, param);
+      return querieParts;
+    }
+
+    private static void CheckProduct(List<IQueryPart> queryParts, ProductQueryParams param)
+    {
+      if (param.Name != null)
+        queryParts.Add(GetProductsByName(param.Name));
+      if (param.Price != null)
+        queryParts.Add(GetProductsByPriceQuery(param.Price));
     }
 
     private static void CheckProductDataInNotebooks(List<IQueryPart> queryParts, ProductQueryParams param)
@@ -508,8 +552,27 @@ namespace OnlineShop
     }
 
     #region subqueries
+
     #region notebook
-   
+    private static IQueryPart GetNotebooksByPriceQuery(Range range)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
+      getNotebook.AddParameter("$minPrice", range.Min);
+      getNotebook.AddParameter("$maxPrice", range.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByPriceSubQuery =
+        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
+
+    private static IQueryPart GetNotebooksByName(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByName);
+      getNotebook.AddParameter("$notebookName", "%" + name + "%");
+
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByName =
+        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.name LIKE $notebookName";
 
     private static IQueryPart GetNotebooksByBatteryTimeQuery(Range time)
     {
@@ -541,28 +604,7 @@ namespace OnlineShop
       "SELECT n.product_id FROM Notebooks AS n WHERE n.os LIKE $os";
 
     #endregion
-    #region productQueries
-    private static IQueryPart GetNotebooksByPriceQuery(Range range)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$minPrice", range.Min);
-      getNotebook.AddParameter("$maxPrice", range.Max);
-      return getNotebook;
-    }
-    private const string CommandGetNotebooksByPriceSubQuery =
-        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
-
-    private static IQueryPart GetNotebooksByName(string name)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByName);
-      getNotebook.AddParameter("$notebookName", "%" + name + "%");
-
-      return getNotebook;
-    }
-    private const string CommandGetNotebooksByName =
-        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.name LIKE $notebookName";
-    #endregion
-
+    
     #region cpu
     private static IQueryPart GetNotebooksByCpuCountQuery(Range cpuCount)
     {
@@ -643,6 +685,26 @@ namespace OnlineShop
     #endregion
 
     #region productQueries
+    private static IQueryPart GetProductsByPriceQuery(Range range)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
+      getNotebook.AddParameter("$minProductPrice", range.Min);
+      getNotebook.AddParameter("$maxProductPrice", range.Max);
+      return getNotebook;
+    }
+    private const string CommandGetProductsByPriceQuery =
+        "SELECT p.product_id FROM Products AS p WHERE p.price BETWEEN $minProductPrice AND $maxProductPrice";
+
+    private static IQueryPart GetProductsByName(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByName);
+      getNotebook.AddParameter("$productName", "%" + name + "%");
+
+      return getNotebook;
+    }
+    private const string CommandGetProductsByName =
+        "SELECT p.product_id FROM Products AS p WHERE p.name LIKE $productName";
+
     #endregion
 
   }
