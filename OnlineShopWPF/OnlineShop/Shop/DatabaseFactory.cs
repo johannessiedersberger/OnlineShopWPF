@@ -425,7 +425,8 @@ namespace OnlineShop
         subQueries.Add(GetNotebooksByCPUClockRateQuery(searchData.cpuClockRate));
       if (searchData.ramMemoryRange != null)
         subQueries.Add(GetNotebooksByRAMQuery(searchData.ramMemoryRange));
-
+      if (searchData.os != null)
+        subQueries.Add(GetNotebooksByOsQuery(searchData.os));
       return subQueries;
     }
 
@@ -473,7 +474,6 @@ namespace OnlineShop
     private const string CommandGetNotebooksByBatteryTime =
       "SELECT n.product_id FROM Notebooks AS n WHERE n.average_battery_time BETWEEN $minTime AND $maxTime";
 
-
     private static IQueryPart GetNotebooksByRAMQuery(Range ram)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByRAM);
@@ -484,6 +484,14 @@ namespace OnlineShop
     private const string CommandGetNotebooksByRAM =
       "SELECT n.product_id FROM Notebooks AS n WHERE n.ram_memory BETWEEN $minRam AND $maxRam";
 
+    private static IQueryPart GetNotebooksByOsQuery(string os)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByOS);
+      getNotebook.AddParameter("$os", "%" + os + "%");
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByOS =
+      "SELECT n.product_id FROM Notebooks AS n WHERE n.os LIKE $os";
 
     #endregion
     #region cpu
