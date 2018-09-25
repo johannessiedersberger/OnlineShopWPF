@@ -432,6 +432,8 @@ namespace OnlineShop
       //HardDrive
       if (searchData.hdMemoryRange != null)
         subQueries.Add(GetNotebooksByhardDriveMemory(searchData.hdMemoryRange));
+      if (searchData.hdType != null)
+        subQueries.Add(GetNotebooksByhardDriveType(searchData.hdType));
       return subQueries;
     }
 
@@ -542,6 +544,16 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksByHardDriveSize =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN HardDrives AS h ON n.hard_drive_id = h.hard_drive_id WHERE h.memory BETWEEN $minSize AND $maxSize";
+
+    private static IQueryPart GetNotebooksByhardDriveType(string type)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByHardDriveType);
+      getNotebook.AddParameter("$type", "%" + type + "%");
+      
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByHardDriveType =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN HardDrives AS h ON n.hard_drive_id = h.hard_drive_id WHERE h.type LIKE $type";
     #endregion
 
     #endregion

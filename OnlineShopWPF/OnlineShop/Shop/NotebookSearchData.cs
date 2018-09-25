@@ -8,16 +8,28 @@ namespace OnlineShop
 {
   public class NotebookSearchData
   {
+    //Notebook
     public Range priceRange;
     public Range ramMemoryRange;
-    public Range hdMemoryRange;
-    public Range vramRange;
     public Range batteryTimeRange;
-    public Range cpuCount;
-    public Range cpuClockRate;
-    public string notebookManufacturer;
     public string os;
+    
+    //CPU
+    public string cpuName;
+    public Range cpuClockRate;
+    public Range cpuCount;
+
+    //HardDrive
+    public Range hdMemoryRange;
+    public string hdType;
+    
+    //Graphic
+    public Range vramRange;
     public string graphicCardName;
-    public string cpuName;  
+
+    public string notebookManufacturer;
+   
+    
+   
   }
 }

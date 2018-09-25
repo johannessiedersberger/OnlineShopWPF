@@ -41,7 +41,7 @@ namespace OnlineShopConsoleApp
         ramMemoryRange = new Range(0, 1000),
         os = "windows",
         hdMemoryRange = new Range(0, 2000),
-        
+        hdType = "ssd",
       });
       foreach(Notebook notebook in notebooks)
       {
