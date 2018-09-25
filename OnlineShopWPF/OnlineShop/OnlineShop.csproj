@@ -59,20 +59,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CPU.cs" />
-    <Compile Include="Customer.cs" />
-    <Compile Include="DatabaseFactory.cs" />
-    <Compile Include="DataException.cs" />
-    <Compile Include="Graphic.cs" />
-    <Compile Include="HardDrive.cs" />
-    <Compile Include="HeadPhone.cs" />
-    <Compile Include="IDatabase.cs" />
-    <Compile Include="ISubQuery.cs" />
-    <Compile Include="Notebook.cs" />
-    <Compile Include="Product.cs" />
-    <Compile Include="Shop.cs" />
+    <Compile Include="IDatabase\ISubQuery.cs" />
+    <Compile Include="MySqliteDB\MySqliteSubQuery.cs" />
+    <Compile Include="Products\CPU.cs" />
+    <Compile Include="Shop\Customer.cs" />
+    <Compile Include="Shop\DatabaseFactory.cs" />
+    <Compile Include="Shop\DataException.cs" />
+    <Compile Include="Products\Graphic.cs" />
+    <Compile Include="Products\HardDrive.cs" />
+    <Compile Include="Products\HeadPhone.cs" />
+    <Compile Include="IDatabase\IDatabase.cs" />
+    <Compile Include="IDatabase\IDatabaseCommand.cs" />
+    <Compile Include="IDatabase\INonQueryCommand.cs" />
+    <Compile Include="IDatabase\IQueryCommand.cs" />
+    <Compile Include="IDatabase\IReader.cs" />
+    <Compile Include="MySqliteDB\MySqliteDataReader.cs" />
+    <Compile Include="MySqliteDB\MySqliteNonQueryCommand.cs" />
+    <Compile Include="MySqliteDB\MySqliteQueryCommand.cs" />
+    <Compile Include="Products\Notebook.cs" />
+    <Compile Include="Shop\NotebookSearchData.cs" />
+    <Compile Include="Products\Product.cs" />
+    <Compile Include="Shop\Range.cs" />
+    <Compile Include="Shop\Shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MySqliteDatabase.cs" />
+    <Compile Include="MySqliteDB\MySqliteDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

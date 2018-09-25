@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public interface ISubQuery
+  public interface IQueryPart
   {
-    string SubQueryText { get; }
-    string JoinText { get; }
-    string WhereText { get; }
+    string QueryText { get; }
+
     void AddParameter(string name, object value);
     /// <summary>
     /// Gets the read only collection of parameters.
@@ -19,18 +18,15 @@ namespace OnlineShop
     IReadOnlyDictionary<string, object> Parameters { get; }
   }
 
-  public class MySqliteSubQuery : ISubQuery
+  public class MySqliteQueryPart : IQueryPart
   {
-    public MySqliteSubQuery(string subQueryText)
+    public MySqliteQueryPart(string queryText)
     {
-      string[] splitedsubQueryText = subQueryText.Split(new string[1] { "WHERE"}, StringSplitOptions.RemoveEmptyEntries);
-      JoinText = splitedsubQueryText[0];
-      WhereText = splitedsubQueryText[1];
+      QueryText = queryText;
+      
     }
 
-    public string JoinText { get; private set; }
-    public string WhereText { get; private set; }
-    public string SubQueryText { get; private set; }
+    public string QueryText { get; private set; }
 
     public void AddParameter(string name, object value)
     {
