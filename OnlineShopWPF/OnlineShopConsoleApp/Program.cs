@@ -39,7 +39,8 @@ namespace OnlineShopConsoleApp
         cpuName = "INTEL",
         cpuClockRate = new Range(0, 11),
         ramMemoryRange = new Range(0, 1000),
-        os = "windows"
+        os = "windows",
+        hdMemoryRange = new Range(0, 2000),
         
       });
       foreach(Notebook notebook in notebooks)

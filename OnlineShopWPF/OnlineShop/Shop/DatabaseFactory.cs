@@ -413,20 +413,25 @@ namespace OnlineShop
     {
       var subQueries = new List<IQueryPart>();
 
+      //Notebook
       if (searchData.priceRange != null)
         subQueries.Add(GetNotebooksByPriceQuery(searchData.priceRange));
-      if (searchData.cpuCount != null)
-        subQueries.Add(GetNotebooksByCpuCountQuery(searchData.cpuCount));
+      if (searchData.os != null)
+        subQueries.Add(GetNotebooksByOsQuery(searchData.os));
       if (searchData.batteryTimeRange != null)
         subQueries.Add(GetNotebooksByBatteryTimeQuery(searchData.batteryTimeRange));
+      if (searchData.ramMemoryRange != null)
+        subQueries.Add(GetNotebooksByRAMQuery(searchData.ramMemoryRange));
+      //CPU
+      if (searchData.cpuCount != null)
+        subQueries.Add(GetNotebooksByCpuCountQuery(searchData.cpuCount));   
       if (searchData.cpuName != null)
         subQueries.Add(GetNotebooksByCPUNameQuery(searchData.cpuName));
       if (searchData.cpuClockRate != null)
         subQueries.Add(GetNotebooksByCPUClockRateQuery(searchData.cpuClockRate));
-      if (searchData.ramMemoryRange != null)
-        subQueries.Add(GetNotebooksByRAMQuery(searchData.ramMemoryRange));
-      if (searchData.os != null)
-        subQueries.Add(GetNotebooksByOsQuery(searchData.os));
+      //HardDrive
+      if (searchData.hdMemoryRange != null)
+        subQueries.Add(GetNotebooksByhardDriveMemory(searchData.hdMemoryRange));
       return subQueries;
     }
 
@@ -494,6 +499,7 @@ namespace OnlineShop
       "SELECT n.product_id FROM Notebooks AS n WHERE n.os LIKE $os";
 
     #endregion
+
     #region cpu
     private static IQueryPart GetNotebooksByCpuCountQuery(Range cpuCount)
     {
@@ -504,7 +510,6 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksByCpuCount =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.count BETWEEN $minCount AND $maxCount";
-
    
 
     private static IQueryPart GetNotebooksByCPUNameQuery(string name)
@@ -525,6 +530,18 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksCpuClockRate =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.clock_rate BETWEEN $minClockRate AND $maxClockRate";
+    #endregion
+
+    #region harddrives
+    private static IQueryPart GetNotebooksByhardDriveMemory(Range size)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByHardDriveSize);
+      getNotebook.AddParameter("$minSize", size.Min);
+      getNotebook.AddParameter("$maxSize", size.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByHardDriveSize =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN HardDrives AS h ON n.hard_drive_id = h.hard_drive_id WHERE h.memory BETWEEN $minSize AND $maxSize";
     #endregion
 
     #endregion
