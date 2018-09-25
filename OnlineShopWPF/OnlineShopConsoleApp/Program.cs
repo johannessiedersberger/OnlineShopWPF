@@ -17,9 +17,10 @@ namespace OnlineShopConsoleApp
       var hardDrive = dbF.GetHardDrive(dbF.GetHardDriveId("ssd", 1011));
       var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
-      var notebooks = dbF.FindMatchingNotebooks(new NotebookQueryParams
+      var notebooks = dbF.FindMatchingProducts(new NotebookQueryParams
       {
-        GraphicQueryParams = new GraphicQueryParams { graphicCardName = "NVIDIA", vramRange = new Range(0, 2) }
+        Price = new Range(0, 10000),
+        Name = "a",
       });
       foreach(Product notebookProduct in notebooks)
       {

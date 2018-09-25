@@ -8,18 +8,11 @@ namespace OnlineShop
 {
   public class NotebookQueryParams : ProductQueryParams
   {
-    //Notebook
-    public Range priceRange;
-    public Range ramMemoryRange;
-    public Range batteryTimeRange;
-    public string os;
     
     public CPUQueryParams CPUQueryParams;
-
     public HardDriveQueryParams HardDriveQueryParams;
-
     public GraphicQueryParams GraphicQueryParams;
-
+    public NotebookDataQueryParams NotebookDataQueryParams;
     
   }
 }

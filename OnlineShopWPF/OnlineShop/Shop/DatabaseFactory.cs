@@ -14,7 +14,6 @@ namespace OnlineShop
       _db = db;
     }
 
-    
     public List<Product> FindMatchingProducts(ProductQueryParams param)
     {
       if (param is NotebookQueryParams)
@@ -23,6 +22,8 @@ namespace OnlineShop
       }
       return null;
     }
+
+    
 
     #region headphones
     /// <summary>
@@ -393,7 +394,7 @@ namespace OnlineShop
 
     #region notebookQueries
 
-    public List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData)
+    private List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData)
     {
       List<IQueryPart> querieParts = GetQueryParts(notebookSearchData);
 
@@ -426,7 +427,17 @@ namespace OnlineShop
       CheckCPU(subQueries, param);
       CheckHardDrive(subQueries, param);
       CheckNotebook(subQueries, param);
+      CheckProductDataInNotebooks(subQueries, param);
       return subQueries;
+      
+    }
+
+    private static void CheckProductDataInNotebooks(List<IQueryPart> queryParts, ProductQueryParams param)
+    {
+      if (param.Price != null)
+        queryParts.Add(GetNotebooksByPriceQuery(param.Price));
+      if (param.Name != null)
+        queryParts.Add(GetNotebooksByName(param.Name));
     }
 
     private static void CheckGraphic(List<IQueryPart> queryParts, NotebookQueryParams param)
@@ -463,14 +474,16 @@ namespace OnlineShop
 
     private static void CheckNotebook(List<IQueryPart> queryParts, NotebookQueryParams param)
     {
-      if (param.priceRange != null)
-        queryParts.Add(GetNotebooksByPriceQuery(param.priceRange));
-      if (param.os != null)
-        queryParts.Add(GetNotebooksByOsQuery(param.os));
-      if (param.batteryTimeRange != null)
-        queryParts.Add(GetNotebooksByBatteryTimeQuery(param.batteryTimeRange));
-      if (param.ramMemoryRange != null)
-        queryParts.Add(GetNotebooksByRAMQuery(param.ramMemoryRange));
+      if (param.NotebookDataQueryParams == null)
+        return;
+      if (param.NotebookDataQueryParams.priceRange != null)
+        queryParts.Add(GetNotebooksByPriceQuery(param.NotebookDataQueryParams.priceRange));
+      if (param.NotebookDataQueryParams.os != null)
+        queryParts.Add(GetNotebooksByOsQuery(param.NotebookDataQueryParams.os));
+      if (param.NotebookDataQueryParams.batteryTimeRange != null)
+        queryParts.Add(GetNotebooksByBatteryTimeQuery(param.NotebookDataQueryParams.batteryTimeRange));
+      if (param.NotebookDataQueryParams.ramMemoryRange != null)
+        queryParts.Add(GetNotebooksByRAMQuery(param.NotebookDataQueryParams.ramMemoryRange));
     }
     private string CreateQueryText(List<IQueryPart> parts)
     {
@@ -496,15 +509,7 @@ namespace OnlineShop
 
     #region subqueries
     #region notebook
-    private static IQueryPart GetNotebooksByPriceQuery(Range range)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$minPrice", range.Min);
-      getNotebook.AddParameter("$maxPrice", range.Max);
-      return getNotebook;
-    }
-    private const string CommandGetNotebooksByPriceSubQuery =
-        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
+   
 
     private static IQueryPart GetNotebooksByBatteryTimeQuery(Range time)
     {
@@ -535,6 +540,27 @@ namespace OnlineShop
     private const string CommandGetNotebooksByOS =
       "SELECT n.product_id FROM Notebooks AS n WHERE n.os LIKE $os";
 
+    #endregion
+    #region productQueries
+    private static IQueryPart GetNotebooksByPriceQuery(Range range)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
+      getNotebook.AddParameter("$minPrice", range.Min);
+      getNotebook.AddParameter("$maxPrice", range.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByPriceSubQuery =
+        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.price BETWEEN $minPrice AND $maxPrice";
+
+    private static IQueryPart GetNotebooksByName(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByName);
+      getNotebook.AddParameter("$notebookName", "%" + name + "%");
+
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByName =
+        "SELECT n.product_id FROM Notebooks AS n INNER JOIN Products AS p ON n.product_id = p.product_id WHERE p.name LIKE $notebookName";
     #endregion
 
     #region cpu
@@ -616,6 +642,8 @@ namespace OnlineShop
     #endregion
     #endregion
 
+    #region productQueries
+    #endregion
 
   }
 }
