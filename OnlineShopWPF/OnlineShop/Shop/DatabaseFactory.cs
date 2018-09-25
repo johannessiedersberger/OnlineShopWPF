@@ -434,6 +434,11 @@ namespace OnlineShop
         subQueries.Add(GetNotebooksByhardDriveMemory(searchData.hdMemoryRange));
       if (searchData.hdType != null)
         subQueries.Add(GetNotebooksByhardDriveType(searchData.hdType));
+      //Graphic
+      if (searchData.graphicCardName != null)
+        subQueries.Add(GetNotebooksByGraphicCardName(searchData.graphicCardName));
+      if (searchData.vramRange != null)
+        subQueries.Add(GetNotebooksByVRAMMemory(searchData.vramRange));
       return subQueries;
     }
 
@@ -554,6 +559,28 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksByHardDriveType =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN HardDrives AS h ON n.hard_drive_id = h.hard_drive_id WHERE h.type LIKE $type";
+    #endregion
+
+    #region graphic
+    private static IQueryPart GetNotebooksByVRAMMemory(Range memory)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByVRAMMemory);
+      getNotebook.AddParameter("$minVRAM", memory.Min);
+      getNotebook.AddParameter("$maxVRAM", memory.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByVRAMMemory =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN Graphics AS g ON n.graphic_id= g.graphic_id WHERE g.vram BETWEEN $minVRAM AND $maxVRAM";
+
+    private static IQueryPart GetNotebooksByGraphicCardName(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByGraphicCardName);
+      getNotebook.AddParameter("$graphicCardName", "%" + name + "%");
+
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksByGraphicCardName =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN Graphics AS g ON n.graphic_id= g.graphic_id WHERE g.name LIKE $graphicCardName";
     #endregion
 
     #endregion

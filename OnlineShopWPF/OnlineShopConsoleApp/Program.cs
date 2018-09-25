@@ -42,6 +42,8 @@ namespace OnlineShopConsoleApp
         os = "windows",
         hdMemoryRange = new Range(0, 2000),
         hdType = "ssd",
+        graphicCardName = "nvidia",
+        vramRange = new Range(0, 4),
       });
       foreach(Notebook notebook in notebooks)
       {
