@@ -22,15 +22,18 @@ namespace OnlineShop
     /// </summary>
     public double Price { get; private set; }
 
+    public int ProductId { get; private set; }
+
     /// <summary>
     /// Assigns the member variables
     /// </summary>
     /// <param name="name">The name of the Product</param>
     /// <param name="price">The price of the Product</param>
-    public Product(string name, double price)
+    public Product(int productId, string name, double price)
     {
       Name = name;
       Price = price;
+      ProductId = productId;
     }
 
     

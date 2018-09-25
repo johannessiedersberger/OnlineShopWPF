@@ -13,26 +13,12 @@ namespace OnlineShopConsoleApp
     {
       DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
 
-      //dbF.AddGraphicToDataBase(4, "NVIDIA TITAN X");
-      //Console.WriteLine("GraphicID " + dbF.GetGraphicCardId("NVIDIA TITAN X"));
-
-      //dbF.AddNewHardDriveToDatabase("ssd", 1011);
-      //Console.WriteLine("HardDriveID " + dbF.GetHardDriveId("ssd", 1011));
-
-      //dbF.AddNewCpuToDatabase(4, 9.9, "INTEL CORE i9 8800k");
-      //Console.WriteLine("CPU ID " + dbF.GetCpuId("INTEL CORE i9 8800k"));
-
-      //dbF.AddProductToDataBase("ULTRA GAMING NOTEBOOK", 3000);
-
-      //dbF.AddNewNotebookToDatabase(dbF.GetProductId("ULTRA GAMING NOTEBOOK"), dbF.GetGraphicCardId("NVIDIA TITAN X"), dbF.GetCpuId("INTEL CORE i9 8800k"), dbF.GetHardDriveId("ssd", 1011), 128, 10000, "windows");
-      //Console.WriteLine(dbF.DoesNotebookAlreadyExist(dbF.GetProductId("ULTRA GAMING NOTEBOOK")));
-
       var graphicCard = dbF.GetGraphicCard(dbF.GetGraphicCardId("NVIDIA TITAN X"));
       var hardDrive = dbF.GetHardDrive(dbF.GetHardDriveId("ssd", 1011));
       var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
-      var notebooks = dbF.GetNotebooks(new NotebookSearchData
-      {
+      var notebooks = dbF.FindMatchingNotebooks(new NotebookQueryParams
+      {       
         priceRange = new Range(0, 100000),
         cpuCount = new Range(0, 8),
         batteryTimeRange = new Range(0, 10000),
@@ -45,9 +31,9 @@ namespace OnlineShopConsoleApp
         graphicCardName = "nvidia",
         vramRange = new Range(0, 4),
       });
-      foreach(Notebook notebook in notebooks)
+      foreach(Product notebookProduct in notebooks)
       {
-        Console.WriteLine(dbF.GetProduct(notebook.ProductId).Name);
+        Console.WriteLine(notebookProduct.Name);
       }
     }
 

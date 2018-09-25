@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class NotebookSearchData
+  public class NotebookQueryParams : ProductQueryParams
   {
     //Notebook
     public Range priceRange;
@@ -18,7 +18,7 @@ namespace OnlineShop
     public string cpuName;
     public Range cpuClockRate;
     public Range cpuCount;
-
+    
     //HardDrive
     public Range hdMemoryRange;
     public string hdType;
@@ -27,7 +27,6 @@ namespace OnlineShop
     public Range vramRange;
     public string graphicCardName;
 
-    public string notebookManufacturer;
    
     
    

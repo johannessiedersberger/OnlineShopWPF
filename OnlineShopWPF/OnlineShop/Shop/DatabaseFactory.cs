@@ -14,6 +14,14 @@ namespace OnlineShop
       _db = db;
     }
 
+    //public List<Product> FindMatchingProducts(ProductQueryParams param)
+    //{
+    //  if(param is NotebookQueryParams)
+    //  {
+    //    return FindMatchingNotebooks((NotebookQueryParams)param);
+    //  }
+    //}
+
     #region headphones
     /// <summary>
     /// Writes the HardDrive to the DataBase
@@ -93,7 +101,7 @@ namespace OnlineShop
             result.Add(row[i].ToString());
           }
         }
-        return new Product(result[0], double.Parse(result[1]));
+        return new Product(productId, result[0], double.Parse(result[1]));
       }
     }
 
@@ -383,16 +391,15 @@ namespace OnlineShop
 
     #region notebookQueries
 
-    public List<Notebook> GetNotebooks(NotebookSearchData notebookSearchData)
+    public List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData)
     {
       List<IQueryPart> querieParts = GetQueryParts(notebookSearchData);
 
-      string CommandGetNotebooks =string.Format( "SELECT Notebooks.product_id, graphic_id, cpu_id, hard_drive_id, Notebooks.ram_memory, Notebooks.average_battery_time, Notebooks.os FROM " +
+      string CommandGetNotebooks =string.Format( "SELECT * FROM " +
         "  ( {0} ) AS PID " +
-        " INNER JOIN Notebooks ON Notebooks.product_id = PID.product_id", CreateQueryText(querieParts));
-        
-        
-      var notebooks = new List<Notebook>();
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", CreateQueryText(querieParts));
+               
+      var notebooks = new List<Product>();
       using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
       {
         SetQueryParameters(getNotebook, querieParts);
@@ -404,12 +411,13 @@ namespace OnlineShop
           {
             notebookRows.Add(row[i].ToString());
           }
-          notebooks.Add(new Notebook(int.Parse(notebookRows[0]), int.Parse(notebookRows[1]), int.Parse(notebookRows[2]), int.Parse(notebookRows[3]), int.Parse(notebookRows[4]), int.Parse(notebookRows[5]), notebookRows[6]));
+          notebooks.Add(new Product(int.Parse(notebookRows[1]), notebookRows[2], double.Parse(notebookRows[3])));
         }
         return notebooks;
       }
     }
-    private List<IQueryPart> GetQueryParts(NotebookSearchData searchData)
+
+    private List<IQueryPart> GetQueryParts(NotebookQueryParams searchData)
     {
       var subQueries = new List<IQueryPart>();
 
@@ -441,7 +449,6 @@ namespace OnlineShop
         subQueries.Add(GetNotebooksByVRAMMemory(searchData.vramRange));
       return subQueries;
     }
-
     private string CreateQueryText(List<IQueryPart> parts)
     {
       string query = "";
@@ -588,12 +595,4 @@ namespace OnlineShop
 
 
   }
-
-  #region dataClasses
-
-
-
-
-
-  #endregion
 }

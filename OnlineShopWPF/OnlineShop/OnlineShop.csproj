@@ -77,8 +77,9 @@
     <Compile Include="MySqliteDB\MySqliteNonQueryCommand.cs" />
     <Compile Include="MySqliteDB\MySqliteQueryCommand.cs" />
     <Compile Include="Products\Notebook.cs" />
-    <Compile Include="Shop\NotebookSearchData.cs" />
+    <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />
+    <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\Range.cs" />
     <Compile Include="Shop\Shop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
