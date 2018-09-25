@@ -421,6 +421,8 @@ namespace OnlineShop
         subQueries.Add(GetNotebooksByBatteryTimeQuery(searchData.batteryTimeRange));
       if (searchData.cpuName != null)
         subQueries.Add(GetNotebooksByCPUNameQuery(searchData.cpuName));
+      if (searchData.cpuClockRate != null)
+        subQueries.Add(GetNotebooksByCPUClockRateQuery(searchData.cpuClockRate));
 
       return subQueries;
     }
@@ -488,6 +490,16 @@ namespace OnlineShop
     }
     private const string CommandGetNotebooksByCpuName =
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.name LIKE $name";
+
+    private static IQueryPart GetNotebooksByCPUClockRateQuery(Range clockRate)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksCpuClockRate);
+      getNotebook.AddParameter("$minClockRate", clockRate.Min);
+      getNotebook.AddParameter("$maxClockRate", clockRate.Max);
+      return getNotebook;
+    }
+    private const string CommandGetNotebooksCpuClockRate =
+      "SELECT n.product_id FROM Notebooks AS n INNER JOIN CPU AS c ON n.cpu_id = c.cpu_id WHERE c.clock_rate BETWEEN $minClockRate AND $maxClockRate";
     #endregion
     #endregion
 
