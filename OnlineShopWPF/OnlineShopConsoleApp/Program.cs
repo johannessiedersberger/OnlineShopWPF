@@ -19,10 +19,10 @@ namespace OnlineShopConsoleApp
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
       CreateBeatsHeadPhone(dbF);
 
-      var notebooks = dbF.FindMatchingProducts(new ProductQueryParams
+      var notebooks = dbF.FindMatchingProducts(new HeadPhoneQueryParams
       {
-        Price = new Range(0, 10000),
-        Name = "a",
+        Price = new Range(0, 248),
+        Name = "Beats",
       });
       foreach(Product notebookProduct in notebooks)
       {

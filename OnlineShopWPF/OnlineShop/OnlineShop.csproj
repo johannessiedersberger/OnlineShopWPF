@@ -80,6 +80,7 @@
     <Compile Include="Products\Notebook.cs" />
     <Compile Include="Shop\GraphicQueryParams.cs" />
     <Compile Include="Shop\HardDriveQueryParams.cs" />
+    <Compile Include="Shop\HeadPhoneQueryParams.cs" />
     <Compile Include="Shop\NotebookDataQueryParams.cs" />
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />

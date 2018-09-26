@@ -20,10 +20,15 @@ namespace OnlineShop
       {
         return FindMatchingNotebooks((NotebookQueryParams)param);
       }
-      if(param is ProductQueryParams)
+      if (param is HeadPhoneQueryParams)
+      {
+        return FindMatchingHeadphone((HeadPhoneQueryParams)param);
+      }
+      if (param is ProductQueryParams) //Needs to be the last one
       {
         return FindMatchingProduct(param);
       }
+     
       return null;
     }
 
@@ -423,11 +428,11 @@ namespace OnlineShop
     private List<IQueryPart> GetQuerypartsProduct(ProductQueryParams param)
     {
       var querieParts = new List<IQueryPart>();
-      CheckProduct(querieParts, param);
+      FillProductQuerie(querieParts, param);
       return querieParts;
     }
 
-    private static void CheckProduct(List<IQueryPart> queryParts, ProductQueryParams param)
+    private static void FillProductQuerie(List<IQueryPart> queryParts, ProductQueryParams param)
     {
       if (param.Name != null)
         queryParts.Add(GetProductsByName(param.Name));
@@ -489,11 +494,11 @@ namespace OnlineShop
       FillQueryPartsWithCPUQueries(queryParts, param);
       FillQueryPartsWithHardDriveQueries(queryParts, param);
       FillQueryPartsWithNotebookQuery(queryParts, param);
-      FillQueryPartsWithProductQuery(queryParts, param);
+      FillQueryPartsWithNotebookProductQuery(queryParts, param);
       return queryParts;     
     }  
 
-    private static void FillQueryPartsWithProductQuery(List<IQueryPart> queryParts, ProductQueryParams param)
+    private static void FillQueryPartsWithNotebookProductQuery(List<IQueryPart> queryParts, ProductQueryParams param)
     {
       if (param.Price != null)
         queryParts.Add(GetNotebooksByPriceQuery(param.Price));
@@ -705,7 +710,69 @@ namespace OnlineShop
 
     #region headPhoneQueries
 
+    private List<Product> FindMatchingHeadphone(HeadPhoneQueryParams headphoneQueryParams)
+    {
+      List<IQueryPart> querieParts = GetQuerypartsHeadPhone(headphoneQueryParams);
 
+      string CommandGetNotebooks = string.Format("SELECT * FROM " +
+        "  ( {0} ) AS PID " +
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", CreateQueryText(querieParts));
+
+      var products = new List<Product>();
+      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
+      {
+        SetQueryParameters(getNotebook, querieParts);
+        IReader reader = getNotebook.ExecuteReader();
+        while (reader.TryReadNextRow(out object[] row))
+        {
+          var productRows = new List<string>();
+          for (int i = 0; i < row.Length; i++)
+          {
+            productRows.Add(row[i].ToString());
+          }
+          products.Add(new Product(int.Parse(productRows[1]), productRows[2], double.Parse(productRows[3])));
+        }
+        return products;
+      }
+    }
+
+    private static List<IQueryPart> GetQuerypartsHeadPhone(HeadPhoneQueryParams param)
+    {
+      var querieParts = new List<IQueryPart>();
+      FillProductHeadPhoneQuery(querieParts, param);
+      return querieParts;
+    }
+
+    private static void FillProductHeadPhoneQuery(List<IQueryPart> queryParts, ProductQueryParams param)
+    {
+      if (param.Name != null)
+        queryParts.Add(GetHeadPhonesByname(param.Name));
+      if (param.Price != null)
+        queryParts.Add(GetHeadPhonesByPrice(param.Price));
+    }
+
+    private static IQueryPart GetHeadPhonesByname(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByname);
+      getNotebook.AddParameter("$headPhoneName", "%" + name + "%");
+      return getNotebook;
+    }
+    private const string CommandGetHeadPhonesByname =
+        "SELECT h.product_id FROM HeadPhones AS h " +
+          "INNER JOIN Products AS p ON h.product_id = p.product_id " +
+            "WHERE p.name LIKE $headPhoneName";
+
+    private static IQueryPart GetHeadPhonesByPrice(Range price)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByPrice);
+      getNotebook.AddParameter("$minHeadPhonePrice", price.Min);
+      getNotebook.AddParameter("$maxHeadPhonePrice", price.Max);
+      return getNotebook;
+    }
+    private const string CommandGetHeadPhonesByPrice =
+       "SELECT h.product_id FROM HeadPhones AS h " +
+        "INNER JOIN Products AS p ON h.product_id = p.product_id " +
+          "WHERE p.price BETWEEN $minHeadPhonePrice AND $maxHeadPhonePrice";
 
     #endregion
 
