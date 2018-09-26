@@ -87,6 +87,7 @@
     <Compile Include="Shop\NotebookQueries.cs" />
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />
+    <Compile Include="Shop\ProductQueries.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\QuerieCreation.cs" />
     <Compile Include="Shop\Range.cs" />
