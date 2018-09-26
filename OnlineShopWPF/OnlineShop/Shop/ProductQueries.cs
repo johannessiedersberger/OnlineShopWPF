@@ -16,22 +16,12 @@ namespace OnlineShop
       string CommandGetNotebooks = string.Format("SELECT * FROM " +
         "  ( {0} ) AS PID " +
         " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieCreation.CreateQueryText(querieParts));
-
-      var products = new List<Product>();
+     
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {
         QuerieCreation.SetQueryParameters(getNotebook, querieParts);
-        IReader reader = getNotebook.ExecuteReader();
-        while (reader.TryReadNextRow(out object[] row))
-        {
-          var productRows = new List<string>();
-          for (int i = 0; i < row.Length; i++)
-          {
-            productRows.Add(row[i].ToString());
-          }
-          products.Add(new Product(int.Parse(productRows[1]), productRows[2], double.Parse(productRows[3])));
-        }
-        return products;
+        IReader reader = getNotebook.ExecuteReader();      
+        return ProductReader.ReadForProducts(reader);
       }
     }
 

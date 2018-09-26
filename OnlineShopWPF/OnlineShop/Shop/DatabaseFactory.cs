@@ -397,12 +397,5 @@ namespace OnlineShop
     private const string CommandSelectNotebookId = "SELECT product_id FROM Notebooks WHERE product_id = $id";
     #endregion
 
-   
-
-   
-
-  
-
-
   }
 }

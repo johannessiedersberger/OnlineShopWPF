@@ -20,7 +20,7 @@ namespace OnlineShopConsoleApp
 
       var notebooks = dbF.FindMatchingProducts(new HeadPhoneQueryParams
       {
-        headPhoneData = new HeadPhoneDataQueryParams { Wireless = true },
+        
       });
       foreach(Product notebookProduct in notebooks)
       {
