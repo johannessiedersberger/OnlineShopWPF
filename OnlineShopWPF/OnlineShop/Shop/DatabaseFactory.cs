@@ -27,14 +27,12 @@ namespace OnlineShop
       return null;
     }
 
-    
-
     #region headphones
     /// <summary>
     /// Writes the HardDrive to the DataBase
     /// </summary>
     /// <param name="db"></param>
-    public void AddNewHeadPhoneToDatabase(int productId, bool wireless, bool microphone)
+    public void AddNewHeadPhoneToDatabase(int productId, bool wireless)
     {
       if (DoesHeadPhoneAlreadyExist(productId))
         return;
@@ -42,12 +40,11 @@ namespace OnlineShop
       {
         createHeadPhone.AddParameter("$id", productId);
         createHeadPhone.AddParameter("$wireless", wireless);
-        createHeadPhone.AddParameter("$microphone", microphone);
         createHeadPhone.Execute();
       }
     }
 
-    private const string CommandAddHeadPhone = "INSERT INTO Headphones(product_id, wireless, microphone_included) VALUES($id,$wireless,$microphone)";
+    private const string CommandAddHeadPhone = "INSERT INTO Headphones(product_id, wireless) VALUES($id,$wireless)";
 
     private bool DoesHeadPhoneAlreadyExist(int productId)
     {
@@ -396,8 +393,7 @@ namespace OnlineShop
     private const string CommandSelectNotebookId = "SELECT product_id FROM Notebooks WHERE product_id = $id";
     #endregion
 
-    #region notebookQueries
-
+    #region productQueries
     private List<Product> FindMatchingProduct(ProductQueryParams productQueryParams)
     {
       List<IQueryPart> querieParts = GetQuerypartsProduct(productQueryParams);
@@ -424,10 +420,46 @@ namespace OnlineShop
       }
     }
 
+    private List<IQueryPart> GetQuerypartsProduct(ProductQueryParams param)
+    {
+      var querieParts = new List<IQueryPart>();
+      CheckProduct(querieParts, param);
+      return querieParts;
+    }
+
+    private static void CheckProduct(List<IQueryPart> queryParts, ProductQueryParams param)
+    {
+      if (param.Name != null)
+        queryParts.Add(GetProductsByName(param.Name));
+      if (param.Price != null)
+        queryParts.Add(GetProductsByPriceQuery(param.Price));
+    }
+    
+    private static IQueryPart GetProductsByName(string name)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByName);
+      getNotebook.AddParameter("$productName", "%" + name + "%");
+
+      return getNotebook;
+    }
+    private const string CommandGetProductsByName =
+        "SELECT p.product_id FROM Products AS p WHERE p.name LIKE $productName";
+
+    private static IQueryPart GetProductsByPriceQuery(Range range)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
+      getNotebook.AddParameter("$minProductPrice", range.Min);
+      getNotebook.AddParameter("$maxProductPrice", range.Max);
+      return getNotebook;
+    }
+    private const string CommandGetProductsByPriceQuery =
+        "SELECT p.product_id FROM Products AS p WHERE p.price BETWEEN $minProductPrice AND $maxProductPrice";
+    #endregion
+
+    #region notebookQueries
     private List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData)
     {
       List<IQueryPart> querieParts = GetQueryPartsNotebook(notebookSearchData);
-
       string CommandGetNotebooks =string.Format( "SELECT * FROM " +
         "  ( {0} ) AS PID " +
         " INNER JOIN Products As p ON p.product_id = PID.product_id", CreateQueryText(querieParts));
@@ -452,31 +484,16 @@ namespace OnlineShop
 
     private List<IQueryPart> GetQueryPartsNotebook(NotebookQueryParams param)
     {
-      var subQueries = new List<IQueryPart>();
-      CheckGraphic(subQueries, param);
-      CheckCPU(subQueries, param);
-      CheckHardDrive(subQueries, param);
-      CheckNotebook(subQueries, param);
-      CheckProductDataInNotebooks(subQueries, param);
-      return subQueries;     
-    }
+      var queryParts = new List<IQueryPart>();
+      FillQueryPartsWithGraphicQueries(queryParts, param);
+      FillQueryPartsWithCPUQueries(queryParts, param);
+      FillQueryPartsWithHardDriveQueries(queryParts, param);
+      FillQueryPartsWithNotebookQuery(queryParts, param);
+      FillQueryPartsWithProductQuery(queryParts, param);
+      return queryParts;     
+    }  
 
-    private List<IQueryPart> GetQuerypartsProduct(ProductQueryParams param)
-    {
-      var querieParts = new List<IQueryPart>();
-      CheckProduct(querieParts, param);
-      return querieParts;
-    }
-
-    private static void CheckProduct(List<IQueryPart> queryParts, ProductQueryParams param)
-    {
-      if (param.Name != null)
-        queryParts.Add(GetProductsByName(param.Name));
-      if (param.Price != null)
-        queryParts.Add(GetProductsByPriceQuery(param.Price));
-    }
-
-    private static void CheckProductDataInNotebooks(List<IQueryPart> queryParts, ProductQueryParams param)
+    private static void FillQueryPartsWithProductQuery(List<IQueryPart> queryParts, ProductQueryParams param)
     {
       if (param.Price != null)
         queryParts.Add(GetNotebooksByPriceQuery(param.Price));
@@ -484,7 +501,7 @@ namespace OnlineShop
         queryParts.Add(GetNotebooksByName(param.Name));
     }
 
-    private static void CheckGraphic(List<IQueryPart> queryParts, NotebookQueryParams param)
+    private static void FillQueryPartsWithGraphicQueries(List<IQueryPart> queryParts, NotebookQueryParams param)
     {
       if (param.GraphicQueryParams == null)
         return;
@@ -494,7 +511,7 @@ namespace OnlineShop
         queryParts.Add(GetNotebooksByVRAMMemory(param.GraphicQueryParams.vramRange));
     }
 
-    private static void CheckHardDrive(List<IQueryPart> queryParts, NotebookQueryParams param)
+    private static void FillQueryPartsWithHardDriveQueries(List<IQueryPart> queryParts, NotebookQueryParams param)
     {
       if (param.HardDriveQueryParams == null)
         return;
@@ -504,7 +521,7 @@ namespace OnlineShop
         queryParts.Add(GetNotebooksByhardDriveType(param.HardDriveQueryParams.hdType));
     }
 
-    private static void CheckCPU(List<IQueryPart> queryParts, NotebookQueryParams param)
+    private static void FillQueryPartsWithCPUQueries(List<IQueryPart> queryParts, NotebookQueryParams param)
     {
       if (param.CPUQueryParams == null)
         return;
@@ -516,7 +533,7 @@ namespace OnlineShop
         queryParts.Add(GetNotebooksByCPUClockRateQuery(param.CPUQueryParams.cpuClockRate));
     }
 
-    private static void CheckNotebook(List<IQueryPart> queryParts, NotebookQueryParams param)
+    private static void FillQueryPartsWithNotebookQuery(List<IQueryPart> queryParts, NotebookQueryParams param)
     {
       if (param.NotebookDataQueryParams == null)
         return;
@@ -529,6 +546,8 @@ namespace OnlineShop
       if (param.NotebookDataQueryParams.ramMemoryRange != null)
         queryParts.Add(GetNotebooksByRAMQuery(param.NotebookDataQueryParams.ramMemoryRange));
     }
+
+    #region queryCreation
     private string CreateQueryText(List<IQueryPart> parts)
     {
       string query = "";
@@ -540,6 +559,7 @@ namespace OnlineShop
       }
       return query;
     }
+
     private void SetQueryParameters(IQueryCommand mainQuery, List<IQueryPart> subQueries)
     {
       foreach (IQueryPart subQuery in subQueries)
@@ -550,8 +570,7 @@ namespace OnlineShop
         }
       }
     }
-
-    #region subqueries
+    #endregion
 
     #region notebook
     private static IQueryPart GetNotebooksByPriceQuery(Range range)
@@ -681,31 +700,15 @@ namespace OnlineShop
       "SELECT n.product_id FROM Notebooks AS n INNER JOIN Graphics AS g ON n.graphic_id= g.graphic_id WHERE g.name LIKE $graphicCardName";
     #endregion
 
+    
     #endregion
-    #endregion
 
-    #region productQueries
-    private static IQueryPart GetProductsByPriceQuery(Range range)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
-      getNotebook.AddParameter("$minProductPrice", range.Min);
-      getNotebook.AddParameter("$maxProductPrice", range.Max);
-      return getNotebook;
-    }
-    private const string CommandGetProductsByPriceQuery =
-        "SELECT p.product_id FROM Products AS p WHERE p.price BETWEEN $minProductPrice AND $maxProductPrice";
+    #region headPhoneQueries
 
-    private static IQueryPart GetProductsByName(string name)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByName);
-      getNotebook.AddParameter("$productName", "%" + name + "%");
 
-      return getNotebook;
-    }
-    private const string CommandGetProductsByName =
-        "SELECT p.product_id FROM Products AS p WHERE p.name LIKE $productName";
 
     #endregion
+
 
   }
 }

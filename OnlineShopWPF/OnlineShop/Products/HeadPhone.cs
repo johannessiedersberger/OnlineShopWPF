@@ -9,14 +9,12 @@ namespace OnlineShop
   public class HeadPhone
   {
     public bool Wireless { get; private set; }
-    public bool MicrophoneIncluded { get; private set; }
     public int ProductId { get; private set; }
 
-    public HeadPhone(int productId, bool wireless, bool microphone)
+    public HeadPhone(int productId, bool wireless)
     {
       ProductId = productId;
       Wireless = wireless;
-      MicrophoneIncluded = microphone;
     }
 
     

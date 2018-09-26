@@ -17,6 +17,8 @@ namespace OnlineShopConsoleApp
       var hardDrive = dbF.GetHardDrive(dbF.GetHardDriveId("ssd", 1011));
       var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
       var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
+      CreateBeatsHeadPhone(dbF);
+
       var notebooks = dbF.FindMatchingProducts(new ProductQueryParams
       {
         Price = new Range(0, 10000),
@@ -28,13 +30,11 @@ namespace OnlineShopConsoleApp
       }
     }
 
-    //static void CreateBeatsHeadPhone(DatabaseFactory db)
-    //{
-    //  Product p = new Product("Beats by Dr. Dre Beats Studio3 Wireless Kopfhörer, Mattschwarz", 247.00);
-    //  p.WriteToDataBase(db);
-    //  HeadPhone h = new HeadPhone(p.ID, true, false);
-    //  h.WriteToDatabase(db);
-    //}
+    static void CreateBeatsHeadPhone(DatabaseFactory db)
+    {
+      db.AddProductToDataBase("Beats Studio 3 Wireless", 247.00);
+      db.AddNewHeadPhoneToDatabase(db.GetProductId("Beats Studio 3 Wireless"), true);
+    }
 
     //static void CreateSonyHeadPhoone(DatabaseFactory db)
     //{
