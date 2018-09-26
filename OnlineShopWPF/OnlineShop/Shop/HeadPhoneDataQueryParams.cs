@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class HeadPhoneQueryParams : ProductQueryParams
+  public class HeadPhoneDataQueryParams
   {
-    public HeadPhoneDataQueryParams headPhoneData;
+    public bool Wireless;
   }
 }

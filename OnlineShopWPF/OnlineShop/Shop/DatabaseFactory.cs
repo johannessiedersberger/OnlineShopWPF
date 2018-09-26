@@ -740,10 +740,19 @@ namespace OnlineShop
     {
       var querieParts = new List<IQueryPart>();
       FillProductHeadPhoneQuery(querieParts, param);
+      FillHeadPhoneQuery(querieParts, param);
       return querieParts;
     }
 
-    private static void FillProductHeadPhoneQuery(List<IQueryPart> queryParts, ProductQueryParams param)
+    private static void FillHeadPhoneQuery(List<IQueryPart> queryParts, HeadPhoneQueryParams param)
+    {
+      if (param.headPhoneData == null)
+        return;
+      if (param.headPhoneData.Wireless != null)
+        queryParts.Add(GetHeadPhonesByWireless(param.headPhoneData.Wireless));
+    }
+
+    private static void FillProductHeadPhoneQuery(List<IQueryPart> queryParts, HeadPhoneQueryParams param)
     {
       if (param.Name != null)
         queryParts.Add(GetHeadPhonesByname(param.Name));
@@ -773,6 +782,16 @@ namespace OnlineShop
        "SELECT h.product_id FROM HeadPhones AS h " +
         "INNER JOIN Products AS p ON h.product_id = p.product_id " +
           "WHERE p.price BETWEEN $minHeadPhonePrice AND $maxHeadPhonePrice";
+
+    private static IQueryPart GetHeadPhonesByWireless(bool wireless)
+    {
+      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByWireless);
+      getNotebook.AddParameter("$wireless", wireless);
+      return getNotebook;
+    }
+    private const string CommandGetHeadPhonesByWireless =
+       "SELECT h.product_id FROM HeadPhones AS h " +
+          "WHERE h.wireless = $wireless";
 
     #endregion
 
