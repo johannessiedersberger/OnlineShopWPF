@@ -22,7 +22,7 @@ namespace OnlineShop
       }
       if (param is HeadPhoneQueryParams)
       {
-        return FindMatchingHeadphone((HeadPhoneQueryParams)param);
+        return HeadPhoneQueries.FindMatchingHeadphone((HeadPhoneQueryParams)param, _db);
       }
       if (param is ProductQueryParams) //Needs to be the last one
       {
@@ -463,92 +463,7 @@ namespace OnlineShop
 
    
 
-    #region headPhoneQueries
-
-    private List<Product> FindMatchingHeadphone(HeadPhoneQueryParams headphoneQueryParams)
-    {
-      List<IQueryPart> querieParts = GetQuerypartsHeadPhone(headphoneQueryParams);
-
-      string CommandGetNotebooks = string.Format("SELECT * FROM " +
-        "  ( {0} ) AS PID " +
-        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieCreation.CreateQueryText(querieParts));
-
-      var products = new List<Product>();
-      using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebooks))
-      {
-        QuerieCreation.SetQueryParameters(getNotebook, querieParts);
-        IReader reader = getNotebook.ExecuteReader();
-        while (reader.TryReadNextRow(out object[] row))
-        {
-          var productRows = new List<string>();
-          for (int i = 0; i < row.Length; i++)
-          {
-            productRows.Add(row[i].ToString());
-          }
-          products.Add(new Product(int.Parse(productRows[1]), productRows[2], double.Parse(productRows[3])));
-        }
-        return products;
-      }
-    }
-
-    private static List<IQueryPart> GetQuerypartsHeadPhone(HeadPhoneQueryParams param)
-    {
-      var querieParts = new List<IQueryPart>();
-      FillProductHeadPhoneQuery(querieParts, param);
-      FillHeadPhoneQuery(querieParts, param);
-      return querieParts;
-    }
-
-    private static void FillHeadPhoneQuery(List<IQueryPart> queryParts, HeadPhoneQueryParams param)
-    {
-      if (param.headPhoneData == null)
-        return;
-      if (param.headPhoneData.Wireless != null)
-        queryParts.Add(GetHeadPhonesByWireless(param.headPhoneData.Wireless));
-    }
-
-    private static void FillProductHeadPhoneQuery(List<IQueryPart> queryParts, HeadPhoneQueryParams param)
-    {
-      if (param.Name != null)
-        queryParts.Add(GetHeadPhonesByname(param.Name));
-      if (param.Price != null)
-        queryParts.Add(GetHeadPhonesByPrice(param.Price));
-    }
-
-    private static IQueryPart GetHeadPhonesByname(string name)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByname);
-      getNotebook.AddParameter("$headPhoneName", "%" + name + "%");
-      return getNotebook;
-    }
-    private const string CommandGetHeadPhonesByname =
-        "SELECT h.product_id FROM HeadPhones AS h " +
-          "INNER JOIN Products AS p ON h.product_id = p.product_id " +
-            "WHERE p.name LIKE $headPhoneName";
-
-    private static IQueryPart GetHeadPhonesByPrice(Range price)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByPrice);
-      getNotebook.AddParameter("$minHeadPhonePrice", price.Min);
-      getNotebook.AddParameter("$maxHeadPhonePrice", price.Max);
-      return getNotebook;
-    }
-    private const string CommandGetHeadPhonesByPrice =
-       "SELECT h.product_id FROM HeadPhones AS h " +
-        "INNER JOIN Products AS p ON h.product_id = p.product_id " +
-          "WHERE p.price BETWEEN $minHeadPhonePrice AND $maxHeadPhonePrice";
-
-    private static IQueryPart GetHeadPhonesByWireless(bool wireless)
-    {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetHeadPhonesByWireless);
-      getNotebook.AddParameter("$wireless", wireless);
-      return getNotebook;
-    }
-    private const string CommandGetHeadPhonesByWireless =
-       "SELECT h.product_id FROM HeadPhones AS h " +
-          "WHERE h.wireless = $wireless";
-
-    #endregion
+  
 
 
   }

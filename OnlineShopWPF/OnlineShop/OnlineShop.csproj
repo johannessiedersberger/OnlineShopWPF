@@ -81,6 +81,7 @@
     <Compile Include="Shop\GraphicQueryParams.cs" />
     <Compile Include="Shop\HardDriveQueryParams.cs" />
     <Compile Include="Shop\HeadPhoneDataQueryParams.cs" />
+    <Compile Include="Shop\HeadPhoneQueries.cs" />
     <Compile Include="Shop\HeadPhoneQueryParams.cs" />
     <Compile Include="Shop\NotebookDataQueryParams.cs" />
     <Compile Include="Shop\NotebookQueries.cs" />
