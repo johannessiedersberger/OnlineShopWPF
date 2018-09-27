@@ -88,6 +88,8 @@
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />
     <Compile Include="Shop\NotebookReader.cs" />
+    <Compile Include="Shop\Order.cs" />
+    <Compile Include="Shop\OrderEntry.cs" />
     <Compile Include="Shop\ProductSearchQueries.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\ProductReader.cs" />

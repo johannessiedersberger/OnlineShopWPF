@@ -18,19 +18,23 @@ namespace OnlineShopConsoleApp
       //dbF.DeleteCompleteNotebook(dbF.GetProductId("OMEN by HP 17 Gaming Notebook 2.0"));
       //dbF.DeleteCompleteNotebook(dbF.GetProductId("OMEN by HP 17 Gaming Notebook"));
 
-      dbF.AddCustomerToDatabase(new CustomerData
-      {
-        City = "Munich",
-        CreditCardNumber = 123456789,
-        Email = "johannes.siedersberger@gmx.de",
-        FirstName = "Johannes",
-        LastName = "Siedersberger",
-        Password = "zxaud90",
-        PhoneNumber = 017395869,
-        StreetName = "Hauptstraße",
-        StreetNumber = 3,
-        ZipCode = 82902
-      });
+      //dbF.AddCustomerToDatabase(new CustomerData
+      //{
+      //  City = "Munich",
+      //  CreditCardNumber = 123456789,
+      //  Email = "johannes.siedersberger@gmx.de",
+      //  FirstName = "Johannes",
+      //  LastName = "Siedersberger",
+      //  Password = "zxaud90",
+      //  PhoneNumber = 017395869,
+      //  StreetName = "Hauptstraße",
+      //  StreetNumber = 3,
+      //  ZipCode = 82902
+      //});
+      Order order = new Order(2, DateTime.Now);
+      dbF.AddOrderToDatabase(order);
+      OrderEntry orderEntry = new OrderEntry(122, dbF.GetOrderID(order), 1);     
+      dbF.AddOrderEntrieToDatabase(orderEntry);
     }
 
     //static void CreateSonyHeadPhoone(DatabaseFactory db)

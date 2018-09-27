@@ -27,7 +27,7 @@ namespace OnlineShop
       if (param is ProductQueryParams) //Has to be the last one
       {
         return ProductSearchQueries.FindMatchingProduct(param, _db);
-      }   
+      }
       return null;
     }
 
@@ -106,12 +106,12 @@ namespace OnlineShop
 
     public Product GetProduct(int productId)
     {
-      using(var getProduct = _db.CreateQueryCommand(CommandGetProduct))
+      using (var getProduct = _db.CreateQueryCommand(CommandGetProduct))
       {
         getProduct.AddParameter("$product_id", productId);
         IReader reader = getProduct.ExecuteReader();
         var result = new List<string>();
-        while(reader.TryReadNextRow(out object[] row))
+        while (reader.TryReadNextRow(out object[] row))
         {
           for (int i = 0; i < row.Length; i++)
           {
@@ -195,7 +195,7 @@ namespace OnlineShop
         getGraphicCard.AddParameter("$graphic_id", graphicId);
         IReader reader = getGraphicCard.ExecuteReader();
         var result = new List<string>();
-        while(reader.TryReadNextRow(out object[] row))
+        while (reader.TryReadNextRow(out object[] row))
         {
           for (int i = 0; i < row.Length; i++)
           {
@@ -297,12 +297,12 @@ namespace OnlineShop
 
     public HardDrive GetHardDrive(int hardDriveId)
     {
-      using(var getHardDrive = _db.CreateQueryCommand(CommandGetHardDrive))
+      using (var getHardDrive = _db.CreateQueryCommand(CommandGetHardDrive))
       {
         getHardDrive.AddParameter("$hard_drive_id", hardDriveId);
         IReader reader = getHardDrive.ExecuteReader();
         var result = new List<string>();
-        while(reader.TryReadNextRow(out object[] row))
+        while (reader.TryReadNextRow(out object[] row))
         {
           for (int i = 0; i < row.Length; i++)
           {
@@ -354,7 +354,7 @@ namespace OnlineShop
         delete.AddParameter("$id", hardDriveId);
         IReader reader = delete.ExecuteReader();
         int i = 0;
-        while(reader.TryReadNextRow(out object[] row))
+        while (reader.TryReadNextRow(out object[] row))
         {
           i++;
         }
@@ -418,12 +418,12 @@ namespace OnlineShop
     private const string CommandGetCPU = "SELECT count,clock_rate,name FROM CPU WHERE $cpu_id = cpu_id ";
     public CPU GetCPU(int cpuId)
     {
-      using(var getCPU = _db.CreateQueryCommand(CommandGetCPU))
+      using (var getCPU = _db.CreateQueryCommand(CommandGetCPU))
       {
         getCPU.AddParameter("$cpu_id", cpuId);
         IReader reader = getCPU.ExecuteReader();
         var result = new List<string>();
-        while(reader.TryReadNextRow(out object[] row))
+        while (reader.TryReadNextRow(out object[] row))
         {
           for (int i = 0; i < row.Length; i++)
           {
@@ -575,8 +575,62 @@ namespace OnlineShop
         return reader.TryReadNextRow(out object[] row);
       }
     }
-
     private const string CommandCheckIfCustomerExists = "SELECT customer_id FROM Customer WHERE $email = email";
     #endregion
+
+    #region orders
+    public void AddOrdersToDatabase(Order order, List<OrderEntry> orderEntries)
+    {
+      AddOrderToDatabase(order);
+      foreach (OrderEntry orderEntry in orderEntries)
+        AddOrderEntrieToDatabase(orderEntry);
+    }
+
+    public void AddOrderToDatabase(Order order)
+    {
+      using (var createOrder = _db.CreateNonQueryCommand(CommandAddOrder))
+      {
+        createOrder.AddParameter("$ordersId", null);
+        createOrder.AddParameter("$customerId", order.CustomerId);
+        createOrder.AddParameter("$date", order.OrderDate);
+        createOrder.Execute();
+      }
+    }
+
+    private const string CommandAddOrder
+      = "INSERT INTO Orders(orders_id, customer_id, date) VALUES($ordersId, $customerId, $date)";
+
+    public void AddOrderEntrieToDatabase(OrderEntry orderEntry)
+    {
+      using (var createOrder = _db.CreateNonQueryCommand(CommandAddOrderEntrie))
+      {
+        createOrder.AddParameter("$orderEntryId", null);
+        createOrder.AddParameter("$amount", orderEntry.Amount);
+        createOrder.AddParameter("$ordersId", orderEntry.OrdersId);
+        createOrder.AddParameter("$productId", orderEntry.ProductId);
+        createOrder.Execute();
+      }
+    }
+
+    private const string CommandAddOrderEntrie
+      = "INSERT INTO OrderEntries(order_entry_id, product_id, order_id, amount) VALUES($orderEntryId,$productId , $ordersId,$amount )";
+
+    public int GetOrderID(Order order)
+    {
+      using (var createOrder = _db.CreateQueryCommand(CommandGetOrderID))
+      {
+        createOrder.AddParameter("$customerId", order.CustomerId);
+        createOrder.AddParameter("$date", order.OrderDate);
+        IReader reader = createOrder.ExecuteReader();
+        reader.TryReadNextRow(out object[] row);
+        return int.Parse(row[0].ToString());
+      }
+    }
+
+    private const string CommandGetOrderID
+      = "SELECT orders_id FROM Orders WHERE $customerId = customer_id AND date = $date ";
+
   }
+  #endregion
 }
+
