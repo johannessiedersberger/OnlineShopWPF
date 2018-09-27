@@ -8,7 +8,6 @@ namespace OnlineShop
 {
   public class QuerieCreation
   {
-    #region queryCreation
     public static string CreateQueryText(List<IQueryPart> parts)
     {
       string query = "";
@@ -31,6 +30,5 @@ namespace OnlineShop
         }
       }
     }
-    #endregion
   }
 }

@@ -536,6 +536,35 @@ namespace OnlineShop
     private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";
     #endregion
 
+    #region customers
+    /// <summary>
+    /// Writes the Customer to the Database
+    /// </summary>
+    /// <param name="db">The Database which contains the customers</param>
+    public void AddCustomerToDatabase(CustomerData data)
+    {
+      using (var createCustomer = _db.CreateNonQueryCommand(CommandAddCustomer))
+      {
+        createCustomer.AddParameter("$id", null);
+        createCustomer.AddParameter("$email", data.Email);
+        createCustomer.AddParameter("$password", data.Password);
+        createCustomer.AddParameter("$firstName", data.FirstName);
+        createCustomer.AddParameter("$lastName", data.LastName);
+        createCustomer.AddParameter("$streetName", data.StreetName);
+        createCustomer.AddParameter("$streetNumber", data.StreetNumber);
+        createCustomer.AddParameter("$city", data.City);
+        createCustomer.AddParameter("$zipCode", data.ZipCode);
+        createCustomer.AddParameter("$creditCardNumber", data.CreditCardNumber);
+        createCustomer.AddParameter("$phone", data.PhoneNumber);
+        createCustomer.Execute();
+      }
+    }
 
+    private const string CommandAddCustomer
+      = "INSERT INTO Customer(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
+                              " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
+
+
+    #endregion
   }
 }
