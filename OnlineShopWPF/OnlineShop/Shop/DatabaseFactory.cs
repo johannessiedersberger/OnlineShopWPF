@@ -543,6 +543,8 @@ namespace OnlineShop
     /// <param name="db">The Database which contains the customers</param>
     public void AddCustomerToDatabase(CustomerData data)
     {
+      if (CheckIfCustomerAlreadyExists(data))
+        return;
       using (var createCustomer = _db.CreateNonQueryCommand(CommandAddCustomer))
       {
         createCustomer.AddParameter("$id", null);
@@ -564,7 +566,17 @@ namespace OnlineShop
       = "INSERT INTO Customer(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
                               " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
 
+    private bool CheckIfCustomerAlreadyExists(CustomerData data)
+    {
+      using (var customer = _db.CreateQueryCommand(CommandCheckIfCustomerExists))
+      {
+        customer.AddParameter("$email", data.Email);
+        IReader reader = customer.ExecuteReader();
+        return reader.TryReadNextRow(out object[] row);
+      }
+    }
 
+    private const string CommandCheckIfCustomerExists = "SELECT customer_id FROM Customer WHERE $email = email";
     #endregion
   }
 }
