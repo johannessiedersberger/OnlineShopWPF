@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class ProductQueries
+  public class ProductSearchQueries
   {
     #region productQueries
     public static List<Product> FindMatchingProduct(ProductQueryParams productQueryParams, IDatabase db)

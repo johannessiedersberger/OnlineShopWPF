@@ -81,13 +81,14 @@
     <Compile Include="Shop\GraphicQueryParams.cs" />
     <Compile Include="Shop\HardDriveQueryParams.cs" />
     <Compile Include="Shop\HeadPhoneDataQueryParams.cs" />
-    <Compile Include="Shop\HeadPhoneQueries.cs" />
+    <Compile Include="Shop\HeadPhoneSearchQueries.cs" />
     <Compile Include="Shop\HeadPhoneQueryParams.cs" />
     <Compile Include="Shop\NotebookDataQueryParams.cs" />
-    <Compile Include="Shop\NotebookQueries.cs" />
+    <Compile Include="Shop\NotebookSearchQueries.cs" />
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Products\Product.cs" />
-    <Compile Include="Shop\ProductQueries.cs" />
+    <Compile Include="Shop\NotebookReader.cs" />
+    <Compile Include="Shop\ProductSearchQueries.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\ProductReader.cs" />
     <Compile Include="Shop\QuerieCreation.cs" />

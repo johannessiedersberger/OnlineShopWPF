@@ -13,19 +13,11 @@ namespace OnlineShopConsoleApp
     {
       DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
 
-      var graphicCard = dbF.GetGraphicCard(dbF.GetGraphicCardId("NVIDIA TITAN X"));
-      var hardDrive = dbF.GetHardDrive(dbF.GetHardDriveId("ssd", 1011));
-      var cpu = dbF.GetCPU(dbF.GetCpuId("INTEL CORE i9 8800k"));
-      var product = dbF.GetProduct(dbF.GetProductId("ULTRA GAMING NOTEBOOK"));
 
-      var notebooks = dbF.FindMatchingProducts(new HeadPhoneQueryParams
-      {
-        
-      });
-      foreach(Product notebookProduct in notebooks)
-      {
-        Console.WriteLine(notebookProduct.Name);
-      }
+      //CreateHPNotebook(dbF);
+      //CreateHPNotebook2(dbF);
+      dbF.DeleteCompleteNotebook(dbF.GetProductId("OMEN by HP 17 Gaming Notebook 2.0"));
+      //dbF.DeleteCompleteNotebook(dbF.GetProductId("OMEN by HP 17 Gaming Notebook"));
     }
 
     //static void CreateSonyHeadPhoone(DatabaseFactory db)
@@ -36,39 +28,61 @@ namespace OnlineShopConsoleApp
     //  h.WriteToDatabase(db);
     //}
 
-    //static void CreateHPNotebook(DatabaseFactory db)
-    //{
-    //  //OMEN by HP 17 Gaming Notebook
-    //  Product p = new Product("OMEN by HP 17 Gaming Notebook 2.0", 1070);
-    //  CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
-    //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
-    //  HardDrive h = new HardDrive(256, "ssd");
-    //  //DB   
-    //  p.WriteToDataBase(db);
-    //  c.WriteToDatabase(db);
-    //  g.WriteToDatabase(db);
-    //  h.WriteToDatabase(db);
-    //  //Notebook
-    //  Notebook notebook = new Notebook(p.ID, g.Id, c.Id, h.Id, 16, 720, "windows");
-    //  notebook.WriteToDataBase(db);
-    //  Graphic gr = notebook.GraphicCard;
-    //}
+    static void CreateHPNotebook(DatabaseFactory db)
+    {
+      //OMEN by HP 17 Gaming Notebook
+      Product p = new Product(0, "OMEN by HP 17 Gaming Notebook", 1070);
+      CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
+      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
+      HardDrive h = new HardDrive(256, "ssd");
 
-    //static void CreateDellNotebook(DatabaseFactory db)
-    //{
-    //  //OMEN by HP 17 Gaming Notebook
-    //  Product p = new Product("Dell G3 17", 828.99);
-    //  CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
-    //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
-    //  HardDrive h = new HardDrive(128, "ssd");
-    //  //DB
-    //  p.WriteToDataBase(db);
-    //  c.WriteToDatabase(db);
-    //  g.WriteToDatabase(db);
-    //  h.WriteToDatabase(db);
-    //  //Notebook
-    //  Notebook notebook = new Notebook(p.ID, g.Id, c.Id, h.Id, 16, 920, "windows");
-    //  notebook.WriteToDataBase(db);
-    //}
+      db.AddGraphicToDataBase(g);
+      db.AddNewCpuToDatabase(c);
+      db.AddNewHardDriveToDatabase(h);
+      db.AddProductToDataBase(p);
+      //Notebook
+      Notebook notebook = new Notebook(db.GetProductId(p.Name), db.GetGraphicCardId(g.Name), db.GetCpuId(c.Name),
+        db.GetHardDriveId(h.Type, h.Memory), 16, 900, "windows");    
+      
+      db.AddNewNotebookToDatabase(notebook);
+    }
+
+    static void CreateHPNotebook2(DatabaseFactory db)
+    {
+      //OMEN by HP 17 Gaming Notebook
+      Product p = new Product(0, "OMEN by HP 17 Gaming Notebook 2.0", 1070);
+      CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
+      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
+      HardDrive h = new HardDrive(256, "ssd");
+
+      db.AddGraphicToDataBase(g);
+      db.AddNewCpuToDatabase(c);
+      db.AddNewHardDriveToDatabase(h);
+      db.AddProductToDataBase(p);
+      //Notebook
+      Notebook notebook = new Notebook(db.GetProductId(p.Name), db.GetGraphicCardId(g.Name), db.GetCpuId(c.Name),
+        db.GetHardDriveId(h.Type, h.Memory), 16, 900, "windows");
+
+      db.AddNewNotebookToDatabase(notebook);
+    }
+
+    static void CreateDellNotebook(DatabaseFactory db)
+    {
+      //OMEN by HP 17 Gaming Notebook
+      Product p = new Product(0,"Dell G3 17", 828.99);
+      CPU c = new CPU(4, 3.9, "Intel® Core™ i5-8300H");
+      Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050");
+      HardDrive h = new HardDrive(256, "ssd");
+      //DB
+      db.AddProductToDataBase(p);
+      db.AddNewCpuToDatabase(c);
+      db.AddGraphicToDataBase(g);
+      db.AddNewHardDriveToDatabase(h);
+      //Notebook
+      Notebook notebook = new Notebook(db.GetProductId(p.Name), db.GetGraphicCardId(g.Name), db.GetCpuId(c.Name)
+        , db.GetHardDriveId(h.Type, h.Memory), 16, 920, "windows");
+      db.AddNewNotebookToDatabase(notebook);
+      
+    }
   }
 }

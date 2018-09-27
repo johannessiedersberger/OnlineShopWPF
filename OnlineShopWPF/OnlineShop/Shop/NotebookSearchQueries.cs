@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public static class NotebookQueries
+  public static class NotebookSearchQueries
   {
     #region notebookQueries
     public static List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData, IDatabase db)

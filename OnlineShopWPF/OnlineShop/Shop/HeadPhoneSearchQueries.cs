@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class HeadPhoneQueries
+  public class HeadPhoneSearchQueries
   {
     #region headPhoneQueries
 
