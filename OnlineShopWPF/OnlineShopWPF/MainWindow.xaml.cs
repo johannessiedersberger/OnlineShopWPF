@@ -33,15 +33,15 @@ namespace OnlineShopWPF
       List<Product> products = dbF.FindMatchingProducts(new NotebookQueryParams { });
       foreach (Product notebookProduct in products)
       {
-        Notebook nb = dbF.GetNotebook(notebookProduct.ProductId);
+        Notebook nb = dbF.GetNotebook(notebookProduct);
         NotebookView view = new NotebookView
         {
           Name = notebookProduct.Name,
           Price = notebookProduct.Price,
-          Cpu = dbF.GetCPU(nb.CpuId).Name,
-          Ram = nb.RamMemory,
-          HdMemory = dbF.GetHardDrive(nb.HardDriveId).Memory,
-          HdType = dbF.GetHardDrive(nb.HardDriveId).Type,
+          Cpu = nb.Cpu.Name,
+          Ram = nb.Ram,
+          HdMemory = nb.HardDrive.Memory,
+          HdType = nb.HardDrive.Type,
         };
         DataGridTest.Items.Add(view);
       }

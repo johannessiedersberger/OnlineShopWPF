@@ -16,10 +16,10 @@
     <DataGrid Grid.Row="1" AutoGenerateColumns="False" Name="DataGridTest" CanUserAddRows="True" ItemsSource="{Binding TestBinding}" >
       <DataGrid.Columns>
         <DataGridTextColumn Header="Notebook" IsReadOnly="True" Binding="{Binding Path=Name}" Width="230"></DataGridTextColumn>
-        <DataGridTextColumn Header="Price" IsReadOnly="True"  Binding="{Binding Path=Price}" Width="50"></DataGridTextColumn>
         <DataGridTextColumn Header="CPU" IsReadOnly="True"  Binding="{Binding Path=Cpu}" Width="150"></DataGridTextColumn>
         <DataGridTextColumn Header="RAM" IsReadOnly="True"  Binding="{Binding Path=Ram}" Width="50"></DataGridTextColumn>
         <DataGridTextColumn Header="HD-Memory" IsReadOnly="True"  Binding="{Binding Path=HdMemory}" Width="80"></DataGridTextColumn>
+        <DataGridTextColumn Header="Price" IsReadOnly="True"  Binding="{Binding Path=Price}" Width="50"></DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
     

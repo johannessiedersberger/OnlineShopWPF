@@ -27,11 +27,6 @@ namespace OnlineShop
     public string Name { get; private set; }
 
     /// <summary>
-    /// The Database that contains the cpu
-    /// </summary>
-    private IDatabase _database;
-
-    /// <summary>
     /// Saves the Parameters as members
     /// </summary>
     /// <param name="count">The number of kernels</param>

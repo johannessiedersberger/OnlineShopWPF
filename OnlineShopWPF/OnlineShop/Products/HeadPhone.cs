@@ -16,7 +16,5 @@ namespace OnlineShop
       ProductId = productId;
       Wireless = wireless;
     }
-
-    
   }
 }

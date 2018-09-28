@@ -31,14 +31,13 @@ namespace OnlineShop
       return null;
     }
 
-    public void DeleteCompleteNotebook(int productID)
+    public void DeleteCompleteNotebook(Notebook nb)
     {
-      Notebook nb = GetNotebook(productID);
-      DeleteCPU(nb.CpuId);
-      DeleteHardDrive(nb.HardDriveId);
-      DeleteGraphic(nb.GraphicId);
-      DeleteNotebook(nb.ProductId);
-      DeleteProduct(nb.ProductId);
+      DeleteCPU(nb.Cpu);
+      DeleteHardDrive(nb.HardDrive);
+      DeleteGraphic(nb.Graphic);
+      DeleteNotebook(nb);
+      DeleteProduct(nb.Product);
     }
 
     #region headphones
@@ -72,10 +71,9 @@ namespace OnlineShop
 
     private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
 
-    public void DeleteCompleteHeadPhoneFromDatabase(int productId)
+    public void DeleteCompleteHeadPhoneFromDatabase(HeadPhone headPhone)
     {
-      DeleteHeadPhone(productId);
-      DeleteProduct(productId);
+      
     }
 
     private void DeleteHeadPhone(int productId)
@@ -143,18 +141,18 @@ namespace OnlineShop
             result.Add(row[i].ToString());
           }
         }
-        return new Product(productId, result[0], double.Parse(result[1]));
+        return new Product(result[0], double.Parse(result[1]));
       }
     }
 
     /// <summary>
     /// Gets the ID from the Product
     /// </summary>
-    public int GetProductId(string name)
+    public int GetProductId(Product product)
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectProductId))
       {
-        getID.AddParameter("$name", name);
+        getID.AddParameter("$name", product.Name);
         IReader reader = getID.ExecuteReader();
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
@@ -169,8 +167,9 @@ namespace OnlineShop
     /// Delets a Product from The Database
     /// </summary>
     /// <param name="productId">The id from the product which sould be removed</param>
-    public void DeleteProduct(int productId)
+    public void DeleteProduct(Product product)
     {
+      int productId = GetProductId(product);
       using (var delete = _db.CreateNonQueryCommand(Delete))
       {
         delete.AddParameter("$id", productId);
@@ -235,8 +234,9 @@ namespace OnlineShop
     /// Delets a Graphic Card from The Database
     /// </summary>
     /// <param name="graphicId">The id from the product which sould be removed</param>
-    public void DeleteGraphic(int graphicId)
+    public void DeleteGraphic(Graphic graphic)
     {
+      int graphicId = GetGraphicCardId(graphic);
       if (CheckIfGraphicIsUsedInTWONotebook(graphicId))
         return;
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteGraphic))
@@ -251,11 +251,11 @@ namespace OnlineShop
     /// <summary>
     /// Gets the ID from the Graphic-Card
     /// </summary>
-    public int GetGraphicCardId(string name)
+    public int GetGraphicCardId(Graphic graphic)
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectGraphicID))
       {
-        getID.AddParameter("$name", name);
+        getID.AddParameter("$name", graphic.Name);
         IReader reader = getID.ExecuteReader();
 
         while (reader.TryReadNextRow(out var row))
@@ -341,12 +341,12 @@ namespace OnlineShop
     /// <summary>
     /// Gets the ID from the HardDrive
     /// </summary>
-    public int GetHardDriveId(string type, int memory)
+    public int GetHardDriveId(HardDrive hardDrive)
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectIHardDriveID))
       {
-        getID.AddParameter("$memory", memory);
-        getID.AddParameter("$type", type);
+        getID.AddParameter("$memory", hardDrive.Memory);
+        getID.AddParameter("$type", hardDrive.Type);
         IReader reader = getID.ExecuteReader();
 
         while (reader.TryReadNextRow(out var row))
@@ -359,9 +359,10 @@ namespace OnlineShop
     /// <summary>
     /// Delets a HardDrive from The Database
     /// </summary>
-    /// <param name="hardDriveId">The id from the product which sould be removed</param>
-    public void DeleteHardDrive(int hardDriveId)
+    /// <param name="hardDrive">The id from the product which sould be removed</param>
+    public void DeleteHardDrive(HardDrive hardDrive)
     {
+      int hardDriveId = GetHardDriveId(hardDrive);
       if (CheckIfHardDriveIsUsedInTWONotebook(hardDriveId))
         return;
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteHardDrive))
@@ -397,12 +398,12 @@ namespace OnlineShop
     /// <summary>
     /// Gets the ID from the CPU
     /// </summary>
-    public int GetCpuId(string name)
+    public int GetCpuId(CPU cpu)
     {
 
       using (var getID = _db.CreateQueryCommand(CommandSelectCPUID))
       {
-        getID.AddParameter("$name", name);
+        getID.AddParameter("$name", cpu.Name);
         IReader reader = getID.ExecuteReader();
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
@@ -462,9 +463,10 @@ namespace OnlineShop
     /// <summary>
     /// Delets a HardDrive from The Database
     /// </summary>
-    /// <param name="cpuId">The id from the product which sould be removed</param>
-    public void DeleteCPU(int cpuId)
+    /// <param name="cpu">The id from the product which sould be removed</param>
+    public void DeleteCPU(CPU cpu)
     {
+      int cpuId = GetCpuId(cpu);
       if (CheckIfCPUIsUsedInTWONotebook(cpuId))
         return;
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteCPU))
@@ -491,7 +493,7 @@ namespace OnlineShop
     }
     private const string CommandCheckCPUUse =
       "SELECT product_id FROM Notebooks AS n" +
-        " INNER JOIN CPU As c ON c.cpu_id = n.cpu_id";
+        " INNER JOIN CPU As c ON $id = n.cpu_id";
 
 
     #endregion
@@ -503,15 +505,15 @@ namespace OnlineShop
     /// <param name="db">the database that will contain the cpu</param>
     public void AddNewNotebookToDatabase(Notebook notebook)
     {
-      if (DoesNotebookAlreadyExist(notebook.ProductId))
+      if (DoesNotebookAlreadyExist(notebook))
         return;
       using (var createNotebook = _db.CreateNonQueryCommand(CommandCreateNotebook))
       {
-        createNotebook.AddParameter("$id", notebook.ProductId);
-        createNotebook.AddParameter("$graphicId", notebook.GraphicId);
-        createNotebook.AddParameter("$cpuId", notebook.CpuId);
-        createNotebook.AddParameter("$hardDriveId", notebook.HardDriveId);
-        createNotebook.AddParameter("$ramMemory", notebook.RamMemory);
+        createNotebook.AddParameter("$id", GetProductId(notebook.Product));
+        createNotebook.AddParameter("$graphicId", GetGraphicCardId(notebook.Graphic));
+        createNotebook.AddParameter("$cpuId", GetCpuId(notebook.Cpu));
+        createNotebook.AddParameter("$hardDriveId", GetHardDriveId(notebook.HardDrive));
+        createNotebook.AddParameter("$ramMemory", notebook.Ram);
         createNotebook.AddParameter("$avgBatteryTime", notebook.AverageBatteryTime);
         createNotebook.AddParameter("$os", notebook.Os);
 
@@ -524,11 +526,11 @@ namespace OnlineShop
     }
 
     private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
-    public bool DoesNotebookAlreadyExist(int productId)
+    public bool DoesNotebookAlreadyExist(Notebook notebook)
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectNotebookId))
       {
-        getID.AddParameter("$id", productId);
+        getID.AddParameter("$id", GetProductId(notebook.Product));
         IReader reader = getID.ExecuteReader();
         return reader.TryReadNextRow(out object[] row);
       }
@@ -539,8 +541,9 @@ namespace OnlineShop
     /// Delets a Notebook from The Database
     /// </summary>
     /// <param name="id">The id from the product which sould be removed</param>
-    public void DeleteNotebook(int productId)
+    public void DeleteNotebook(Notebook notebook)
     {
+      int productId = GetProductId(notebook.Product);
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteNotebook))
       {
         delete.AddParameter("$id", productId);
@@ -549,13 +552,14 @@ namespace OnlineShop
     }
     private const string CommandDeleteNotebook = "DELETE FROM Notebooks WHERE product_id = $id";
 
-    public Notebook GetNotebook(int productId)
+    public Notebook GetNotebook(Product product)
     {
+      int productId = GetProductId(product);
       using (var getNotebook = _db.CreateQueryCommand(CommandGetNotebook))
       {
         getNotebook.AddParameter("$id", productId);
         IReader reader = getNotebook.ExecuteReader();
-        return NotebookReader.ReadForNotebooks(reader)[0];
+        return NotebookReader.ReadForNotebooks(reader, this)[0];
       }
     }
     private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";

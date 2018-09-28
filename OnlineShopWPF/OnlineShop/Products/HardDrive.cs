@@ -22,8 +22,6 @@ namespace OnlineShop
     /// </summary>
     public string Type { get; private set; }
 
-    private IDatabase _database;
-
     /// <summary>
     /// Assign the Member variables 
     /// </summary>

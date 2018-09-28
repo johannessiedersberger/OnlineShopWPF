@@ -8,7 +8,7 @@ namespace OnlineShop
 {
   public class NotebookReader
   {
-    public static List<Notebook> ReadForNotebooks(IReader reader)
+    public static List<Notebook> ReadForNotebooks(IReader reader, DatabaseFactory db)
     {
       var notebooks = new List<Notebook>();
       while (reader.TryReadNextRow(out object[] row))
@@ -18,8 +18,14 @@ namespace OnlineShop
         {
           notebookRows.Add(row[i].ToString());
         }
-        notebooks.Add(new Notebook(int.Parse(notebookRows[0]), int.Parse(notebookRows[1]), int.Parse(notebookRows[2]),
-          int.Parse(notebookRows[3]), int.Parse(notebookRows[4]), int.Parse(notebookRows[5]), notebookRows[6]));
+        notebooks.Add(new Notebook(
+          db.GetProduct(int.Parse(notebookRows[0])),
+          db.GetGraphicCard(int.Parse(notebookRows[1])),
+          db.GetCPU(int.Parse(notebookRows[2])),
+          db.GetHardDrive(int.Parse(notebookRows[3])),
+          int.Parse(notebookRows[4]),
+          int.Parse(notebookRows[5]),
+          notebookRows[6]));
       }
       return notebooks;
     }

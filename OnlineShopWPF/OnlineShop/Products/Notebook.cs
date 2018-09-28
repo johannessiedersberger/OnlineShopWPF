@@ -17,13 +17,13 @@ namespace OnlineShop
   /// <summary>
   /// Notebook
   /// </summary>
-  public class Notebook
+  public class Notebook 
   {
-    public int ProductId { get; private set; }
-    public int GraphicId { get; private set; }
-    public int CpuId { get; private set; }
-    public int HardDriveId { get; private set; }
-    public int RamMemory { get; private set; }
+    public Product Product { get; private set; }
+    public Graphic Graphic { get; private set; }
+    public CPU Cpu { get; private set; }
+    public HardDrive HardDrive { get; private set; }
+    public int Ram { get; private set; }
     public int AverageBatteryTime { get; private set; }
     public string Os { get; private set; }
 
@@ -37,13 +37,13 @@ namespace OnlineShop
     /// <param name="ramMemory">the ram</param>
     /// <param name="avgBatteryTime">the battery time</param>
     /// <param name="os">the os</param>
-    public Notebook(int productId, int graphicId, int cpuId, int hardDriveId, int ramMemory, int avgBatteryTime, string os)
+    public Notebook(Product productId, Graphic graphicId, CPU cpuId, HardDrive hardDriveId, int ramMemory, int avgBatteryTime, string os)
     {
-      ProductId = productId;
-      GraphicId = graphicId;
-      CpuId = cpuId;
-      HardDriveId = hardDriveId;
-      RamMemory = ramMemory;
+      Product = productId;
+      Graphic = graphicId;
+      Cpu = cpuId;
+      HardDrive = hardDriveId;
+      Ram = ramMemory;
       AverageBatteryTime = avgBatteryTime;
       Os = os;
     }
