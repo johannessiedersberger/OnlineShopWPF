@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopConsoleApp", "Onl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopTest", "OnlineShopTest\OnlineShopTest.csproj", "{4BCA3BB8-336D-4A45-9A80-F0495786C906}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShopWPF", "OnlineShopWPF\OnlineShopWPF.csproj", "{BE38ED86-CF46-4E31-8BC3-1E8C637856C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4BCA3BB8-336D-4A45-9A80-F0495786C906}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BCA3BB8-336D-4A45-9A80-F0495786C906}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BCA3BB8-336D-4A45-9A80-F0495786C906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE38ED86-CF46-4E31-8BC3-1E8C637856C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE38ED86-CF46-4E31-8BC3-1E8C637856C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE38ED86-CF46-4E31-8BC3-1E8C637856C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE38ED86-CF46-4E31-8BC3-1E8C637856C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

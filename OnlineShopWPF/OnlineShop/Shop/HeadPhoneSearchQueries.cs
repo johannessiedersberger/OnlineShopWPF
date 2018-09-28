@@ -13,10 +13,15 @@ namespace OnlineShop
     public static List<Product> FindMatchingHeadphone(HeadPhoneQueryParams headphoneQueryParams, IDatabase db)
     {
       List<IQueryPart> querieParts = GetQuerypartsHeadPhone(headphoneQueryParams);
+      string QueryText;
+      if (querieParts.Count() == 0)
+        QueryText = "SELECT product_id FROM HeadPhones";
+      else
+        QueryText = QuerieCreation.CreateQueryText(querieParts);
 
       string CommandGetNotebooks = string.Format("SELECT * FROM " +
         "  ( {0} ) AS PID " +
-        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieCreation.CreateQueryText(querieParts));
+        " INNER JOIN Products As p ON p.product_id = PID.product_id",QueryText );
 
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {

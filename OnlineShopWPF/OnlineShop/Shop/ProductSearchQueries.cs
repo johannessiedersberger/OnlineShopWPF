@@ -13,9 +13,14 @@ namespace OnlineShop
     {
       List<IQueryPart> querieParts = GetQuerypartsProduct(productQueryParams);
 
+      string queryText;
+      if (querieParts.Count() == 0)
+        queryText = "SELECT product_id FROM Products";
+      else
+        queryText = QuerieCreation.CreateQueryText(querieParts);
       string CommandGetNotebooks = string.Format("SELECT * FROM " +
         "  ( {0} ) AS PID " +
-        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieCreation.CreateQueryText(querieParts));
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", queryText);
      
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {

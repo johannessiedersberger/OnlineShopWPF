@@ -12,9 +12,16 @@ namespace OnlineShop
     public static List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData, IDatabase db)
     {
       List<IQueryPart> querieParts = GetQueryPartsNotebook(notebookSearchData);
+      string QuerieText;
+      
+      if (querieParts.Count == 0)
+        QuerieText = "SELECT product_id FROM Notebooks ";
+      else
+        QuerieText = QuerieCreation.CreateQueryText(querieParts);
+
       string CommandGetNotebooks = string.Format("SELECT * FROM " +
         "  ( {0} ) AS PID " +
-        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieCreation.CreateQueryText(querieParts));
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieText);
 
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {

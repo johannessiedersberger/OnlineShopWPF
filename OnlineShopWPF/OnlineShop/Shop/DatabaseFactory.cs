@@ -24,7 +24,7 @@ namespace OnlineShop
       {
         return HeadPhoneSearchQueries.FindMatchingHeadphone((HeadPhoneQueryParams)param, _db);
       }
-      if (param is ProductQueryParams) //Has to be the last one
+      if (param is ProductQueryParams)
       {
         return ProductSearchQueries.FindMatchingProduct(param, _db);
       }
@@ -46,19 +46,19 @@ namespace OnlineShop
     /// Writes the HardDrive to the DataBase
     /// </summary>
     /// <param name="db"></param>
-    public void AddNewHeadPhoneToDatabase(int productId, bool wireless)
+    public void AddNewHeadPhoneToDatabase(HeadPhone headPhone)
     {
-      if (DoesHeadPhoneAlreadyExist(productId))
+      if (DoesHeadPhoneAlreadyExist(headPhone.ProductId))
         return;
       using (var createHeadPhone = _db.CreateNonQueryCommand(CommandAddHeadPhone))
       {
-        createHeadPhone.AddParameter("$id", productId);
-        createHeadPhone.AddParameter("$wireless", wireless);
+        createHeadPhone.AddParameter("$id", headPhone.ProductId);
+        createHeadPhone.AddParameter("$wireless", headPhone.Wireless);
         createHeadPhone.Execute();
       }
     }
 
-    private const string CommandAddHeadPhone = "INSERT INTO Headphones(product_id, wireless) VALUES($id,$wireless)";
+    private const string CommandAddHeadPhone = " INSERT INTO Headphones(product_id, wireless) VALUES($id, $wireless)";
 
     private bool DoesHeadPhoneAlreadyExist(int productId)
     {
@@ -71,6 +71,31 @@ namespace OnlineShop
     }
 
     private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
+
+    public void DeleteCompleteHeadPhoneFromDatabase(int productId)
+    {
+      DeleteHeadPhone(productId);
+      DeleteProduct(productId);
+    }
+
+    private void DeleteHeadPhone(int productId)
+    {
+      //if (CheckIfHeadPhoneIsUsedByOtherProduct(productId))
+      //  return;
+      using (var delete = _db.CreateNonQueryCommand(CommandDeleteHeadPhone))
+      {
+        delete.AddParameter("$id", productId);
+        delete.Execute();
+      }
+    }
+
+    private const string CommandDeleteHeadPhone = "DELETE FROM Products WHERE product_id = $id";
+
+
+    private bool CheckIfHeadPhoneIsUsedByOtherProduct(int productId)
+    {
+      return false;
+    }
     #endregion
 
     #region products
@@ -143,12 +168,12 @@ namespace OnlineShop
     /// <summary>
     /// Delets a Product from The Database
     /// </summary>
-    /// <param name="id">The id from the product which sould be removed</param>
-    public void DeleteProduct(int id)
+    /// <param name="productId">The id from the product which sould be removed</param>
+    public void DeleteProduct(int productId)
     {
       using (var delete = _db.CreateNonQueryCommand(Delete))
       {
-        delete.AddParameter("$id", id);
+        delete.AddParameter("$id", productId);
         delete.Execute();
       }
     }
