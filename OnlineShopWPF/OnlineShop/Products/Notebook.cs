@@ -30,19 +30,19 @@ namespace OnlineShop
     /// <summary>
     /// Creates a new notebook in the databse
     /// </summary>
-    /// <param name="productId">the product id</param>
-    /// <param name="graphicId">the notebook id</param>
-    /// <param name="cpuId">the cpu id</param>
-    /// <param name="hardDriveId">the graphic id</param>
+    /// <param name="product">the product id</param>
+    /// <param name="graphic">the notebook id</param>
+    /// <param name="cpu">the cpu id</param>
+    /// <param name="hardDrive">the graphic id</param>
     /// <param name="ramMemory">the ram</param>
     /// <param name="avgBatteryTime">the battery time</param>
     /// <param name="os">the os</param>
-    public Notebook(Product productId, Graphic graphicId, CPU cpuId, HardDrive hardDriveId, int ramMemory, int avgBatteryTime, string os)
+    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, string os)
     {
-      Product = productId;
-      Graphic = graphicId;
-      Cpu = cpuId;
-      HardDrive = hardDriveId;
+      Product = product;
+      Graphic = graphic;
+      Cpu = cpu;
+      HardDrive = hardDrive;
       Ram = ramMemory;
       AverageBatteryTime = avgBatteryTime;
       Os = os;

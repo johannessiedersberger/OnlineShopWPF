@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OnlineShop;
 
-namespace OnlineShopWPF
+namespace OnlineShop
 {
   /// <summary>
   /// Interaction logic for MainWindow.xaml

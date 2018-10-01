@@ -19,13 +19,13 @@ namespace OnlineShop
           notebookRows.Add(row[i].ToString());
         }
         notebooks.Add(new Notebook(
-          db.GetProduct(int.Parse(notebookRows[0])),
-          db.GetGraphicCard(int.Parse(notebookRows[1])),
-          db.GetCPU(int.Parse(notebookRows[2])),
-          db.GetHardDrive(int.Parse(notebookRows[3])),
-          int.Parse(notebookRows[4]),
-          int.Parse(notebookRows[5]),
-          notebookRows[6]));
+          product: db.GetProduct(int.Parse(notebookRows[0])), 
+          graphic: db.GetGraphicCard(int.Parse(notebookRows[1])), 
+          cpu: db.GetCPU(int.Parse(notebookRows[2])), 
+          hardDrive: db.GetHardDrive(int.Parse(notebookRows[3])),
+          ramMemory: int.Parse(notebookRows[4]), 
+          avgBatteryTime: int.Parse(notebookRows[5]), 
+          os: notebookRows[6])); 
       }
       return notebooks;
     }
