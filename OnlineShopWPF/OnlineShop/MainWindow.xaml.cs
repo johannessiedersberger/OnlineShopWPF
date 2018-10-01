@@ -24,37 +24,7 @@ namespace OnlineShop
     public MainWindow()
     {
       InitializeComponent();
-      ShowNotebooks();
     }
 
-    private void ShowNotebooks()
-    {
-      DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
-      List<Product> products = dbF.FindMatchingProducts(new NotebookQueryParams { });
-      foreach (Product notebookProduct in products)
-      {
-        Notebook nb = dbF.GetNotebook(notebookProduct);
-        NotebookView view = new NotebookView
-        {
-          Name = notebookProduct.Name,
-          Price = notebookProduct.Price,
-          Cpu = nb.Cpu.Name,
-          Ram = nb.Ram,
-          HdMemory = nb.HardDrive.Memory,
-          HdType = nb.HardDrive.Type,
-        };
-        DataGridTest.Items.Add(view);
-      }
-    }
-  }
-
-  public class NotebookView
-  {
-    public string Name { get; set; }
-    public double Price { get; set; }
-    public string Cpu { get; set; }
-    public int Ram { get; set; }
-    public int HdMemory { get; set; }
-    public string HdType { get; set; }
   }
 }
