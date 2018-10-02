@@ -47,20 +47,20 @@ namespace OnlineShop
 
     private static IQueryPart GetProductsByName(string name)
     {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByName);
-      getNotebook.AddParameter("$productName", "%" + name + "%");
+      MySqliteQueryPart getProduct = new MySqliteQueryPart(CommandGetProductsByName);
+      getProduct.AddParameter("$productName", "%" + name + "%");
 
-      return getNotebook;
+      return getProduct;
     }
     private const string CommandGetProductsByName =
         "SELECT p.product_id FROM Products AS p WHERE p.name LIKE $productName";
 
     private static IQueryPart GetProductsByPriceQuery(Range range)
     {
-      MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
-      getNotebook.AddParameter("$minProductPrice", range.Min);
-      getNotebook.AddParameter("$maxProductPrice", range.Max);
-      return getNotebook;
+      MySqliteQueryPart getProduct = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
+      getProduct.AddParameter("$minProductPrice", range.Min);
+      getProduct.AddParameter("$maxProductPrice", range.Max);
+      return getProduct;
     }
     private const string CommandGetProductsByPriceQuery =
         "SELECT p.product_id FROM Products AS p WHERE p.price BETWEEN $minProductPrice AND $maxProductPrice";

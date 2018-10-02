@@ -69,6 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Filter\FilterViewModel.cs" />
+    <Compile Include="Filter\Filter.xaml.cs">
+      <DependentUpon>Filter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Shop\CPUQueryParams.cs" />
     <Compile Include="Shop\Customer.cs" />
@@ -91,6 +95,10 @@
     <Compile Include="Shop\QuerieCreation.cs" />
     <Compile Include="Shop\Range.cs" />
     <Compile Include="Shop\Shop.cs" />
+    <Page Include="Filter\Filter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local ="clr-namespace:OnlineShop"
+        xmlns:local1="clr-namespace:OnlineShop"
         Title="MainWindow" Height="450" Width="800">
 
   <Window.DataContext>
@@ -13,12 +14,10 @@
   
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="0.2*"/>
-      <RowDefinition Height="0.6*"/>
-      <RowDefinition Height="0.2*"/>
-
+      <RowDefinition/>
+      <RowDefinition/>
     </Grid.RowDefinitions>
-    <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="True" ItemsSource="{Binding Notebooks}" >
+    <DataGrid Grid.Row="1"   AutoGenerateColumns="False" CanUserAddRows="True" ItemsSource="{Binding ProductList}" >
       <DataGrid.Columns>
         <DataGridTextColumn Header="Notebook" IsReadOnly="True" Binding="{Binding Path=Name}" Width="230"></DataGridTextColumn>
         <DataGridTextColumn Header="CPU" IsReadOnly="True"  Binding="{Binding Path=Cpu}" Width="150"></DataGridTextColumn>
@@ -27,8 +26,7 @@
         <DataGridTextColumn Header="Price" IsReadOnly="True"  Binding="{Binding Path=Price}" Width="50"></DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
-    <TextBox Grid.Row="2" Text="{Binding TestText, Mode=OneWay}" IsReadOnly="True"/>
 
-
+    <local:Filter Grid.Row="0" Height="300"></local:Filter>
   </Grid>
 </Window>

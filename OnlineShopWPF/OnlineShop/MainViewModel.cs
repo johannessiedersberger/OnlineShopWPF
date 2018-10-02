@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SQLite;
+using System.Collections.ObjectModel;
 
 namespace OnlineShop
 {
   public class MainViewModel
   {
-
-    public List<NotebookView> Notebooks { get; private set; } = new List<NotebookView>();
+    public ObservableCollection<NotebookView> ProductList { get; private set; } = new ObservableCollection<NotebookView>();
 
     public MainViewModel()
     {
@@ -26,16 +27,15 @@ namespace OnlineShop
         Notebook nb = dbF.GetNotebook(notebookProduct);
         NotebookView view = new NotebookView
         {
-          Name = notebookProduct.Name,
-          Price = notebookProduct.Price,
+          Name = nb.Product.Name,
+          Price = nb.Product.Price,
           Cpu = nb.Cpu.Name,
           Ram = nb.Ram,
           HdMemory = nb.HardDrive.Memory,
           HdType = nb.HardDrive.Type,
         };
-        Notebooks.Add(view);
-      }
-      
+        ProductList.Add(view);
+      }      
     }
   }
 
@@ -48,5 +48,6 @@ namespace OnlineShop
     public int HdMemory { get; set; }
     public string HdType { get; set; }
   }
+
 }
 
