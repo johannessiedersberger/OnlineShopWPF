@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
+  /// <summary>
+  /// Contains the HeadPhone search Queries
+  /// </summary>
   public class HeadPhoneSearchQueries
   {
     #region headPhoneQueries
-
+    /// <summary>
+    /// Finds the Matching Headphones 
+    /// </summary>
+    /// <param name="headphoneQueryParams">the Headphone search data</param>
+    /// <param name="db">the database</param>
+    /// <returns></returns>
     public static List<Product> FindMatchingHeadphone(HeadPhoneQueryParams headphoneQueryParams, IDatabase db)
     {
       List<IQueryPart> querieParts = GetQuerypartsHeadPhone(headphoneQueryParams);

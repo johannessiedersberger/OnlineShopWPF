@@ -8,6 +8,11 @@ namespace OnlineShop
 {
   public class QuerieCreation
   {
+    /// <summary>
+    /// Creates a query text based on the parts of a query
+    /// </summary>
+    /// <param name="parts"></param>
+    /// <returns></returns>
     public static string CreateQueryText(List<IQueryPart> parts)
     {
       string query = "";
@@ -20,6 +25,11 @@ namespace OnlineShop
       return query;
     }
 
+    /// <summary>
+    /// Sets the queryParameters into the mainQuery
+    /// </summary>
+    /// <param name="mainQuery">the mainQuery</param>
+    /// <param name="subQueries">all the subQueries</param>
     public static void SetQueryParameters(IQueryCommand mainQuery, List<IQueryPart> subQueries)
     {
       foreach (IQueryPart subQuery in subQueries)

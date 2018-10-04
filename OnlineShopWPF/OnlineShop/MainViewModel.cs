@@ -18,8 +18,9 @@ namespace OnlineShop
       ShowNotebooks();
     }
 
-    private void ShowNotebooks()
+    public void ShowNotebooks()
     {
+      ProductList.Clear();
       DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
       List<Product> products = dbF.FindMatchingProducts(new NotebookQueryParams { });
       foreach (Product notebookProduct in products)

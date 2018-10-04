@@ -6,13 +6,26 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
+  /// <summary>
+  /// The notebook seach Data
+  /// </summary>
   public class NotebookQueryParams : ProductQueryParams
-  {
-    
+  {   
+    /// <summary>
+    /// the cpu seach data
+    /// </summary>
     public CPUQueryParams CPUQueryParams;
+    /// <summary>
+    /// The HardDrive search Data
+    /// </summary>
     public HardDriveQueryParams HardDriveQueryParams;
+    /// <summary>
+    /// the graphic seach data
+    /// </summary>
     public GraphicQueryParams GraphicQueryParams;
-    public NotebookDataQueryParams NotebookDataQueryParams;
-    
+    /// <summary>
+    /// The notebook-data seach data
+    /// </summary>
+    public NotebookDataQueryParams NotebookDataQueryParams; 
   }
 }

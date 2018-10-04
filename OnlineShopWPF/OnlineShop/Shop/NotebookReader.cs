@@ -8,6 +8,12 @@ namespace OnlineShop
 {
   public class NotebookReader
   {
+    /// <summary>
+    /// Returns Notebooks by a Data Reader
+    /// </summary>
+    /// <param name="reader">the reader</param>
+    /// <param name="db">the database</param>
+    /// <returns></returns>
     public static List<Notebook> ReadForNotebooks(IReader reader, DatabaseFactory db)
     {
       var notebooks = new List<Notebook>();

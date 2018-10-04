@@ -8,6 +8,11 @@ namespace OnlineShop
 {
   public class ProductReader
   {
+    /// <summary>
+    /// Returns a list of products based on the reader
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <returns></returns>
     public static List<Product> ReadForProducts(IReader reader)
     {
       var products = new List<Product>();

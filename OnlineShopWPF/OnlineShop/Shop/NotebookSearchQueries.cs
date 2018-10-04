@@ -9,6 +9,12 @@ namespace OnlineShop
   public static class NotebookSearchQueries
   {
     #region notebookQueries
+    /// <summary>
+    /// Finds the matching Notebooks
+    /// </summary>
+    /// <param name="notebookSearchData">the query params</param>
+    /// <param name="db">the database</param>
+    /// <returns></returns>
     public static List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData, IDatabase db)
     {
       List<IQueryPart> querieParts = GetQueryPartsNotebook(notebookSearchData);

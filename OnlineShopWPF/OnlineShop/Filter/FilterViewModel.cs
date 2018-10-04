@@ -11,17 +11,19 @@ namespace OnlineShop
   public class FilterViewModel : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
+    public int MinCPUSliderText { get; private set; }
 
-    public int SliderValue
+    public int MinCPUCores
     {
-      get => _sliderValue;
+      get => _minCPUCores;
       set
       {
-        _sliderValue = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SliderValue)));
+        _minCPUCores = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinCPUCores)));
+        MinCPUSliderText = value;
       }
     }
-    private int _sliderValue;
-    
+    private int _minCPUCores;
+
   }
 }

@@ -9,6 +9,12 @@ namespace OnlineShop
   public class ProductSearchQueries
   {
     #region productQueries
+    /// <summary>
+    /// Returns a list of products by the given searchData
+    /// </summary>
+    /// <param name="productQueryParams">The seachdata</param>
+    /// <param name="db">the database</param>
+    /// <returns></returns>
     public static List<Product> FindMatchingProduct(ProductQueryParams productQueryParams, IDatabase db)
     {
       List<IQueryPart> querieParts = GetQuerypartsProduct(productQueryParams);
