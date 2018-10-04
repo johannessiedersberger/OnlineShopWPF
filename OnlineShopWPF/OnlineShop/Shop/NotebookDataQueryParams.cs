@@ -27,5 +27,9 @@ namespace OnlineShop
     /// The os of the notebook
     /// </summary>
     public string os;
+    /// <summary>
+    /// the name of the notebook
+    /// </summary>
+    public string notebookName;
   }
 }

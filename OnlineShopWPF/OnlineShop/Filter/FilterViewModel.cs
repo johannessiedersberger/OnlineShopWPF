@@ -339,6 +339,20 @@ namespace OnlineShop
     private int _maxRamMemory = 128;
     #endregion
 
+    #region name
+    public string NotebookName
+    {
+      get => _notebookName;
+      set
+      {
+        _notebookName = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NotebookName)));
+        RunQuery();
+      }
+    }
+    private string _notebookName = "";
+    #endregion
+
     #region battery
 
     public int MaxBatteryTimeSliderValue { get; set; } = 2000;
@@ -425,10 +439,13 @@ namespace OnlineShop
         {
           os = OS,
           ramMemoryRange = new Range(MinRamMemory, MaxRamMemory),
-          batteryTimeRange= new Range(MinBatteryTime, MaxBatteryTime),
+          batteryTimeRange = new Range(MinBatteryTime, MaxBatteryTime),
+          priceRange = new Range(MinPrice, MaxPrice),
+          notebookName = NotebookName,
         }
-        
-      })));
+
+      }
+      )));
     }
   }
 }

@@ -92,6 +92,8 @@ namespace OnlineShop
     {
       if (param.NotebookDataQueryParams == null)
         return;
+      if (param.NotebookDataQueryParams.notebookName != null)
+        queryParts.Add(GetNotebooksByName(param.NotebookDataQueryParams.notebookName));
       if (param.NotebookDataQueryParams.priceRange != null)
         queryParts.Add(GetNotebooksByPriceQuery(param.NotebookDataQueryParams.priceRange));
       if (param.NotebookDataQueryParams.os != null)

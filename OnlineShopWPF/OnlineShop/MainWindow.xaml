@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:local ="clr-namespace:OnlineShop"
         xmlns:local1="clr-namespace:OnlineShop"
-        Title="MainWindow" Height="800" Width="1200">
+        Title="MainWindow" Height="1000" Width="1200">
 
   <Window.DataContext>
     <local:MainViewModel/>
@@ -27,6 +27,6 @@
       </DataGrid.Columns>
     </DataGrid>
 
-    <local:Filter Grid.Row="0" Height="300"></local:Filter>
+    <local:Filter Grid.Row="0" Height="500"></local:Filter>
   </Grid>
 </Window>
