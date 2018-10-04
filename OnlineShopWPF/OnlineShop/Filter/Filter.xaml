@@ -39,7 +39,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
           </Grid.ColumnDefinitions>
-          <CheckBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="amdCheckBox" x:FieldModifier="public"/>
+          <RadioButton GroupName="cpuManufacturer" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="amdCheckBox" x:FieldModifier="public" IsChecked="{Binding IsAMDCpu}"/>
           <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="AMD"/>
         </Grid>
 
@@ -48,7 +48,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="3*"/>
           </Grid.ColumnDefinitions>
-          <CheckBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <RadioButton  GroupName="cpuManufacturer" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsIntelCpu}"/>
           <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="INTEL"/>
         </Grid>
       </Grid>
@@ -69,7 +69,7 @@
           </Grid.ColumnDefinitions>
           <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
           <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinCPUCores}"/>
-          <Slider Grid.Column="1" Maximum="{Binding VMProperty}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinCPUCores}" />
+          <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinCPUCores}" />
         </Grid>
 
         <Grid Grid.Row="2">
@@ -79,8 +79,8 @@
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
           <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="32"/>
-          <Slider Grid.Column="1" Maximum="32" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="32" />
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxCPUCores}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxCPUCores}"  />
         </Grid>
       </Grid>
 
@@ -99,8 +99,8 @@
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
           <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="0 GHZ"/>
-          <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="1" VerticalAlignment="Center" Value="0" />
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinClockRate}"/>
+          <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="1" VerticalAlignment="Center" Value="{Binding MinClockRate}" />
         </Grid>
 
         <Grid Grid.Row="2">
@@ -110,8 +110,8 @@
             <ColumnDefinition Width="1*"/>
           </Grid.ColumnDefinitions>
           <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="10 GHZ"/>
-          <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="1" VerticalAlignment="Center" Value="10" />
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxClockRate}"/>
+          <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="1" VerticalAlignment="Center" Value="{Binding MaxClockRate}" />
         </Grid>
 
 

@@ -23,7 +23,6 @@ namespace OnlineShop
     public Filter()
     {
       InitializeComponent();
-      //DataContext = new FilterViewModel();
     }
   }
 }

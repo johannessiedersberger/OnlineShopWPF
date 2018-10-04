@@ -11,29 +11,26 @@ namespace OnlineShop
 {
   public class MainViewModel
   {
-    public ObservableCollection<NotebookView> ProductList { get; private set; } = new ObservableCollection<NotebookView>();
-
+    public static ObservableCollection<NotebookView> ProductList { get; private set; } = new ObservableCollection<NotebookView>();
+    
     public MainViewModel()
     {
-      ShowNotebooks();
+      
     }
 
-    public void ShowNotebooks()
+    public static void ShowNotebooks(List<Notebook> notebooks)
     {
       ProductList.Clear();
-      DatabaseFactory dbF = new DatabaseFactory(new MySqliteDatabase(Shop.file));
-      List<Product> products = dbF.FindMatchingProducts(new NotebookQueryParams { });
-      foreach (Product notebookProduct in products)
+      foreach (Notebook notebook in notebooks)
       {
-        Notebook nb = dbF.GetNotebook(notebookProduct);
         NotebookView view = new NotebookView
         {
-          Name = nb.Product.Name,
-          Price = nb.Product.Price,
-          Cpu = nb.Cpu.Name,
-          Ram = nb.Ram,
-          HdMemory = nb.HardDrive.Memory,
-          HdType = nb.HardDrive.Type,
+          Name = notebook.Product.Name,
+          Price = notebook.Product.Price,
+          Cpu = notebook.Cpu.Name,
+          Ram = notebook.Ram,
+          HdMemory = notebook.HardDrive.Memory,
+          HdType = notebook.HardDrive.Type,
         };
         ProductList.Add(view);
       }      
