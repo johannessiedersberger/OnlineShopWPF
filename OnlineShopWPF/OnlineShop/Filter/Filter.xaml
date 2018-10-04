@@ -13,8 +13,6 @@
     <Grid.RowDefinitions>
       <RowDefinition/>
       <RowDefinition/>
-      
-      
     </Grid.RowDefinitions>
 
     <Grid Grid.Row="0">
@@ -120,6 +118,78 @@
       <Label Content="CPU" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
     </Grid>
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Graphic Card Manufacturer"/>
+
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton GroupName="graphicManufacturer" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  IsChecked="{Binding IsNVIDIAGraphicCard}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="NVIDIA"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton  GroupName="graphicManufacturer" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsAMDGrapicCard}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="AMD"/>
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Video RAM"/>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinVram}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinVram}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxVram}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxVram }"  />
+        </Grid>
+      </Grid>
+
+      <Label Content="Graphic Card" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+    </Grid>
+
   </Grid>
 
 </UserControl>

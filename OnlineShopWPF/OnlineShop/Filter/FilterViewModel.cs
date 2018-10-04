@@ -15,7 +15,7 @@ namespace OnlineShop
     private static DatabaseFactory db = new DatabaseFactory(new MySqliteDatabase(Shop.file));
 
     #region cpucores
-    public static int MaxCPUSliderLenth = 16;
+    public int MaxCPUSliderLenth = 16;
 
     public int MinCPUCores
     {
@@ -40,7 +40,7 @@ namespace OnlineShop
         RunQuery();
       }
     }
-    private int _maxCpuCores = MaxCPUSliderLenth;
+    private int _maxCpuCores = 16;
     #endregion
 
     #region cpuManufacturer
@@ -51,7 +51,7 @@ namespace OnlineShop
       {
         if (IsIntelCpu)
           return "INTEL";
-        else if (IsAMDCpu)
+        if (IsAMDCpu)
           return "AMD";
         else
           return "";
@@ -109,18 +109,98 @@ namespace OnlineShop
         RunQuery();
       }
     }
-    private int _maxClockRate = MaxCPUSliderLenth;
+    private int _maxClockRate = 10;
 
     #endregion
+
+    #region graphicCardManufacturer
+
+    private string graphicName
+    {
+      get
+      {
+        
+        if (IsNVIDIAGraphicCard)
+          return "NVIDIA";
+        if (IsAMDGrapicCard)
+          return "AMD";
+        else
+          return "";
+      }
+    }
+    public bool IsNVIDIAGraphicCard
+    {
+      get => _IsNVIDIAGraphicCard;
+      set
+      {
+        _IsNVIDIAGraphicCard = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsNVIDIAGraphicCard)));
+        RunQuery();
+      }
+    }
+    private bool _IsNVIDIAGraphicCard = false;
+
+
+    public bool IsAMDGrapicCard
+    {
+      get => _IsAMDGrapicCard;
+      set
+      {
+        _IsAMDGrapicCard = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAMDGrapicCard)));
+      }
+    }
+    private bool _IsAMDGrapicCard = false;
+
+    #endregion
+
+    #region graphicCardVram
+
+    public int MaxVramSliderRange = 16;
+
+    public int MinVram
+    {
+      get => _minVram;
+      set
+      {
+        _minVram = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinVram)));
+        RunQuery();
+      }
+    }
+    private int _minVram = 0;
+
+
+    public int MaxVram
+    {
+      get => _maxVram;
+      set
+      {
+        _maxVram = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxVram)));
+        RunQuery();
+      }
+    }
+    private int _maxVram = 16;
+
+    #endregion
+
     private void RunQuery()
     {
 
       MainViewModel.ShowNotebooks(db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
       {
-        CPUQueryParams = new CPUQueryParams { cpuCount = new Range(MinCPUCores, MaxCPUCores),
-          cpuClockRate=new Range(MinClockRate,MaxClockRate), cpuName = this.cpuName }
-
-
+        CPUQueryParams = new CPUQueryParams
+        {
+          cpuCount = new Range(MinCPUCores, MaxCPUCores),
+          cpuClockRate = new Range(MinClockRate, MaxClockRate),
+          cpuName = this.cpuName
+        },
+        GraphicQueryParams = new GraphicQueryParams
+        {
+          graphicCardName = this.graphicName,
+          vramRange = new Range(MinVram, MaxVram)
+        }
       })));
     }
   }
