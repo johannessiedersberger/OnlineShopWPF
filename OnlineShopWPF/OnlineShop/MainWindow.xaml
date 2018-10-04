@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:local ="clr-namespace:OnlineShop"
         xmlns:local1="clr-namespace:OnlineShop"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="800" Width="1200">
 
   <Window.DataContext>
     <local:MainViewModel/>
@@ -14,8 +14,8 @@
   
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition/>
-      <RowDefinition/>
+      <RowDefinition Height="3*"/>
+      <RowDefinition Height="2*"/>
     </Grid.RowDefinitions>
     <DataGrid Grid.Row="1"   AutoGenerateColumns="False" CanUserAddRows="True" ItemsSource="{Binding ProductList}" >
       <DataGrid.Columns>

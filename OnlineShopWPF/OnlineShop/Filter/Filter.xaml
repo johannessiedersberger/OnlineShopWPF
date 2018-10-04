@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OnlineShop"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="800">
   <UserControl.DataContext>
     <local:FilterViewModel></local:FilterViewModel>
   </UserControl.DataContext>
   <Grid>
     <Grid.RowDefinitions>
+      <RowDefinition/>
       <RowDefinition/>
       <RowDefinition/>
       <RowDefinition/>
@@ -262,6 +263,150 @@
 
     </Grid>
 
+    <Grid Grid.Row="3">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="OS"/>
+
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton GroupName="os" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  IsChecked="{Binding IsWindows}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Windows"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton  GroupName="os" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsLinux}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="LINUX"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton  GroupName="os" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsMac}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="MAC"/>
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="RAM Memory"/>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinRamMemory}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinRamMemory}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxRamMemory}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxRamMemory }"  />
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Column="3">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Battery Time"/>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinBatteryTime}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinBatteryTime}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxBatteryTime}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxBatteryTime }"  />
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Column="4">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Price"/>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinPrice}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinPrice}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxPrice}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxPrice }"  />
+        </Grid>
+      </Grid>
+
+      <Label Content="Notebook" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+    </Grid>
+    
   </Grid>
 
 </UserControl>

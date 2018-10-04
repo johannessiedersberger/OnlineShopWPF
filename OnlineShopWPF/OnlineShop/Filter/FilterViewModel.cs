@@ -257,6 +257,150 @@ namespace OnlineShop
 
     #endregion
 
+    #region os
+
+    private string OS
+    {
+      get
+      {
+        if (IsWindows)
+          return "windows";
+        if (IsLinux)
+          return "linux";
+        if (IsMac)
+          return "mac";
+        else
+          return "";
+      }
+    }
+
+    public bool IsWindows
+    {
+      get => _isWindows;
+      set
+      {
+        _isWindows = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWindows)));
+        RunQuery();
+      }
+    }
+    private bool _isWindows = false;
+
+    public bool IsLinux
+    {
+      get => _isLinux;
+      set
+      {
+        _isLinux = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLinux)));
+      }
+    }
+    private bool _isLinux = false;
+
+    public bool IsMac
+    {
+      get => _isMac;
+      set
+      {
+        _isMac = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMac)));
+      }
+    }
+    private bool _isMac = false;
+
+    #endregion
+
+    #region ram
+
+    public int MaxRAMMemorySliderRange { get; set; } = 128;
+
+    public int MinRamMemory
+    {
+      get => _minRamMemory;
+      set
+      {
+        _minRamMemory = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinRamMemory)));
+        RunQuery();
+      }
+    }
+    private int _minRamMemory = 0;
+
+    public int MaxRamMemory
+    {
+      get => _maxRamMemory;
+      set
+      {
+        _maxRamMemory = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxRamMemory)));
+        RunQuery();
+      }
+    }
+    private int _maxRamMemory = 128;
+    #endregion
+
+    #region battery
+
+    public int MaxBatteryTimeSliderValue { get; set; } = 2000;
+
+    public int MinBatteryTime
+    {
+      get => _minBatteryTime;
+      set
+      {
+        _minBatteryTime = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinBatteryTime)));
+        RunQuery();
+      }
+    }
+    private int _minBatteryTime = 0;
+
+    public int MaxBatteryTime
+    {
+      get => _maxBatteryTime;
+      set
+      {
+        _maxBatteryTime = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxBatteryTime)));
+        RunQuery();
+      }
+    }
+    private int _maxBatteryTime = 2000;
+
+    #endregion
+
+    #region price
+
+    public int MaxPriceSliderValue { get; set; } = 10000;
+
+    public int MinPrice
+    {
+      get => _minPrice;
+      set
+      {
+        _minPrice = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinPrice)));
+        RunQuery();
+      }
+    }
+    private int _minPrice = 0;
+
+    public int MaxPrice
+    {
+      get => _maxPrice;
+      set
+      {
+        _maxPrice = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPrice)));
+        RunQuery();
+      }
+    }
+    private int _maxPrice = 10000;
+
+    #endregion
+
+
+
     private void RunQuery()
     {
       MainViewModel.ShowNotebooks(db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
@@ -270,12 +414,18 @@ namespace OnlineShop
         GraphicQueryParams = new GraphicQueryParams
         {
           graphicCardName = this.graphicName,
-          vramRange = new Range(MinVram, MaxVram)
+          vramRange = new Range(MinVram, MaxVram),
         },
         HardDriveQueryParams = new HardDriveQueryParams
         {
           hdType = hdType,
           hdMemoryRange = new Range(MinHdMemory, MaxHdMemory),
+        },
+        NotebookDataQueryParams = new NotebookDataQueryParams
+        {
+          os = OS,
+          ramMemoryRange = new Range(MinRamMemory, MaxRamMemory),
+          batteryTimeRange= new Range(MinBatteryTime, MaxBatteryTime),
         }
         
       })));
