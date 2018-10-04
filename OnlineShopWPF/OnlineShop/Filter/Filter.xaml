@@ -13,6 +13,7 @@
     <Grid.RowDefinitions>
       <RowDefinition/>
       <RowDefinition/>
+      <RowDefinition/>
     </Grid.RowDefinitions>
 
     <Grid Grid.Row="0">
@@ -187,6 +188,77 @@
       </Grid>
 
       <Label Content="Graphic Card" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+    </Grid>
+
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Hard Drive Type"/>
+
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton GroupName="hdtype" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"  IsChecked="{Binding IsHDD}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="HDD"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          </Grid.ColumnDefinitions>
+          <RadioButton  GroupName="hdtype" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsSSD}"/>
+          <Label Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="SSD"/>
+        </Grid>
+      </Grid>
+
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Memory"/>
+
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinHdMemory}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinHdMemory}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+          </Grid.ColumnDefinitions>
+          <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxHdMemory}"/>
+          <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxHdMemory }"  />
+        </Grid>
+      </Grid>
+
+      <Label Content="Hard Drive" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
     </Grid>
 

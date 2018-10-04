@@ -185,9 +185,80 @@ namespace OnlineShop
 
     #endregion
 
+    #region hardDriveType
+
+    private string hdType
+    {
+      get
+      {
+
+        if (IsSSD)
+          return "ssd";
+        if (IsHDD)
+          return "hdd";
+        else
+          return "";
+      }
+    }
+
+    public bool IsSSD
+    {
+      get => _isSSd;
+      set
+      {
+        _isSSd = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSSD)));
+        RunQuery();
+      }
+    }
+    private bool _isSSd = false;
+
+
+    public bool IsHDD
+    {
+      get => _isHdd;
+      set
+      {
+        _isHdd = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHDD)));
+      }
+    }
+    private bool _isHdd = false;
+
+    #endregion
+
+    #region hardDriveMemory
+
+    public int MaxHdMemorySliderRange { get; set; } = 5000;
+
+    public int MinHdMemory
+    {
+      get => _minHdMemory;
+      set
+      {
+        _minHdMemory = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinHdMemory)));
+        RunQuery();
+      }
+    }
+    private int _minHdMemory = 0;
+
+    public int MaxHdMemory
+    {
+      get => _MaxHdMemory;
+      set
+      {
+        _MaxHdMemory = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxHdMemory)));
+        RunQuery();
+      }
+    }
+    private int _MaxHdMemory = 10000;
+
+    #endregion
+
     private void RunQuery()
     {
-
       MainViewModel.ShowNotebooks(db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
       {
         CPUQueryParams = new CPUQueryParams
@@ -200,7 +271,13 @@ namespace OnlineShop
         {
           graphicCardName = this.graphicName,
           vramRange = new Range(MinVram, MaxVram)
+        },
+        HardDriveQueryParams = new HardDriveQueryParams
+        {
+          hdType = hdType,
+          hdMemoryRange = new Range(MinHdMemory, MaxHdMemory),
         }
+        
       })));
     }
   }
