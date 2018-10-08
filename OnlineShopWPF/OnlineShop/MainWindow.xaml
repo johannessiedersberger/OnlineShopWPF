@@ -26,7 +26,6 @@
         <DataGridTextColumn Header="Price" IsReadOnly="True"  Binding="{Binding Path=Price}" Width="50"></DataGridTextColumn>
       </DataGrid.Columns>
     </DataGrid>
-
-    <local:Filter Grid.Row="0" Height="500"></local:Filter>
+    <local:Filter Height="500" Grid.Row="0"/>
   </Grid>
 </Window>

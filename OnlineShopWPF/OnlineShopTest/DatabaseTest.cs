@@ -12,241 +12,207 @@ namespace OnlineShopTest
 {
   class DatabaseTest
   {
-    //#region cpu
+    public static string testDb = @"C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShopTest.db";
+    public DatabaseFactory db = new DatabaseFactory(new MySqliteDatabase(testDb));
 
-    //static class TestCPU
-    //{
-    //  public static int Count = 4;
-    //  public static double ClockRate = 3.7;
-    //  public static string Name = "INTEL CORE i7";
-    //}
+    [Test]
+    public void TestAddCPU()
+    {
+      db.DeleteEveryThing();
+      CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
+      db.AddNewCpuToDatabase(cpu);
+      db.AddNewCpuToDatabase(cpu);
+      int cpuId = db.GetCpuId(cpu);
+      Assert.That(cpu.Name, Is.EqualTo(db.GetCPU(cpuId).Name));
+    }
 
-    //[Test]
-    //public void TestAddCPU()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  CPU cpu = new CPU(TestCPU.Count, TestCPU.ClockRate, TestCPU.Name);
-    //  //When
-    //  cpu.WriteToDatabase(fakeDB);
-    //  //Then
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$id"], Is.EqualTo(null));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$count"], Is.EqualTo(TestCPU.Count));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$clockRate"], Is.EqualTo(TestCPU.ClockRate));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$name"], Is.EqualTo(TestCPU.Name));
-    //  Assert.That(fakeDB.NonQueries[0].WasExecuted, Is.EqualTo(true));
+    [Test]
+    public void TestAddGraphic()
+    {
+      db.DeleteEveryThing();
+      Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 980TI");
+      db.AddGraphicToDataBase(graphic);
+      db.AddGraphicToDataBase(graphic);
+      int graphicId = db.GetGraphicCardId(graphic);
+      Assert.That(graphic.Name, Is.EqualTo(db.GetGraphicCard(graphicId).Name));
+    }
 
-    //  Assert.That(cpu.Count, Is.EqualTo(TestCPU.Count));
-    //  Assert.That(cpu.ClockRate, Is.EqualTo(TestCPU.ClockRate));
-    //  Assert.That(cpu.Name, Is.EqualTo(TestCPU.Name));
-    //}
+    [Test]
+    public void TestAddHardDrive()
+    {
+      db.DeleteEveryThing();
+      HardDrive hardDrive = new HardDrive(1024, "ssd");
+      db.AddNewHardDriveToDatabase(hardDrive);
+      db.AddNewHardDriveToDatabase(hardDrive);
+      int hardDriveId = db.GetHardDriveId(hardDrive);
+      Assert.That(hardDrive.Memory, Is.EqualTo(db.GetHardDrive(hardDriveId).Memory));
+      Assert.That(hardDrive.Type, Is.EqualTo(db.GetHardDrive(hardDriveId).Type));
 
-    //[Test]
-    //public void TestGetCPUIDException()
-    //{
-    //  //Given
-    //  CPU cpu = new CPU(TestCPU.Count, TestCPU.ClockRate, TestCPU.Name);
-    //  //When /Then
-    //  Assert.That(() => cpu.Id, Throws.TypeOf(typeof(NullReferenceException)));
-    //}
+    }
 
-    //[Test]
-    //public void TestGetCPUID()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  CPU cpu = new CPU(TestCPU.Count, TestCPU.ClockRate, TestCPU.Name);
-    //  cpu.WriteToDatabase(fakeDB);
-    //  //When /Then
-    //  Assert.That(cpu.Id, Is.EqualTo(0));
-    //}
-
-    //#endregion
-
-    //#region graphic
-
-    //static class TestGraphic
-    //{     
-    //  public static int Vram = 4;
-    //  public static string Name = "NVIDIA GeForce GTX 1080ti";
-    //}
-
-    //[Test]
-    //public void TestAddGraphic()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Graphic graphic = new Graphic(TestGraphic.Vram, TestGraphic.Name);
-    //  //When
-    //  graphic.WriteToDatabase(fakeDB);
-    //  //Then
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$id"], Is.EqualTo(null));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$vram"], Is.EqualTo(TestGraphic.Vram));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$name"], Is.EqualTo(TestGraphic.Name));
-    //  Assert.That(fakeDB.NonQueries[0].WasExecuted, Is.EqualTo(true));
+    [Test]
+    public void TestAddProduct()
+    {
+      db.DeleteEveryThing();
+      Product p = new Product("NOTEBOOK", 1000);
+      db.AddProductToDataBase(p);
+      db.AddProductToDataBase(p);
+      int productId = db.GetProductId(p);
+      Assert.That(p.Name, Is.EqualTo(db.GetProduct(productId).Name));
       
-    //  Assert.That(graphic.VRAM, Is.EqualTo(TestGraphic.Vram));
-    //  Assert.That(graphic.Name, Is.EqualTo(TestGraphic.Name));
-    //}
+    }
 
-    //[Test]
-    //public void TestGraphicID()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Graphic graphic = new Graphic(TestGraphic.Vram, TestGraphic.Name);
-    //  graphic.WriteToDatabase(fakeDB);
-    //  //when /then
-    //  Assert.That(graphic.Id, Is.EqualTo(0));
-    //}
+    [Test]
+    public void TestAddNotebook()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb);
+      Assert.That(nb.Product.Name, Is.EqualTo(db.GetNotebook(nb.Product).Product.Name));
+           
+    }
 
-    //[Test]
-    //public void TestGraphicIDExpception()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Graphic graphic = new Graphic(TestGraphic.Vram, TestGraphic.Name);
+    [Test]
+    public void TestDeleteNotebook()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      Notebook nb2 = CreateNotebook2();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb2);
+      db.DeleteCompleteNotebook(nb);
+      db.DeleteCompleteNotebook(nb2);
+      Assert.That(() => db.GetNotebook(nb.Product), Throws.InvalidOperationException);
+      Assert.That(() => db.GetCpuId(nb.Cpu), Throws.InvalidOperationException);
+      Assert.That(() => db.GetGraphicCardId(nb.Graphic), Throws.InvalidOperationException);
+      Assert.That(() => db.GetHardDriveId(nb.HardDrive), Throws.InvalidOperationException);
+      Assert.That(() => db.GetProductId(nb.Product), Throws.InvalidOperationException);
+      
+    }
 
-    //  //when /then
-    //  Assert.That(() => graphic.Id, Throws.TypeOf(typeof(NullReferenceException)));
-    //}
-    //#endregion
+    [Test]
+    public void TestGetNotebooksbyCPU()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      Notebook nb2 = CreateNotebook2();
+      Notebook nb3 = CreateNotebook3();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb2);
+      db.AddNewNotebookToDatabase(nb3);
+      List<Product> notebooks = db.FindMatchingProducts(new NotebookQueryParams {
+        CPUQueryParams = new CPUQueryParams {
+          cpuName ="INTEL",
+          cpuClockRate = new OnlineShop.Range(5.5,5.5),
+          cpuCount = new OnlineShop.Range(4,4),
+        }});
+      Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+    }
 
-    //#region HardDrive
-    //static class TestHardDrive
-    //{
-    //  public static int Memory = 128;
-    //  public static string Type = "ssd";
-    //}
+    [Test]
+    public void TestGetNotebooksbyGraphic()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      Notebook nb2 = CreateNotebook2();
+      Notebook nb3 = CreateNotebook3();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb2);
+      db.AddNewNotebookToDatabase(nb3);
+      List<Product> notebooks = db.FindMatchingProducts(new NotebookQueryParams
+      {
+        GraphicQueryParams = new GraphicQueryParams
+        {
+          graphicCardName = "NVIDIA GEFORCE 1080TI",
+          vramRange = new OnlineShop.Range(4,4),
+        }
+      });
+      Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+    }
 
-    //[Test]
-    //public void TestAddHardDrive()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  HardDrive hardDrive = new HardDrive(TestHardDrive.Memory, TestHardDrive.Type);
-    //  //When
-    //  hardDrive.WriteToDatabase(fakeDB);
-    //  //Then
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$id"], Is.EqualTo(null));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$type"], Is.EqualTo(TestHardDrive.Type));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$memory"], Is.EqualTo(TestHardDrive.Memory));
-    //  Assert.That(fakeDB.NonQueries[0].WasExecuted, Is.EqualTo(true));
+    [Test]
+    public void TestGetNotebooksbyHardDrive()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      Notebook nb2 = CreateNotebook2();
+      Notebook nb3 = CreateNotebook3();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb2);
+      db.AddNewNotebookToDatabase(nb3);
+      List<Product> notebooks = db.FindMatchingProducts(new NotebookQueryParams
+      {
+        HardDriveQueryParams = new HardDriveQueryParams
+        {
+          hdType = "ssd",
+          hdMemoryRange = new OnlineShop.Range(2048, 2048),
+        }
+      });
+      Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+    }
 
-    //  Assert.That(hardDrive.Memory, Is.EqualTo(TestHardDrive.Memory));
-    //  Assert.That(hardDrive.Type, Is.EqualTo(TestHardDrive.Type));
-    //}
+    [Test]
+    public void TestGetNotebooksbyNotebookData()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      Notebook nb2 = CreateNotebook2();
+      Notebook nb3 = CreateNotebook3();
+      db.AddNewNotebookToDatabase(nb);
+      db.AddNewNotebookToDatabase(nb2);
+      db.AddNewNotebookToDatabase(nb3);
+      List<Product> notebooks = db.FindMatchingProducts(new NotebookQueryParams
+      {
+        NotebookDataQueryParams = new NotebookDataQueryParams
+        {
+          batteryTimeRange = new OnlineShop.Range(950,950),
+          notebookName = "ASUS",
+          os = "linux",
+          priceRange = new OnlineShop.Range(999.99, 999.99),
+          ramMemoryRange = new OnlineShop.Range(32,32),
+        }
+      });
+      Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+    }
 
-    //[Test]
-    //public void TestHardDriveID()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  HardDrive hardDrive = new HardDrive(TestHardDrive.Memory, TestHardDrive.Type);
-    //  hardDrive.WriteToDatabase(fakeDB);
-    //  //when /then
-    //  Assert.That(hardDrive.Id, Is.EqualTo(0));
-    //}
+    [Test]
+    public void TestGetProducts()
+    {
+      db.DeleteEveryThing();
+      Notebook nb = CreateNotebook();
+      db.AddNewNotebookToDatabase(nb);
+      List<Product> notebooks = db.FindMatchingProducts(new ProductQueryParams {
+        Price = new OnlineShop.Range(1199.99, 1199.99),
+        Name = "DELL GAMING NOTEBOOK",
+      });
+      Assert.That(notebooks[0].Name, Is.EqualTo(nb.Product.Name));
+    }
 
-    //[Test]
-    //public void TestHardDriveIDExpception()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  HardDrive harddrive = new HardDrive(TestHardDrive.Memory, TestHardDrive.Type);
+    private Notebook CreateNotebook()
+    {
+      Product product = new Product("DELL GAMING NOTEBOOK", 1199.99);
+      CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
+      Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 980TI");
+      HardDrive hardDrive = new HardDrive(1024, "ssd");
+      return new Notebook(product, graphic, cpu, hardDrive, 16, 900, OS.windows);
+    }
+    private Notebook CreateNotebook2()
+    {
+      Product product = new Product("DELL GAMING NOTEBOOK 2.0", 1199.99);
+      CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
+      Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 980TI");
+      HardDrive hardDrive = new HardDrive(1024, "ssd");
+      return new Notebook(product, graphic, cpu, hardDrive, 16, 900, OS.windows);
+    }
+    private Notebook CreateNotebook3()
+    {
+      Product product = new Product("ASUS", 999.99);
+      CPU cpu = new CPU(4, 5.5, "INTEL CORE i7 7200HQ");
+      Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 1080TI");
+      HardDrive hardDrive = new HardDrive(2048, "ssd");
+      return new Notebook(product, graphic, cpu, hardDrive, 32, 950, OS.linux);
+    }
 
-    //  //when /then
-    //  Assert.That(() => harddrive.Id, Throws.TypeOf(typeof(NullReferenceException)));
-    //}
-
-    //#endregion
-
-    //#region product
-    //static class TestProduct
-    //{
-    //  public static string Name = "OMEN by HP 17 Gaming Notebook";
-    //  public static int Price = 1070;
-    //}
-
-    //public void TestAddProduct()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Product p = new Product(TestProduct.Name,TestProduct.Price);
-    //  //When
-    //  p.WriteToDataBase(fakeDB);
-    //  //Then
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$id"], Is.EqualTo(null));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$name"], Is.EqualTo(TestProduct.Name));
-    //  Assert.That(fakeDB.NonQueries[0].Parameters["$price"], Is.EqualTo(TestProduct.Price));
-    //  Assert.That(fakeDB.NonQueries[0].WasExecuted, Is.EqualTo(true));
-
-    //  Assert.That(TestProduct.Name, Is.EqualTo(TestProduct.Name));
-    //  Assert.That(TestProduct.Price, Is.EqualTo(TestProduct.Price));
-    //}
-
-    //public void TestProductID()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Product product = new Product(TestProduct.Name, TestProduct.Price);
-    //  product.WriteToDataBase(fakeDB);
-    //  //When /THen
-    //  Assert.That(product.ID, Is.EqualTo(0));
-    //}
-
-    //public void TestProductIDException()
-    //{
-    //  //Given 
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Product product = new Product(TestProduct.Name, TestProduct.Price);
-
-    //  //when /then
-    //  Assert.That(() => product.ID, Throws.TypeOf(typeof(NullReferenceException)));
-    //}
-    //#endregion
-
-    //#region notebook
-    //static class TestNotebook
-    //{
-    //  public static int RAM = 16;
-    //  public static int BatteryTime = 720;
-    //  public static string OS = "windows";
-    //}
-
-    //[Test]
-    //public void NotebookAddTest()
-    //{
-    //  //Given
-    //  FakeDataBase fakeDB = new FakeDataBase();
-    //  Product p = new Product("OMEN by HP 17 Gaming Notebook", 1070);
-    //  CPU c = new CPU(4, 3.8, "Intel® Core™ i7-7700HQ");
-    //  Graphic g = new Graphic(4, "NVIDIA® GeForce® GTX 1050 Ti");
-    //  HardDrive h = new HardDrive(256, "ssd");
-
-    //  p.WriteToDataBase(fakeDB);
-    //  c.WriteToDatabase(fakeDB);
-    //  g.WriteToDatabase(fakeDB);
-    //  h.WriteToDatabase(fakeDB);
-
-    //  //When
-    //  Notebook nb = new Notebook(p.ID, g.Id, c.Id, h.Id, TestNotebook.RAM, TestNotebook.BatteryTime, TestNotebook.OS);
-    //  nb.WriteToDataBase(fakeDB);
-    //  //Then
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$id"], Is.EqualTo(0));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$graphicId"], Is.EqualTo(0));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$cpuId"], Is.EqualTo(0));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$hardDriveId"], Is.EqualTo(0));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$ramMemory"], Is.EqualTo(TestNotebook.RAM));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$avgBatteryTime"], Is.EqualTo(TestNotebook.BatteryTime));
-    //  Assert.That(fakeDB.NonQueries[4].Parameters["$os"], Is.EqualTo(TestNotebook.OS));
-    //  Assert.That(fakeDB.NonQueries[4].WasExecuted, Is.EqualTo(true));
-
-    //  Assert.That(TestProduct.Name, Is.EqualTo(TestProduct.Name));
-    //  Assert.That(TestProduct.Price, Is.EqualTo(TestProduct.Price));
-
-    //}
-
-    //#endregion
   }
 }

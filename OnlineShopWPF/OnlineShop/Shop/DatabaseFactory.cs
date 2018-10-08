@@ -30,10 +30,6 @@ namespace OnlineShop
       {
         return NotebookSearchQueries.FindMatchingNotebooks((NotebookQueryParams)param, _db);
       }
-      if (param is HeadPhoneQueryParams)
-      {
-        return HeadPhoneSearchQueries.FindMatchingHeadphone((HeadPhoneQueryParams)param, _db);
-      }
       if (param is ProductQueryParams)
       {
         return ProductSearchQueries.FindMatchingProduct(param, _db);
@@ -53,64 +49,6 @@ namespace OnlineShop
       DeleteNotebook(nb);
       DeleteProduct(nb.Product);
     }
-
-    #region headphones
-    /// <summary>
-    /// Writes the HardDrive to the DataBase
-    /// </summary>
-    /// <param name="db">The headphone that has to be added</param>
-    public void AddNewHeadPhoneToDatabase(HeadPhone headPhone)
-    {
-      if (DoesHeadPhoneAlreadyExist(headPhone.ProductId))
-        return;
-      using (var createHeadPhone = _db.CreateNonQueryCommand(CommandAddHeadPhone))
-      {
-        createHeadPhone.AddParameter("$id", headPhone.ProductId);
-        createHeadPhone.AddParameter("$wireless", headPhone.Wireless);
-        createHeadPhone.Execute();
-      }
-    }
-
-    private const string CommandAddHeadPhone = " INSERT INTO Headphones(product_id, wireless) VALUES($id, $wireless)";
-
-    private bool DoesHeadPhoneAlreadyExist(int productId)
-    {
-      using (var getID = _db.CreateQueryCommand(CommandSelectID))
-      {
-        getID.AddParameter("$id", productId);
-        IReader reader = getID.ExecuteReader();
-        return reader.TryReadNextRow(out object[] row);
-      }
-    }
-
-    private const string CommandSelectID = "SELECT product_id FROM Headphones WHERE product_id = $id";
-
-    public void DeleteCompleteHeadPhoneFromDatabase(HeadPhone headPhone)
-    {
-      //TODO: Complete Method
-    }
-
-    private void DeleteHeadPhone(int productId)
-    {
-      //TODO: Complete Method
-      //if (CheckIfHeadPhoneIsUsedByOtherProduct(productId))
-      //  return;
-      using (var delete = _db.CreateNonQueryCommand(CommandDeleteHeadPhone))
-      {
-        delete.AddParameter("$id", productId);
-        delete.Execute();
-      }
-    }
-
-    private const string CommandDeleteHeadPhone = "DELETE FROM Products WHERE product_id = $id";
-
-
-    private bool CheckIfHeadPhoneIsUsedByOtherProduct(int productId)
-    {
-      //TODO: Complete Method
-      return false;
-    }
-    #endregion
 
     #region products
     /// <summary>
@@ -174,7 +112,6 @@ namespace OnlineShop
           return int.Parse(row[0].ToString());
         throw new InvalidOperationException("The Given product could not be found");
       }
-
     }
 
     private const string CommandSelectProductId = "SELECT product_id FROM Products WHERE name = $name";
@@ -542,8 +479,14 @@ namespace OnlineShop
     /// <param name="db">the database that will contain the cpu</param>
     public void AddNewNotebookToDatabase(Notebook notebook)
     {
+      AddProductToDataBase(notebook.Product);
+      AddGraphicToDataBase(notebook.Graphic);
+      AddNewHardDriveToDatabase(notebook.HardDrive);
+      AddNewCpuToDatabase(notebook.Cpu);
+
       if (DoesNotebookAlreadyExist(notebook))
         return;
+
       using (var createNotebook = _db.CreateNonQueryCommand(CommandCreateNotebook))
       {
         createNotebook.AddParameter("$id", GetProductId(notebook.Product));
@@ -628,119 +571,66 @@ namespace OnlineShop
     private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";
     #endregion
 
-    #region customers
-    /// <summary>
-    /// Writes the Customer to the Database
-    /// </summary>
-    /// <param name="db">The Database which contains the customers</param>
-    public void AddCustomerToDatabase(CustomerData data)
+    #region delete
+
+    public void DeleteEveryThing()
     {
-      if (CheckIfCustomerAlreadyExists(data))
-        return;
-      using (var createCustomer = _db.CreateNonQueryCommand(CommandAddCustomer))
-      {
-        createCustomer.AddParameter("$id", null);
-        createCustomer.AddParameter("$email", data.Email);
-        createCustomer.AddParameter("$password", data.Password);
-        createCustomer.AddParameter("$firstName", data.FirstName);
-        createCustomer.AddParameter("$lastName", data.LastName);
-        createCustomer.AddParameter("$streetName", data.StreetName);
-        createCustomer.AddParameter("$streetNumber", data.StreetNumber);
-        createCustomer.AddParameter("$city", data.City);
-        createCustomer.AddParameter("$zipCode", data.ZipCode);
-        createCustomer.AddParameter("$creditCardNumber", data.CreditCardNumber);
-        createCustomer.AddParameter("$phone", data.PhoneNumber);
-        createCustomer.Execute();
-      }
+      DeleteCPUTable();
+      DeleteHardDriveTable();
+      DelteGraphicTable();
+      DeleteProductTable();
+      DeleteNotebookTable();
     }
 
-    private const string CommandAddCustomer
-      = "INSERT INTO Customer(customer_id, email, password, first_name, last_name, street_name, street_number, city, zip_code, credit_card_number, phone)" +
-                              " VALUES($id,$email,$password,$firstName, $lastName, $streetName, $streetNumber, $city, $zipCode, $creditCardNumber, $phone)";
-
-    private bool CheckIfCustomerAlreadyExists(CustomerData data)
+    public void DeleteCPUTable()
     {
-      using (var customer = _db.CreateQueryCommand(CommandCheckIfCustomerExists))
+      using (var delete = _db.CreateNonQueryCommand(CommandDelteCPUTable))
       {
-        customer.AddParameter("$email", data.Email);
-        IReader reader = customer.ExecuteReader();
-        return reader.TryReadNextRow(out object[] row);
+        delete.Execute();
       }
     }
-    private const string CommandCheckIfCustomerExists = "SELECT customer_id FROM Customer WHERE $email = email";
+    private const string CommandDelteCPUTable = "DELETE FROM CPU";
+
+    public void DeleteHardDriveTable()
+    {
+      using (var delete = _db.CreateNonQueryCommand(CommandDelteHardDriveTable))
+      {
+        delete.Execute();
+      }
+    }
+    private const string CommandDelteHardDriveTable = "DELETE FROM HardDrives";
+
+    public void DelteGraphicTable()
+    {
+      using (var delete = _db.CreateNonQueryCommand(CommandDeleteGraphicTable))
+      {
+        delete.Execute();
+      }
+    }
+    private const string CommandDeleteGraphicTable = "DELETE FROM Graphics";
+
+    public void DeleteProductTable()
+    {
+      using (var delete = _db.CreateNonQueryCommand(CommandDelteProduct))
+      {
+        delete.Execute();
+      }
+    }
+    private const string CommandDelteProduct = "DELETE FROM Products";
+
+    public void DeleteNotebookTable()
+    {
+      using (var delete = _db.CreateNonQueryCommand(CommandDeleteNotebookTable))
+      {
+        delete.Execute();
+      }
+    }
+    private const string CommandDeleteNotebookTable = "DELETE FROM Notebooks";
     #endregion
-
-    #region orders
-    /// <summary>
-    /// Ads an Order to the Databse
-    /// </summary>
-    /// <param name="order">The order</param>
-    /// <param name="orderEntries">The orderEntries from the order</param>
-    public void AddOrdersToDatabase(Order order, List<OrderEntry> orderEntries)
-    {
-      AddOrderToDatabase(order);
-      foreach (OrderEntry orderEntry in orderEntries)
-        AddOrderEntrieToDatabase(orderEntry);
-    }
-
-    /// <summary>
-    /// Ads an order the the Databse
-    /// </summary>
-    /// <param name="order">the order</param>
-    public void AddOrderToDatabase(Order order)
-    {
-      using (var createOrder = _db.CreateNonQueryCommand(CommandAddOrder))
-      {
-        createOrder.AddParameter("$ordersId", null);
-        createOrder.AddParameter("$customerId", order.CustomerId);
-        createOrder.AddParameter("$date", order.OrderDate);
-        createOrder.Execute();
-      }
-    }
-
-    private const string CommandAddOrder
-      = "INSERT INTO Orders(orders_id, customer_id, date) VALUES($ordersId, $customerId, $date)";
-
-    /// <summary>
-    /// Ads an order Entrie to the Databse
-    /// </summary>
-    /// <param name="orderEntry"></param>
-    public void AddOrderEntrieToDatabase(OrderEntry orderEntry)
-    {
-      using (var createOrder = _db.CreateNonQueryCommand(CommandAddOrderEntrie))
-      {
-        createOrder.AddParameter("$orderEntryId", null);
-        createOrder.AddParameter("$amount", orderEntry.Amount);
-        createOrder.AddParameter("$ordersId", orderEntry.OrdersId);
-        createOrder.AddParameter("$productId", orderEntry.ProductId);
-        createOrder.Execute();
-      }
-    }
-
-    private const string CommandAddOrderEntrie
-      = "INSERT INTO OrderEntries(order_entry_id, product_id, order_id, amount) VALUES($orderEntryId,$productId , $ordersId,$amount )";
-
-    /// <summary>
-    /// Gets the OrderId by the Order
-    /// </summary>
-    /// <param name="order">the order id</param>
-    /// <returns></returns>
-    public int GetOrderID(Order order)
-    {
-      using (var createOrder = _db.CreateQueryCommand(CommandGetOrderID))
-      {
-        createOrder.AddParameter("$customerId", order.CustomerId);
-        createOrder.AddParameter("$date", order.OrderDate);
-        IReader reader = createOrder.ExecuteReader();
-        reader.TryReadNextRow(out object[] row);
-        return int.Parse(row[0].ToString());
-      }
-    }
-
-    private const string CommandGetOrderID
-      = "SELECT orders_id FROM Orders WHERE $customerId = customer_id AND date = $date ";
-
   }
-  #endregion
+
+
+
+
 }
 

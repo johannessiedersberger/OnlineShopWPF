@@ -19,19 +19,21 @@ namespace OnlineShop
       var notebooks = new List<Notebook>();
       while (reader.TryReadNextRow(out object[] row))
       {
-        var notebookRows = new List<string>();
+        var notebookRows = new Dictionary<string,string>();
+        string[] columnNames = reader.ColumnNames;
         for (int i = 0; i < row.Length; i++)
         {
-          notebookRows.Add(row[i].ToString());
+          notebookRows.Add(columnNames[i], row[i].ToString());
         }
+
         notebooks.Add(new Notebook(
-          product: db.GetProduct(int.Parse(notebookRows[0])), 
-          graphic: db.GetGraphicCard(int.Parse(notebookRows[1])), 
-          cpu: db.GetCPU(int.Parse(notebookRows[2])), 
-          hardDrive: db.GetHardDrive(int.Parse(notebookRows[3])),
-          ramMemory: int.Parse(notebookRows[4]), 
-          avgBatteryTime: int.Parse(notebookRows[5]), 
-          os: notebookRows[6])); 
+          product: db.GetProduct(int.Parse(notebookRows["product_id"])), 
+          graphic: db.GetGraphicCard(int.Parse(notebookRows["graphic_id"])), 
+          cpu: db.GetCPU(int.Parse(notebookRows["cpu_id"])), 
+          hardDrive: db.GetHardDrive(int.Parse(notebookRows["hard_drive_id"])),
+          ramMemory: int.Parse(notebookRows["ram_memory"]), 
+          avgBatteryTime: int.Parse(notebookRows["average_battery_time"]), 
+          os: notebookRows["os"])); 
       }
       return notebooks;
     }

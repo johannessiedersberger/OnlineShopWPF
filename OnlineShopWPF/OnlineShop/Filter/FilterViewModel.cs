@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Input;
 
 namespace OnlineShop
 {
-  public class FilterViewModel : INotifyPropertyChanged
+  public class FilterViewModel : ViewModelBase, INotifyPropertyChanged
   {
-    public event PropertyChangedEventHandler PropertyChanged;
     private static DatabaseFactory db = new DatabaseFactory(new MySqliteDatabase(Shop.file));
+
+    public FilterViewModel()
+    {
+      ShowNotebooks();
+      Search = new DelegateAction(ShowNotebooks); 
+    }
 
     #region cpucores
     public int MaxCPUSliderLenth = 16;
@@ -23,8 +22,8 @@ namespace OnlineShop
       set
       {
         _minCPUCores = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinCPUCores)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minCPUCores = 0;
@@ -36,8 +35,8 @@ namespace OnlineShop
       set
       {
         _maxCpuCores = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxCPUCores)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxCpuCores = 16;
@@ -63,8 +62,8 @@ namespace OnlineShop
       set
       {
         _isIntelCPU = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIntelCpu)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isIntelCPU = false;
@@ -76,7 +75,8 @@ namespace OnlineShop
       set
       {
         _isAmdCpu = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAMDCpu)));
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isAmdCpu = false;
@@ -92,8 +92,8 @@ namespace OnlineShop
       set
       {
         _minClockRate = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinClockRate)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minClockRate = 0;
@@ -105,8 +105,8 @@ namespace OnlineShop
       set
       {
         _maxClockRate = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxClockRate)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxClockRate = 10;
@@ -118,8 +118,7 @@ namespace OnlineShop
     private string graphicName
     {
       get
-      {
-        
+      {    
         if (IsNVIDIAGraphicCard)
           return "NVIDIA";
         if (IsAMDGrapicCard)
@@ -134,8 +133,8 @@ namespace OnlineShop
       set
       {
         _IsNVIDIAGraphicCard = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsNVIDIAGraphicCard)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _IsNVIDIAGraphicCard = false;
@@ -147,7 +146,8 @@ namespace OnlineShop
       set
       {
         _IsAMDGrapicCard = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsAMDGrapicCard)));
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _IsAMDGrapicCard = false;
@@ -164,8 +164,8 @@ namespace OnlineShop
       set
       {
         _minVram = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinVram)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minVram = 0;
@@ -177,8 +177,8 @@ namespace OnlineShop
       set
       {
         _maxVram = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxVram)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxVram = 16;
@@ -191,7 +191,6 @@ namespace OnlineShop
     {
       get
       {
-
         if (IsSSD)
           return "ssd";
         if (IsHDD)
@@ -207,8 +206,8 @@ namespace OnlineShop
       set
       {
         _isSSd = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSSD)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isSSd = false;
@@ -220,7 +219,8 @@ namespace OnlineShop
       set
       {
         _isHdd = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsHDD)));
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isHdd = false;
@@ -237,8 +237,8 @@ namespace OnlineShop
       set
       {
         _minHdMemory = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinHdMemory)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minHdMemory = 0;
@@ -249,8 +249,8 @@ namespace OnlineShop
       set
       {
         _MaxHdMemory = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxHdMemory)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _MaxHdMemory = 10000;
@@ -280,8 +280,8 @@ namespace OnlineShop
       set
       {
         _isWindows = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsWindows)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isWindows = false;
@@ -292,7 +292,8 @@ namespace OnlineShop
       set
       {
         _isLinux = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLinux)));
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isLinux = false;
@@ -303,7 +304,8 @@ namespace OnlineShop
       set
       {
         _isMac = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsMac)));
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private bool _isMac = false;
@@ -320,8 +322,8 @@ namespace OnlineShop
       set
       {
         _minRamMemory = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinRamMemory)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minRamMemory = 0;
@@ -332,8 +334,8 @@ namespace OnlineShop
       set
       {
         _maxRamMemory = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxRamMemory)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxRamMemory = 128;
@@ -346,8 +348,8 @@ namespace OnlineShop
       set
       {
         _notebookName = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NotebookName)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private string _notebookName = "";
@@ -363,8 +365,8 @@ namespace OnlineShop
       set
       {
         _minBatteryTime = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinBatteryTime)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minBatteryTime = 0;
@@ -375,8 +377,8 @@ namespace OnlineShop
       set
       {
         _maxBatteryTime = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxBatteryTime)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxBatteryTime = 2000;
@@ -393,8 +395,8 @@ namespace OnlineShop
       set
       {
         _minPrice = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MinPrice)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _minPrice = 0;
@@ -405,17 +407,17 @@ namespace OnlineShop
       set
       {
         _maxPrice = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaxPrice)));
-        RunQuery();
+        FirePropertyChanged();
+        ShowNotebooks();
       }
     }
     private int _maxPrice = 10000;
 
     #endregion
 
+    public ICommand Search { get; private set; }
 
-
-    private void RunQuery()
+    private void ShowNotebooks()
     {
       MainViewModel.ShowNotebooks(db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
       {
@@ -443,7 +445,6 @@ namespace OnlineShop
           priceRange = new Range(MinPrice, MaxPrice),
           notebookName = NotebookName,
         }
-
       }
       )));
     }
