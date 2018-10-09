@@ -18,7 +18,9 @@ namespace OnlineShop
 
     #region CanExecute
 
+#   pragma warning disable 67 // interface implementation
     public event EventHandler CanExecuteChanged;
+#   pragma warning restore 67
 
     public bool CanExecute(object parameter) => true;
 

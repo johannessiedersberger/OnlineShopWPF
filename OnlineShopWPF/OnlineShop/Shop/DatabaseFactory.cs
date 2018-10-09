@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class DatabaseFactory
+  public class DatabaseFactory : IDisposable
   {
     private IDatabase _db;
 
@@ -26,15 +26,17 @@ namespace OnlineShop
     /// <returns>Returns a list of Products</returns>
     public List<Product> FindMatchingProducts(ProductQueryParams param)
     {
-      if (param is NotebookQueryParams)
+      if (param == null)
+        throw new ArgumentNullException(nameof(param));
+
+      if (param is NotebookQueryParams notebookParams)
       {
-        return NotebookSearchQueries.FindMatchingNotebooks((NotebookQueryParams)param, _db);
+        return NotebookSearchQueries.FindMatchingNotebooks(notebookParams, _db);
       }
-      if (param is ProductQueryParams)
+      else
       {
         return ProductSearchQueries.FindMatchingProduct(param, _db);
       }
-      return null;
     }
 
     /// <summary>
@@ -625,6 +627,12 @@ namespace OnlineShop
         delete.Execute();
       }
     }
+
+    public void Dispose()
+    {
+      _db.Dispose();
+    }
+
     private const string CommandDeleteNotebookTable = "DELETE FROM Notebooks";
     #endregion
   }

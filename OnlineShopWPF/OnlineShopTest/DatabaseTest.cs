@@ -19,9 +19,9 @@ namespace OnlineShopTest
     public void TestAddCPU()
     {
       db.DeleteEveryThing();
-      CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
+      CPU cpu = new CPU(numCores: 4, clockRate: 2.5, name: "INTEL CORE i5 3200k");
       db.AddNewCpuToDatabase(cpu);
-      db.AddNewCpuToDatabase(cpu);
+      Assert.That(() => db.AddNewCpuToDatabase(cpu), Throws.InstanceOf<InvalidOperationException>());
       int cpuId = db.GetCpuId(cpu);
       Assert.That(cpu.Name, Is.EqualTo(db.GetCPU(cpuId).Name));
     }

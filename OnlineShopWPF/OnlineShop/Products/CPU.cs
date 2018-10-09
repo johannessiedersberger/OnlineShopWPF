@@ -29,12 +29,12 @@ namespace OnlineShop
     /// <summary>
     /// Saves the Parameters as members
     /// </summary>
-    /// <param name="count">The number of kernels</param>
+    /// <param name="numCores">The number of kernels</param>
     /// <param name="clockRate">The clock rate in ghz </param>
     /// <param name="name">The name of the cpu </param>
-    public CPU(int count, double clockRate, string name)
+    public CPU(int numCores, double clockRate, string name)
     {
-      Count = count;
+      Count = numCores;
       ClockRate = clockRate;
       Name = name;
     }

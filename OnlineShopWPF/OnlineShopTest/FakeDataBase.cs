@@ -30,9 +30,9 @@ namespace OnlineShopTest
     #region Dispose
     public void Dispose()
     {
-      WasDisposed = true;
+      IsDisposed = true;
     }
-    public bool WasDisposed { get; private set; } = false;
+    public bool IsDisposed { get; private set; } = false;
     #endregion
 
   }
