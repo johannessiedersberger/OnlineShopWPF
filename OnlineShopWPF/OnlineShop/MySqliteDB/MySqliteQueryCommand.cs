@@ -20,9 +20,7 @@ namespace OnlineShop
     /// The SqliteQueryCommand
     /// </summary>
     public string CommandText { get; set; }
-    /// <summary>
-    /// The Sqlite Database Object
-    /// </summary>
+
     private MySqliteDatabase _db;
 
     private SQLiteCommand _command;
@@ -59,14 +57,6 @@ namespace OnlineShop
     }
 
     /// <summary>
-    /// Disposes the Database
-    /// </summary>
-    public void Dispose()
-    {
-      _db.Dispose();
-    }
-
-    /// <summary>
     /// Executes the Reader and returns a SqliteDataReaderObject
     /// </summary>
     /// <returns></returns>
@@ -80,6 +70,11 @@ namespace OnlineShop
       }
 
       return new MySqliteDataReader(_command);
+    }
+
+    public void Dispose()
+    {
+      _command.Dispose();
     }
   }
 }

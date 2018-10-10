@@ -60,7 +60,7 @@ namespace OnlineShop
     public void AddProductToDataBase(Product product)
     {
       if (DoesProductAlreadyExist(product.Name))
-        return;
+        throw new InvalidOperationException("The Product already exists in the Databse");
       using (var createProduct = _db.CreateNonQueryCommand(CommandAddProduct))
       {
         createProduct.AddParameter("$id", null);
@@ -143,7 +143,7 @@ namespace OnlineShop
     public void AddGraphicToDataBase(Graphic graphic)
     {
       if (DoesGraphicAlreadyExist(graphic.Name))
-        return;
+        throw new InvalidOperationException("The Graphic Card already exists in the Database");
       using (var createGraphic = _db.CreateNonQueryCommand(CommandAddGraphic))
       {
         createGraphic.AddParameter("$id", null);
@@ -198,7 +198,7 @@ namespace OnlineShop
     {
       int graphicId = GetGraphicCardId(graphic);
       if (CheckIfGraphicIsUsedInTWONotebook(graphicId))
-        return;
+        throw new InvalidOperationException("The graphic Card could not be deleted because it is used in two or more notebooks");
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteGraphic))
       {
         delete.AddParameter("$id", graphicId);
@@ -253,7 +253,7 @@ namespace OnlineShop
     public void AddNewHardDriveToDatabase(HardDrive hardDrive)
     {
       if (DoesHardDriveAlreadyExist(hardDrive.Type, hardDrive.Memory))
-        return;
+        throw new InvalidOperationException("the HardDrive already exists in the Database");
       using (var createHardDrive = _db.CreateNonQueryCommand(CommandAddHardDrive))
       {
         createHardDrive.AddParameter("$id", null);
@@ -329,7 +329,7 @@ namespace OnlineShop
     {
       int hardDriveId = GetHardDriveId(hardDrive);
       if (CheckIfHardDriveIsUsedInTWONotebook(hardDriveId))
-        return;
+        throw new InvalidOperationException("The HardDrive is used in two or more notebooks and could not be deleted");
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteHardDrive))
       {
         delete.AddParameter("$id", hardDriveId);
@@ -384,7 +384,7 @@ namespace OnlineShop
     public void AddNewCpuToDatabase(CPU cpu)
     {
       if (DoesCPUAlreadyExist(cpu.Name))
-        return;
+        throw new InvalidOperationException("The CPU already exists in the Database");
       using (var createCPU = _db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);
@@ -570,71 +570,16 @@ namespace OnlineShop
         return NotebookReader.ReadForNotebooks(reader, this)[0];
       }
     }
-    private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";
-    #endregion
-
-    #region delete
-
-    public void DeleteEveryThing()
-    {
-      DeleteCPUTable();
-      DeleteHardDriveTable();
-      DelteGraphicTable();
-      DeleteProductTable();
-      DeleteNotebookTable();
-    }
-
-    public void DeleteCPUTable()
-    {
-      using (var delete = _db.CreateNonQueryCommand(CommandDelteCPUTable))
-      {
-        delete.Execute();
-      }
-    }
-    private const string CommandDelteCPUTable = "DELETE FROM CPU";
-
-    public void DeleteHardDriveTable()
-    {
-      using (var delete = _db.CreateNonQueryCommand(CommandDelteHardDriveTable))
-      {
-        delete.Execute();
-      }
-    }
-    private const string CommandDelteHardDriveTable = "DELETE FROM HardDrives";
-
-    public void DelteGraphicTable()
-    {
-      using (var delete = _db.CreateNonQueryCommand(CommandDeleteGraphicTable))
-      {
-        delete.Execute();
-      }
-    }
-    private const string CommandDeleteGraphicTable = "DELETE FROM Graphics";
-
-    public void DeleteProductTable()
-    {
-      using (var delete = _db.CreateNonQueryCommand(CommandDelteProduct))
-      {
-        delete.Execute();
-      }
-    }
-    private const string CommandDelteProduct = "DELETE FROM Products";
-
-    public void DeleteNotebookTable()
-    {
-      using (var delete = _db.CreateNonQueryCommand(CommandDeleteNotebookTable))
-      {
-        delete.Execute();
-      }
-    }
 
     public void Dispose()
     {
       _db.Dispose();
     }
 
-    private const string CommandDeleteNotebookTable = "DELETE FROM Notebooks";
+    private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";
     #endregion
+
+
   }
 
 

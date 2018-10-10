@@ -31,8 +31,10 @@ namespace OnlineShop
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {
         QuerieCreation.SetQueryParameters(getNotebook, querieParts);
-        IReader reader = getNotebook.ExecuteReader();      
-        return ProductReader.ReadForProducts(reader);
+        using (IReader reader = getNotebook.ExecuteReader())
+        {
+          return ProductReader.ReadForProducts(reader);
+        }
       }
     }
 

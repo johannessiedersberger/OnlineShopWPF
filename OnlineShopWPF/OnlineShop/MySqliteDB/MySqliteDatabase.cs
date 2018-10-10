@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SQLite;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace OnlineShop
 {
@@ -19,7 +11,7 @@ namespace OnlineShop
     /// <summary>
     /// Source of the Database
     /// </summary>
-    public string ConnectionString { get; private set; }
+    public string DataBaseSourceFile { get; private set; }
 
     /// <summary>
     /// Connection to the Database
@@ -29,11 +21,11 @@ namespace OnlineShop
     /// <summary>
     /// Creates the Connection to the Database
     /// </summary>
-    /// <param name="fileName"></param>
-    public MySqliteDatabase(string fileName)
+    /// <param name="filePath"></param>
+    public MySqliteDatabase(string file)
     {
-      ConnectionString = fileName;
-      Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", fileName));
+      DataBaseSourceFile = file;
+      Connection = new SQLiteConnection(string.Format("Data Source = {0}; Version =3;", file));
       Connection.Open();
     }
 
@@ -62,11 +54,37 @@ namespace OnlineShop
     }
 
     /// <summary>
+    /// Finalizer.
+    /// </summary>
+    ~MySqliteDatabase()
+    {
+      Dispose(disposing: false);
+    }
+
+    /// <summary>
     /// Disposes the Database
     /// </summary>
     public void Dispose()
     {
-      //Connection.Dispose();
+      Dispose(disposing: true);
+      GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Implementation to dispose of objects of this type.
+    /// </summary>
+    /// <remarks>
+    /// When <paramref name="disposing"/> is <b>false</b> do not access reference types
+    /// as they might be already garbage collected.
+    /// </remarks>
+    /// <param name="disposing"><b>true</b> if called from <see cref="IDisposable.Dispose"/>;
+    /// <b>false</b> if called from finalizer.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+      if (disposing)
+      {
+        Connection.Dispose();
+      }
     }
   }
 

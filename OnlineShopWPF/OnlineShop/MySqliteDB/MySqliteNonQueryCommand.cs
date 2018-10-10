@@ -20,8 +20,10 @@ namespace OnlineShop
     /// The SqliteCommand 
     /// </summary>
     public string CommandText { get; set; }
+
     private MySqliteDatabase _db;
 
+    private SQLiteCommand _command;
 
     /// <summary>
     /// Save the database as a member
@@ -55,25 +57,22 @@ namespace OnlineShop
     }
 
     /// <summary>
-    /// Disposes the Database
-    /// </summary>
-    public void Dispose()
-    {
-      _db.Dispose();
-    }
-
-    /// <summary>
     /// Executes the SqliteQuery
     /// </summary>
     public int Execute()
     {
-      SQLiteCommand _command = new SQLiteCommand(_db.Connection);
+      _command = new SQLiteCommand(_db.Connection);
       _command.CommandText = CommandText;
       foreach (var p in Parameters)
       {
         _command.Parameters.Add(new SQLiteParameter(p.Key, p.Value));
       }
       return _command.ExecuteNonQuery();
+    }
+
+    public void Dispose()
+    {
+      _command.Dispose();
     }
   }
 }
