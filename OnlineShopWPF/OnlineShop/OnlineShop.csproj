@@ -89,6 +89,7 @@
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Shop\NotebookReader.cs" />
     <Compile Include="Shop\NotebookSearchQueries.cs" />
+    <Compile Include="Shop\ProductAlreadyExistsException.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\ProductReader.cs" />
     <Compile Include="Shop\ProductSearchQueries.cs" />

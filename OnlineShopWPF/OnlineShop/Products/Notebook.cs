@@ -29,7 +29,7 @@ namespace OnlineShop
   /// <summary>
   /// Notebook
   /// </summary>
-  public class Notebook 
+  public class Notebook
   {
     public Product Product { get; private set; }
     public Graphic Graphic { get; private set; }
@@ -49,7 +49,7 @@ namespace OnlineShop
     /// <param name="ramMemory">the ram</param>
     /// <param name="avgBatteryTime">the battery time</param>
     /// <param name="os">the os</param>
-    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, string os)
+    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, string os) 
     {
       Product = product;
       Graphic = graphic;

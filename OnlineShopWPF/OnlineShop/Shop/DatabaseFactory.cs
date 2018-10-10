@@ -45,11 +45,31 @@ namespace OnlineShop
     /// <param name="nb"></param>
     public void DeleteCompleteNotebook(Notebook nb)
     {
-      DeleteCPU(nb.Cpu);
-      DeleteHardDrive(nb.HardDrive);
-      DeleteGraphic(nb.Graphic);
-      DeleteNotebook(nb);
-      DeleteProduct(nb.Product);
+      try
+      {
+        DeleteHardDrive(nb.HardDrive);
+      }
+      catch (InvalidOperationException) { }
+      try
+      {
+        DeleteGraphic(nb.Graphic);
+      }
+      catch (InvalidOperationException) { }
+      try
+      {
+        DeleteCPU(nb.Cpu);
+      }
+      catch (InvalidOperationException) { }
+      try
+      {
+        DeleteNotebook(nb);
+      }
+      catch (InvalidOperationException) { }
+      try
+      {
+        DeleteProduct(nb.Product);
+      }
+      catch (InvalidOperationException) { }
     }
 
     #region products
@@ -60,7 +80,7 @@ namespace OnlineShop
     public void AddProductToDataBase(Product product)
     {
       if (DoesProductAlreadyExist(product.Name))
-        throw new InvalidOperationException("The Product already exists in the Databse");
+        throw new ProductAlreadyExistsException("The Product already exists in the Databse");
       using (var createProduct = _db.CreateNonQueryCommand(CommandAddProduct))
       {
         createProduct.AddParameter("$id", null);
@@ -112,7 +132,7 @@ namespace OnlineShop
         IReader reader = getID.ExecuteReader();
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
-        throw new InvalidOperationException("The Given product could not be found");
+        throw new ProductNotFoundException("The Given product could not be found");
       }
     }
 
@@ -143,7 +163,7 @@ namespace OnlineShop
     public void AddGraphicToDataBase(Graphic graphic)
     {
       if (DoesGraphicAlreadyExist(graphic.Name))
-        throw new InvalidOperationException("The Graphic Card already exists in the Database");
+        throw new ProductAlreadyExistsException("The Graphic Card already exists in the Database");
       using (var createGraphic = _db.CreateNonQueryCommand(CommandAddGraphic))
       {
         createGraphic.AddParameter("$id", null);
@@ -220,7 +240,7 @@ namespace OnlineShop
 
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
-        throw new InvalidOperationException("The given Graphic card could not be found");
+        throw new ProductNotFoundException("The given Graphic card could not be found");
       }
     }
 
@@ -253,7 +273,7 @@ namespace OnlineShop
     public void AddNewHardDriveToDatabase(HardDrive hardDrive)
     {
       if (DoesHardDriveAlreadyExist(hardDrive.Type, hardDrive.Memory))
-        throw new InvalidOperationException("the HardDrive already exists in the Database");
+        throw new ProductAlreadyExistsException("the HardDrive already exists in the Database");
       using (var createHardDrive = _db.CreateNonQueryCommand(CommandAddHardDrive))
       {
         createHardDrive.AddParameter("$id", null);
@@ -316,7 +336,7 @@ namespace OnlineShop
 
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
-        throw new InvalidOperationException("The Given hard drive could not be found");
+        throw new ProductNotFoundException("The Given hard drive could not be found");
       }
     }
     private const string CommandSelectIHardDriveID = "SELECT hard_drive_id FROM HardDrives WHERE memory = $memory AND type = $type";
@@ -372,7 +392,7 @@ namespace OnlineShop
         IReader reader = getID.ExecuteReader();
         while (reader.TryReadNextRow(out var row))
           return int.Parse(row[0].ToString());
-        throw new InvalidOperationException("The Given cpu could not be found");
+        throw new ProductNotFoundException("The Given cpu could not be found");
       }
 
     }
@@ -384,7 +404,7 @@ namespace OnlineShop
     public void AddNewCpuToDatabase(CPU cpu)
     {
       if (DoesCPUAlreadyExist(cpu.Name))
-        throw new InvalidOperationException("The CPU already exists in the Database");
+        throw new ProductAlreadyExistsException("The CPU already exists in the Database");
       using (var createCPU = _db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);
@@ -481,13 +501,10 @@ namespace OnlineShop
     /// <param name="db">the database that will contain the cpu</param>
     public void AddNewNotebookToDatabase(Notebook notebook)
     {
-      AddProductToDataBase(notebook.Product);
-      AddGraphicToDataBase(notebook.Graphic);
-      AddNewHardDriveToDatabase(notebook.HardDrive);
-      AddNewCpuToDatabase(notebook.Cpu);
+      AddNotebookComponents(notebook);
 
       if (DoesNotebookAlreadyExist(notebook))
-        return;
+        throw new ProductAlreadyExistsException();
 
       using (var createNotebook = _db.CreateNonQueryCommand(CommandCreateNotebook))
       {
@@ -508,6 +525,30 @@ namespace OnlineShop
     }
 
     private const string CommandCreateNotebook = "INSERT INTO Notebooks(product_id, graphic_id, cpu_id, hard_drive_id, ram_memory, average_battery_time, os) VALUES($id, $graphicId, $cpuId ,$hardDriveId, $ramMemory, $avgBatteryTime, $os) ";
+
+    private void AddNotebookComponents(Notebook notebook)
+    {
+      try
+      {
+        AddProductToDataBase(notebook.Product);
+      }
+      catch (ProductAlreadyExistsException) { }
+      try
+      {
+        AddGraphicToDataBase(notebook.Graphic);
+      }
+      catch (ProductAlreadyExistsException) { }
+      try
+      {
+        AddNewHardDriveToDatabase(notebook.HardDrive);
+      }
+      catch (ProductAlreadyExistsException) { }
+      try
+      {
+        AddNewCpuToDatabase(notebook.Cpu);
+      }
+      catch (ProductAlreadyExistsException) { }
+    }
 
     /// <summary>
     /// Checks if the Notebook Already exists in the Databse
@@ -567,7 +608,11 @@ namespace OnlineShop
       {
         getNotebook.AddParameter("$id", productId);
         IReader reader = getNotebook.ExecuteReader();
-        return NotebookReader.ReadForNotebooks(reader, this)[0];
+        Notebook nb = NotebookReader.ReadForNotebooks(reader, this)[0];
+        if (nb != null)
+          return nb;
+        else
+          throw new ProductNotFoundException();
       }
     }
 
@@ -579,11 +624,6 @@ namespace OnlineShop
     private const string CommandGetNotebook = "SELECT * FROM Notebooks WHERE product_id = $id";
     #endregion
 
-
   }
-
-
-
-
 }
 
