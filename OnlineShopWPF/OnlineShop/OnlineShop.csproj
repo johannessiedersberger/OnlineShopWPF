@@ -125,7 +125,6 @@
     <Compile Include="MySqliteDB\MySqliteDataReader.cs" />
     <Compile Include="MySqliteDB\MySqliteNonQueryCommand.cs" />
     <Compile Include="MySqliteDB\MySqliteQueryCommand.cs" />
-    <Compile Include="MySqliteDB\MySqliteSubQuery.cs" />
     <Compile Include="Products\CPU.cs" />
     <Compile Include="Products\Graphic.cs" />
     <Compile Include="Products\HardDrive.cs" />

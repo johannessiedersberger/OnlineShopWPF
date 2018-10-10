@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace OnlineShop
 {
@@ -99,7 +101,7 @@ namespace OnlineShop
     private int _minClockRate = 0;
 
 
-    public int MaxClockRate
+    public double MaxClockRate
     {
       get => _maxClockRate;
       set
@@ -109,7 +111,7 @@ namespace OnlineShop
         ShowNotebooks();
       }
     }
-    private int _maxClockRate = 10;
+    private double _maxClockRate = 10;
 
     #endregion
 
@@ -417,9 +419,10 @@ namespace OnlineShop
 
     public ICommand Search { get; private set; }
 
-    private void ShowNotebooks()
+
+    public List<Notebook> GetNotebooks()
     {
-      MainViewModel.ShowNotebooks(db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
+      return db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
       {
         CPUQueryParams = new CPUQueryParams
         {
@@ -445,8 +448,13 @@ namespace OnlineShop
           priceRange = new Range(MinPrice, MaxPrice),
           notebookName = NotebookName,
         }
-      }
-      )));
+      }));
+
+    }
+
+    public void ShowNotebooks()
+    { 
+      MainViewModel.ShowNotebooks(GetNotebooks());
     }
   }
 }
