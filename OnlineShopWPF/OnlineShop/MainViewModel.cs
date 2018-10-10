@@ -25,8 +25,8 @@ namespace OnlineShop
       {
         NotebookView view = new NotebookView
         {
-          Name = notebook.Product.Name,
-          Price = notebook.Product.Price,
+          Name = notebook.Name,
+          Price = notebook.Price,
           Cpu = notebook.Cpu.Name,
           Ram = notebook.Ram,
           HdMemory = notebook.HardDrive.Memory,

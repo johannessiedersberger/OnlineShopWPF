@@ -81,7 +81,7 @@ namespace OnlineShopTest
         Notebook nb = CreateNotebook();
         db.AddNewNotebookToDatabase(nb);
         Assert.That(() => db.AddNewNotebookToDatabase(nb), Throws.TypeOf<ProductAlreadyExistsException>());
-        Assert.That(nb.Product.Name, Is.EqualTo(db.GetNotebook(nb.Product).Product.Name));
+        Assert.That(nb.Name, Is.EqualTo(db.GetNotebook(nb).Name));
       }
     }
 
@@ -97,11 +97,11 @@ namespace OnlineShopTest
         db.AddNewNotebookToDatabase(nb2);
         db.DeleteCompleteNotebook(nb);
         db.DeleteCompleteNotebook(nb2);
-        Assert.That(() => db.GetNotebook(nb.Product), Throws.TypeOf<ProductNotFoundException>());
+        Assert.That(() => db.GetNotebook(nb), Throws.TypeOf<ProductNotFoundException>());
         Assert.That(() => db.GetCpuId(nb.Cpu), Throws.TypeOf<ProductNotFoundException>());
         Assert.That(() => db.GetGraphicCardId(nb.Graphic), Throws.TypeOf<ProductNotFoundException>());
         Assert.That(() => db.GetHardDriveId(nb.HardDrive), Throws.TypeOf<ProductNotFoundException>());
-        Assert.That(() => db.GetProductId(nb.Product), Throws.TypeOf<ProductNotFoundException>());
+        Assert.That(() => db.GetProductId(nb), Throws.TypeOf<ProductNotFoundException>());
       }
     }
 
@@ -126,7 +126,7 @@ namespace OnlineShopTest
             cpuCount = new OnlineShop.Range(4, 4),
           }
         });
-        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Name));
       }
     }
 
@@ -150,7 +150,7 @@ namespace OnlineShopTest
             vramRange = new OnlineShop.Range(4, 4),
           }
         });
-        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Name));
       }
     }
 
@@ -174,7 +174,7 @@ namespace OnlineShopTest
             hdMemoryRange = new OnlineShop.Range(2048, 2048),
           }
         });
-        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Name));
       }
     }
 
@@ -201,7 +201,7 @@ namespace OnlineShopTest
             ramMemoryRange = new OnlineShop.Range(32, 32),
           }
         });
-        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Product.Name));
+        Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Name));
       }
     }
 
@@ -218,7 +218,7 @@ namespace OnlineShopTest
           Price = new OnlineShop.Range(1199.99, 1199.99),
           Name = "DELL GAMING NOTEBOOK",
         });
-        Assert.That(notebooks[0].Name, Is.EqualTo(nb.Product.Name));
+        Assert.That(notebooks[0].Name, Is.EqualTo(nb.Name));
       }
     }
 

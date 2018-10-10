@@ -29,9 +29,8 @@ namespace OnlineShop
   /// <summary>
   /// Notebook
   /// </summary>
-  public class Notebook
+  public class Notebook : Product
   {
-    public Product Product { get; private set; }
     public Graphic Graphic { get; private set; }
     public CPU Cpu { get; private set; }
     public HardDrive HardDrive { get; private set; }
@@ -50,8 +49,8 @@ namespace OnlineShop
     /// <param name="avgBatteryTime">the battery time</param>
     /// <param name="os">the os</param>
     public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, string os) 
+      :base(product.Name, product.Price)
     {
-      Product = product;
       Graphic = graphic;
       Cpu = cpu;
       HardDrive = hardDrive;
@@ -59,8 +58,6 @@ namespace OnlineShop
       AverageBatteryTime = avgBatteryTime;
       Os = os;
     }
-
-    
   }
 }
 

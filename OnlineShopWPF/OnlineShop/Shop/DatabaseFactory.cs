@@ -67,7 +67,7 @@ namespace OnlineShop
       catch (InvalidOperationException) { }
       try
       {
-        DeleteProduct(nb.Product);
+        DeleteProduct(nb);
       }
       catch (InvalidOperationException) { }
     }
@@ -508,7 +508,7 @@ namespace OnlineShop
 
       using (var createNotebook = _db.CreateNonQueryCommand(CommandCreateNotebook))
       {
-        createNotebook.AddParameter("$id", GetProductId(notebook.Product));
+        createNotebook.AddParameter("$id", GetProductId(notebook));
         createNotebook.AddParameter("$graphicId", GetGraphicCardId(notebook.Graphic));
         createNotebook.AddParameter("$cpuId", GetCpuId(notebook.Cpu));
         createNotebook.AddParameter("$hardDriveId", GetHardDriveId(notebook.HardDrive));
@@ -530,7 +530,7 @@ namespace OnlineShop
     {
       try
       {
-        AddProductToDataBase(notebook.Product);
+        AddProductToDataBase(notebook);
       }
       catch (ProductAlreadyExistsException) { }
       try
@@ -559,7 +559,7 @@ namespace OnlineShop
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectNotebookId))
       {
-        getID.AddParameter("$id", GetProductId(notebook.Product));
+        getID.AddParameter("$id", GetProductId(notebook));
         IReader reader = getID.ExecuteReader();
         return reader.TryReadNextRow(out object[] row);
       }
@@ -572,7 +572,7 @@ namespace OnlineShop
     /// <param name="id">The id from the product which sould be removed</param>
     public void DeleteNotebook(Notebook notebook)
     {
-      int productId = GetProductId(notebook.Product);
+      int productId = GetProductId(notebook);
       using (var delete = _db.CreateNonQueryCommand(CommandDeleteNotebook))
       {
         delete.AddParameter("$id", productId);
