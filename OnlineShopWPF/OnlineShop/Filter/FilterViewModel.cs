@@ -261,18 +261,18 @@ namespace OnlineShop
 
     #region os
 
-    private string OS
+    private OS OS
     {
       get
       {
         if (IsWindows)
-          return "windows";
+          return OS.windows;
         if (IsLinux)
-          return "linux";
+          return OS.linux;
         if (IsMac)
-          return "mac";
+          return OS.mac;
         else
-          return "";
+          return OS.empty;
       }
     }
 

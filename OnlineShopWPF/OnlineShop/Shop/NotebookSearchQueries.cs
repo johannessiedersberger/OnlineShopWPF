@@ -96,7 +96,7 @@ namespace OnlineShop
         queryParts.Add(GetNotebooksByName(param.NotebookDataQueryParams.notebookName));
       if (param.NotebookDataQueryParams.priceRange != null)
         queryParts.Add(GetNotebooksByPriceQuery(param.NotebookDataQueryParams.priceRange));
-      if (param.NotebookDataQueryParams.os != null)
+      if (param.NotebookDataQueryParams.os != OS.empty)
         queryParts.Add(GetNotebooksByOsQuery(param.NotebookDataQueryParams.os));
       if (param.NotebookDataQueryParams.batteryTimeRange != null)
         queryParts.Add(GetNotebooksByBatteryTimeQuery(param.NotebookDataQueryParams.batteryTimeRange));
@@ -147,10 +147,10 @@ namespace OnlineShop
     private const string CommandGetNotebooksByRAM =
       "SELECT n.product_id FROM Notebooks AS n WHERE n.ram_memory BETWEEN $minRam AND $maxRam";
 
-    private static IQueryPart GetNotebooksByOsQuery(string os)
+    private static IQueryPart GetNotebooksByOsQuery(OS os)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByOS);
-      getNotebook.AddParameter("$os", "%" + os + "%");
+      getNotebook.AddParameter("$os", "%" + os.ToString() + "%");
       return getNotebook;
     }
     private const string CommandGetNotebooksByOS =

@@ -25,7 +25,7 @@ namespace OnlineShop
         {
           notebookRows.Add(columnNames[i], row[i].ToString());
         }
-
+        
         notebooks.Add(new Notebook(
           product: db.GetProduct(int.Parse(notebookRows["product_id"])), 
           graphic: db.GetGraphicCard(int.Parse(notebookRows["graphic_id"])), 
@@ -33,9 +33,14 @@ namespace OnlineShop
           hardDrive: db.GetHardDrive(int.Parse(notebookRows["hard_drive_id"])),
           ramMemory: int.Parse(notebookRows["ram_memory"]), 
           avgBatteryTime: int.Parse(notebookRows["average_battery_time"]), 
-          os: notebookRows["os"])); 
+          os: ParseEnum(notebookRows["os"]))); 
       }
       return notebooks;
+    }
+    private static OS ParseEnum(string osDbString)
+    {
+      Enum.TryParse(osDbString, out OS os);
+      return os;
     }
   }
 }

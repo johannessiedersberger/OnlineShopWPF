@@ -514,7 +514,7 @@ namespace OnlineShop
         createNotebook.AddParameter("$hardDriveId", GetHardDriveId(notebook.HardDrive));
         createNotebook.AddParameter("$ramMemory", notebook.Ram);
         createNotebook.AddParameter("$avgBatteryTime", notebook.AverageBatteryTime);
-        createNotebook.AddParameter("$os", notebook.Os);
+        createNotebook.AddParameter("$os", notebook.Os.ToString());
 
         int rowsAffected = createNotebook.Execute();
         if (rowsAffected != 1)

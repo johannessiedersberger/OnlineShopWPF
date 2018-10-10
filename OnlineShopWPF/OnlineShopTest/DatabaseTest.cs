@@ -221,7 +221,7 @@ namespace OnlineShopTest
           {
             batteryTimeRange = new OnlineShop.Range(950, 950),
             notebookName = "ASUS",
-            os = "linux",
+            os = OS.linux,
             priceRange = new OnlineShop.Range(999.99, 999.99),
             ramMemoryRange = new OnlineShop.Range(32, 32),
           }

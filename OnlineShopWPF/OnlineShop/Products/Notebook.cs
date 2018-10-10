@@ -7,23 +7,13 @@ using System.Data.SQLite;
 
 namespace OnlineShop
 {
-  /// <summary>
-  /// Contains the Os on the notebooks
-  /// </summary>
-  public static class OS
+
+  public enum OS
   {
-    /// <summary>
-    /// WINDOWS
-    /// </summary>
-    public static string windows = "windows";
-    /// <summary>
-    /// Linux
-    /// </summary>
-    public static string linux = "linux";
-    /// <summary>
-    /// Mac
-    /// </summary>
-    public static string macos = "macos";
+    windows,
+    linux,
+    mac,
+    empty
   }
 
   /// <summary>
@@ -36,7 +26,7 @@ namespace OnlineShop
     public HardDrive HardDrive { get; private set; }
     public int Ram { get; private set; }
     public int AverageBatteryTime { get; private set; }
-    public string Os { get; private set; }
+    public OS Os { get; private set; }
 
     /// <summary>
     /// Creates a new notebook in the databse
@@ -48,7 +38,7 @@ namespace OnlineShop
     /// <param name="ramMemory">the ram</param>
     /// <param name="avgBatteryTime">the battery time</param>
     /// <param name="os">the os</param>
-    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, string os) 
+    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, OS os) 
       :base(product.Name, product.Price)
     {
       Graphic = graphic;
@@ -58,6 +48,8 @@ namespace OnlineShop
       AverageBatteryTime = avgBatteryTime;
       Os = os;
     }
+
+    
   }
 }
 
