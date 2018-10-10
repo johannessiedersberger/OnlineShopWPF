@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using Moq;
+﻿using NUnit.Framework;
 using OnlineShop;
-using System.Data;
+using System.Collections.Generic;
 
 namespace OnlineShopTest
 {
   class DatabaseTest
   {
-
-    public static string testDb = @"C:\Users\jsiedersberger\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShopTest.db";
-
+    /// <summary>
+    /// Checks if the Database-Factory adds a new CPU correctly
+    /// </summary>
     [Test]
     public void TestAddCPU()
     {
@@ -29,6 +23,9 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory adds a new Graphic-Card correctly
+    /// </summary>
     [Test]
     public void TestAddGraphic()
     {
@@ -43,6 +40,9 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory adds a new hard drive correctly
+    /// </summary>
     [Test]
     public void TestAddHardDrive()
     {
@@ -58,6 +58,9 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory adds a new product correctly
+    /// </summary>
     [Test]
     public void TestAddProduct()
     {
@@ -72,6 +75,9 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory adds a new notebook correctly
+    /// </summary>
     [Test]
     public void TestAddNotebook()
     {
@@ -85,6 +91,9 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory deletes a notebook correctly
+    /// </summary>
     [Test]
     public void TestDeleteNotebook()
     {
@@ -105,6 +114,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory returns the
+    /// correct notebooks by the cpu
+    /// </summary>
     [Test]
     public void TestGetNotebooksbyCPU()
     {
@@ -130,6 +143,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory returns the
+    /// correct notebooks by the graphic-card
+    /// </summary>
     [Test]
     public void TestGetNotebooksbyGraphic()
     {
@@ -154,6 +171,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory returns the
+    /// correct notebooks by the hard drive
+    /// </summary>
     [Test]
     public void TestGetNotebooksbyHardDrive()
     {
@@ -178,6 +199,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Checks if the Database-Factory returns the
+    /// correct notebooks by the notebook-data
+    /// </summary>
     [Test]
     public void TestGetNotebooksbyNotebookData()
     {
@@ -204,7 +229,10 @@ namespace OnlineShopTest
         Assert.That(notebooks[0].Name, Is.EqualTo(nb3.Name));
       }
     }
-
+    /// <summary>
+    /// Checks if the Database-Factory returns the
+    /// products
+    /// </summary>
     [Test]
     public void TestGetProducts()
     {

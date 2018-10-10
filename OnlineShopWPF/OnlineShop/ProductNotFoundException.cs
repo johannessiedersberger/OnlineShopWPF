@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace OnlineShop
 {
 
+  /// <summary>
+  /// Is Thrown if a Product could not be found in the database
+  /// </summary>
   public class ProductNotFoundException : Exception
   {
     public ProductNotFoundException()

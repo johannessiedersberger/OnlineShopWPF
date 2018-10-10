@@ -4,7 +4,11 @@ using OnlineShop;
 namespace OnlineShopTest
 {
   class ViewModelTest
-  {
+  {  
+    /// <summary>
+    /// Sets the CPU Properties in the View Model
+    /// and Checks if the returned notebooks have the right attributes
+    /// </summary>
     [Test]
     public void TestCPUViewModel()
     {
@@ -22,6 +26,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Sets the HardDrive Properties in the View Model
+    /// and Checks if the returned notebooks have the right attributes
+    /// </summary>
     [Test]
     public void TestHardDriveViewModel()
     {
@@ -37,6 +45,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Sets the Graphic Properties in the View Model
+    /// and Checks if the returned notebook have the right attributes
+    /// </summary>
     [Test]
     public void TestGraphicViewModel()
     {
@@ -52,6 +64,10 @@ namespace OnlineShopTest
       }
     }
 
+    /// <summary>
+    /// Sets the Notebook Properties in the View Model
+    /// and Checks if the returned notebook have the right attributes
+    /// </summary>
     [Test]
     public void TestNotebookViewModel()
     {

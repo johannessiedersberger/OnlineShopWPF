@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineShop;
+﻿using OnlineShop;
+using System;
 using System.Data.SQLite;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
 
 namespace OnlineShopTest
 {
+  /// <summary>
+  /// A Database for Testing
+  /// </summary>
   public class MyTestSqliteDatabase : MySqliteDatabase
   {
     #region Member Fields
@@ -18,11 +17,19 @@ namespace OnlineShopTest
 
     #endregion
 
+    /// <summary>
+    /// Creates the Path for a Database File in the Temp folder
+    /// </summary>
+    /// <returns></returns>
     public static string CreateTempPath()
     {
       return Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}.db");
     }
 
+    /// <summary>
+    /// Creates the DB-File with the Tables
+    /// </summary>
+    /// <param name="fileName"></param>
     public MyTestSqliteDatabase(string fileName) 
       : base(CreateDataBase(fileName))
     {
