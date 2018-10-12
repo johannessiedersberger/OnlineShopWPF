@@ -20,7 +20,7 @@ namespace OnlineShop
     /// <summary>
     /// The Clock rate in GHZ
     /// </summary>
-    public double ClockRate { get; private set; }
+    public double ClockRateInGHZ { get; private set; }
     /// <summary>
     /// The name of the CPU
     /// </summary>
@@ -30,12 +30,12 @@ namespace OnlineShop
     /// Saves the Parameters as members
     /// </summary>
     /// <param name="numCores">The number of kernels</param>
-    /// <param name="clockRate">The clock rate in ghz </param>
+    /// <param name="clockRateInGHZ">The clock rate in ghz </param>
     /// <param name="name">The name of the cpu </param>
-    public CPU(int numCores, double clockRate, string name)
+    public CPU(int numCores, double clockRateInGHZ, string name)
     {
       Count = numCores;
-      ClockRate = clockRate;
+      ClockRateInGHZ = clockRateInGHZ;
       Name = name;
     }
 

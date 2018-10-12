@@ -16,7 +16,7 @@ namespace OnlineShop
     /// <summary>
     /// The Video RAM of the Graphic-Card in GB
     /// </summary>
-    public int VRAM { get; private set; }
+    public int VRAMInGB { get; private set; }
     /// <summary>
     /// The name of the Graphic-Card
     /// </summary>
@@ -25,11 +25,11 @@ namespace OnlineShop
     /// <summary>
     /// Creates a Graphic-Card in the Database
     /// </summary>
-    /// <param name="vram">The video RAM of the Graphic-Card</param>
+    /// <param name="vramInGB">The video RAM of the Graphic-Card</param>
     /// <param name="name">The name of the Graphic-card</param>
-    public Graphic(int vram, string name)
+    public Graphic(int vramInGB, string name)
     {
-      VRAM = vram;
+      VRAMInGB = vramInGB;
       Name = name;
     }
 

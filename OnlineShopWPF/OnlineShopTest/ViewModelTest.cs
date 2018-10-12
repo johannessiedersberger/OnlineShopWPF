@@ -21,7 +21,7 @@ namespace OnlineShopTest
       foreach(Notebook nb in filter.GetNotebooks())
       {
         Assert.That(nb.Cpu.Name.Contains("Intel"));
-        Assert.That(nb.Cpu.ClockRate > 1 && nb.Cpu.ClockRate < 3.5 );
+        Assert.That(nb.Cpu.ClockRateInGHZ > 1 && nb.Cpu.ClockRateInGHZ < 3.5 );
         Assert.That(nb.Cpu.Count == 4);
       }
     }
@@ -41,7 +41,7 @@ namespace OnlineShopTest
       foreach (Notebook nb in filter.GetNotebooks())
       {
         Assert.That(nb.HardDrive.Type == "ssd");
-        Assert.That(nb.HardDrive.Memory > 200 && nb.HardDrive.Memory < 300);
+        Assert.That(nb.HardDrive.MemoryInGB > 200 && nb.HardDrive.MemoryInGB < 300);
       }
     }
 
@@ -60,7 +60,7 @@ namespace OnlineShopTest
       foreach(Notebook nb in filter.GetNotebooks())
       {
         Assert.That(nb.Graphic.Name.Contains("NVIDIA"));
-        Assert.That(nb.Graphic.VRAM >= 1 && nb.Graphic.VRAM <= 4);
+        Assert.That(nb.Graphic.VRAMInGB >= 1 && nb.Graphic.VRAMInGB <= 4);
       }
     }
 
@@ -85,7 +85,7 @@ namespace OnlineShopTest
       foreach(Notebook nb in filter.GetNotebooks())
       {
         Assert.That(nb.Name.Contains("Dell"));
-        Assert.That(nb.Ram == 16);
+        Assert.That(nb.RamInGB == 16);
         Assert.That(nb.Price.Amount > 500 && nb.Price.Amount < 1000);
         Assert.That(nb.Os == OS.windows);
       }

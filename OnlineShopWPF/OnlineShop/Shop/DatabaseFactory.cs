@@ -167,7 +167,7 @@ namespace OnlineShop
       using (var createGraphic = _db.CreateNonQueryCommand(CommandAddGraphic))
       {
         createGraphic.AddParameter("$id", null);
-        createGraphic.AddParameter("$vram", graphic.VRAM);
+        createGraphic.AddParameter("$vram", graphic.VRAMInGB);
         createGraphic.AddParameter("$name", graphic.Name);
         createGraphic.Execute();
       }
@@ -272,13 +272,13 @@ namespace OnlineShop
     /// </summary>
     public void AddNewHardDriveToDatabase(HardDrive hardDrive)
     {
-      if (DoesHardDriveAlreadyExist(hardDrive.Type, hardDrive.Memory))
+      if (DoesHardDriveAlreadyExist(hardDrive.Type, hardDrive.MemoryInGB))
         throw new ProductAlreadyExistsException("the HardDrive already exists in the Database");
       using (var createHardDrive = _db.CreateNonQueryCommand(CommandAddHardDrive))
       {
         createHardDrive.AddParameter("$id", null);
         createHardDrive.AddParameter("$type", hardDrive.Type);
-        createHardDrive.AddParameter("$memory", hardDrive.Memory);
+        createHardDrive.AddParameter("$memory", hardDrive.MemoryInGB);
         createHardDrive.Execute();
       }
     }
@@ -330,7 +330,7 @@ namespace OnlineShop
     {
       using (var getID = _db.CreateQueryCommand(CommandSelectIHardDriveID))
       {
-        getID.AddParameter("$memory", hardDrive.Memory);
+        getID.AddParameter("$memory", hardDrive.MemoryInGB);
         getID.AddParameter("$type", hardDrive.Type);
         IReader reader = getID.ExecuteReader();
 
@@ -409,7 +409,7 @@ namespace OnlineShop
       {
         createCPU.AddParameter("$id", null);
         createCPU.AddParameter("$count", cpu.Count);
-        createCPU.AddParameter("$clockRate", cpu.ClockRate);
+        createCPU.AddParameter("$clockRate", cpu.ClockRateInGHZ);
         createCPU.AddParameter("$name", cpu.Name);
         createCPU.Execute();
       }
@@ -512,8 +512,8 @@ namespace OnlineShop
         createNotebook.AddParameter("$graphicId", GetGraphicCardId(notebook.Graphic));
         createNotebook.AddParameter("$cpuId", GetCpuId(notebook.Cpu));
         createNotebook.AddParameter("$hardDriveId", GetHardDriveId(notebook.HardDrive));
-        createNotebook.AddParameter("$ramMemory", notebook.Ram);
-        createNotebook.AddParameter("$avgBatteryTime", notebook.AverageBatteryTime);
+        createNotebook.AddParameter("$ramMemory", notebook.RamInGB);
+        createNotebook.AddParameter("$avgBatteryTime", notebook.AverageBatteryTimeInMinutes);
         createNotebook.AddParameter("$os", notebook.Os.ToString());
 
         int rowsAffected = createNotebook.Execute();

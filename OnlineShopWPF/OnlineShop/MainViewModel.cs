@@ -22,8 +22,8 @@ namespace OnlineShop
           Name = notebook.Name,
           Price = notebook.Price,
           Cpu = notebook.Cpu.Name,
-          Ram = notebook.Ram,
-          HdMemory = notebook.HardDrive.Memory,
+          Ram = notebook.RamInGB,
+          HdMemory = notebook.HardDrive.MemoryInGB,
           HdType = notebook.HardDrive.Type,
         };
         ProductList.Add(view);

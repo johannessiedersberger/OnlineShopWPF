@@ -50,11 +50,11 @@ namespace OnlineShop
     /// <summary>
     /// The Ram-Memory from the Notebook
     /// </summary>
-    public int Ram { get; private set; }
+    public int RamInGB { get; private set; }
     /// <summary>
     /// The Average Battery Time from the Notebook in Minutes
     /// </summary>
-    public int AverageBatteryTime { get; private set; }
+    public int AverageBatteryTimeInMinutes { get; private set; }
     /// <summary>
     /// The installed Operating System from the notebook
     /// </summary>
@@ -67,17 +67,17 @@ namespace OnlineShop
     /// <param name="graphic">the notebook id</param>
     /// <param name="cpu">the cpu id</param>
     /// <param name="hardDrive">the graphic id</param>
-    /// <param name="ramMemory">the ram</param>
-    /// <param name="avgBatteryTime">the battery time</param>
+    /// <param name="ramMemoryInGB">the ram</param>
+    /// <param name="avgBatteryTimeInMinutes">the battery time</param>
     /// <param name="os">the os</param>
-    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemory, int avgBatteryTime, OS os) 
+    public Notebook(Product product, Graphic graphic, CPU cpu, HardDrive hardDrive, int ramMemoryInGB, int avgBatteryTimeInMinutes, OS os) 
       :base(product.Name, product.Price)
     {
       Graphic = graphic;
       Cpu = cpu;
       HardDrive = hardDrive;
-      Ram = ramMemory;
-      AverageBatteryTime = avgBatteryTime;
+      RamInGB = ramMemoryInGB;
+      AverageBatteryTimeInMinutes = avgBatteryTimeInMinutes;
       Os = os;
     }
 

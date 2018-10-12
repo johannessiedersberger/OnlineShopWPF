@@ -31,8 +31,8 @@ namespace OnlineShop
           graphic: db.GetGraphicCard(int.Parse(notebookRows["graphic_id"])), 
           cpu: db.GetCPU(int.Parse(notebookRows["cpu_id"])), 
           hardDrive: db.GetHardDrive(int.Parse(notebookRows["hard_drive_id"])),
-          ramMemory: int.Parse(notebookRows["ram_memory"]), 
-          avgBatteryTime: int.Parse(notebookRows["average_battery_time"]), 
+          ramMemoryInGB: int.Parse(notebookRows["ram_memory"]), 
+          avgBatteryTimeInMinutes: int.Parse(notebookRows["average_battery_time"]), 
           os: ParseEnum(notebookRows["os"]))); 
       }
       return notebooks;

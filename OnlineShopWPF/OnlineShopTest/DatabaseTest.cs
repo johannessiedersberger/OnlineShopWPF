@@ -15,7 +15,7 @@ namespace OnlineShopTest
       var databasePath = MyTestSqliteDatabase.CreateTempPath();
       using (var db = new DatabaseFactory(new MyTestSqliteDatabase(databasePath)))
       {
-        CPU cpu = new CPU(numCores: 4, clockRate: 2.5, name: "INTEL CORE i5 3200k");
+        CPU cpu = new CPU(numCores: 4, clockRateInGHZ: 2.5, name: "INTEL CORE i5 3200k");
         db.AddNewCpuToDatabase(cpu);
         Assert.That(() => db.AddNewCpuToDatabase(cpu), Throws.TypeOf<ProductAlreadyExistsException>());
         int cpuId = db.GetCpuId(cpu);
@@ -53,7 +53,7 @@ namespace OnlineShopTest
         db.AddNewHardDriveToDatabase(hardDrive);
         Assert.That(() => db.AddNewHardDriveToDatabase(hardDrive), Throws.TypeOf<ProductAlreadyExistsException>());
         int hardDriveId = db.GetHardDriveId(hardDrive);
-        Assert.That(hardDrive.Memory, Is.EqualTo(db.GetHardDrive(hardDriveId).Memory));
+        Assert.That(hardDrive.MemoryInGB, Is.EqualTo(db.GetHardDrive(hardDriveId).MemoryInGB));
         Assert.That(hardDrive.Type, Is.EqualTo(db.GetHardDrive(hardDriveId).Type));
       }
     }

@@ -16,7 +16,7 @@ namespace OnlineShop
     /// <summary>
     /// The Memory of the HardDisk in GB
     /// </summary>
-    public int Memory { get; private set; }
+    public int MemoryInGB { get; private set; }
     /// <summary>
     /// The type of the HardDisk (SSD or HDD)
     /// </summary>
@@ -25,11 +25,11 @@ namespace OnlineShop
     /// <summary>
     /// Assign the Member variables 
     /// </summary>
-    /// <param name="memory"></param>
+    /// <param name="memoryInGB"></param>
     /// <param name="type"></param>
-    public HardDrive(int memory, string type)
+    public HardDrive(int memoryInGB, string type)
     {
-      Memory = memory;
+      MemoryInGB = memoryInGB;
       Type = type; 
     }
 
