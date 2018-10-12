@@ -14,7 +14,7 @@ namespace OnlineShop
     /// <summary>
     /// The price of the notebook
     /// </summary>
-    public Range priceRange;
+    public PriceRange priceRange;
     /// <summary>
     /// the ram of the notebook
     /// </summary>

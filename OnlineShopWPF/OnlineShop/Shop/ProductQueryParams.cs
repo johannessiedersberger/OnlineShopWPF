@@ -18,6 +18,6 @@ namespace OnlineShop
     /// <summary>
     /// the price of the product
     /// </summary>
-    public Range Price;
+    public PriceRange Price;
   }
 }

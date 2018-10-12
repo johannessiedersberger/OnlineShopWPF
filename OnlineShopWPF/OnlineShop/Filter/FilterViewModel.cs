@@ -445,7 +445,7 @@ namespace OnlineShop
           os = OS,
           ramMemoryRange = new Range(MinRamMemory, MaxRamMemory),
           batteryTimeRange = new Range(MinBatteryTime, MaxBatteryTime),
-          priceRange = new Range(MinPrice, MaxPrice),
+          priceRange = new PriceRange(new Money(decimal.Parse(MinPrice.ToString())), new Money(decimal.Parse(MaxPrice.ToString()))),
           notebookName = NotebookName,
         }
       }));

@@ -107,11 +107,11 @@ namespace OnlineShop
    
 
     #region notebook
-    private static IQueryPart GetNotebooksByPriceQuery(Range range)
+    private static IQueryPart GetNotebooksByPriceQuery(PriceRange range)
     {
       MySqliteQueryPart getNotebook = new MySqliteQueryPart(CommandGetNotebooksByPriceSubQuery);
-      getNotebook.AddParameter("$minPrice", range.Min);
-      getNotebook.AddParameter("$maxPrice", range.Max);
+      getNotebook.AddParameter("$minPrice", range.Min.Amount);
+      getNotebook.AddParameter("$maxPrice", range.Max.Amount);
       return getNotebook;
     }
     private const string CommandGetNotebooksByPriceSubQuery =

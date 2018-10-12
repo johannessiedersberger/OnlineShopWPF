@@ -63,11 +63,11 @@ namespace OnlineShop
     private const string CommandGetProductsByName =
         "SELECT p.product_id FROM Products AS p WHERE p.name LIKE $productName";
 
-    private static IQueryPart GetProductsByPriceQuery(Range range)
+    private static IQueryPart GetProductsByPriceQuery(PriceRange range)
     {
       MySqliteQueryPart getProduct = new MySqliteQueryPart(CommandGetProductsByPriceQuery);
-      getProduct.AddParameter("$minProductPrice", range.Min);
-      getProduct.AddParameter("$maxProductPrice", range.Max);
+      getProduct.AddParameter("$minProductPrice", range.Min.Amount);
+      getProduct.AddParameter("$maxProductPrice", range.Max.Amount);
       return getProduct;
     }
     private const string CommandGetProductsByPriceQuery =

@@ -67,7 +67,7 @@ namespace OnlineShopTest
       var databasePath = MyTestSqliteDatabase.CreateTempPath();
       using (var db = new DatabaseFactory(new MyTestSqliteDatabase(databasePath)))
       {
-        Product p = new Product("NOTEBOOK", 1000);
+        Product p = new Product("NOTEBOOK", new Money(1000m));
         db.AddProductToDataBase(p);
         Assert.That(() => db.AddProductToDataBase(p), Throws.TypeOf<ProductAlreadyExistsException>());
         int productId = db.GetProductId(p);
@@ -222,7 +222,7 @@ namespace OnlineShopTest
             batteryTimeRange = new OnlineShop.Range(950, 950),
             notebookName = "ASUS",
             os = OS.linux,
-            priceRange = new OnlineShop.Range(999.99, 999.99),
+            priceRange = new OnlineShop.PriceRange(new Money(1),new Money(77000)),
             ramMemoryRange = new OnlineShop.Range(32, 32),
           }
         });
@@ -243,7 +243,7 @@ namespace OnlineShopTest
         db.AddNewNotebookToDatabase(nb);
         List<Product> notebooks = db.FindMatchingProducts(new ProductQueryParams
         {
-          Price = new OnlineShop.Range(1199.99, 1199.99),
+          Price = new OnlineShop.PriceRange(new Money(1199.99m), new Money(1199.99m)),
           Name = "DELL GAMING NOTEBOOK",
         });
         Assert.That(notebooks[0].Name, Is.EqualTo(nb.Name));
@@ -252,7 +252,7 @@ namespace OnlineShopTest
 
     private Notebook CreateNotebook()
     {
-      Product product = new Product("DELL GAMING NOTEBOOK", 1199.99);
+      Product product = new Product("DELL GAMING NOTEBOOK", new Money(1199.99m));
       CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
       Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 980TI");
       HardDrive hardDrive = new HardDrive(1024, "ssd");
@@ -261,7 +261,7 @@ namespace OnlineShopTest
     }
     private Notebook CreateNotebook2()
     {
-      Product product = new Product("DELL GAMING NOTEBOOK 2.0", 1199.99);
+      Product product = new Product("DELL GAMING NOTEBOOK 2.0",new Money( 1199.99m));
       CPU cpu = new CPU(4, 2.5, "INTEL CORE i5 3200k");
       Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 980TI");
       HardDrive hardDrive = new HardDrive(1024, "ssd");
@@ -269,7 +269,7 @@ namespace OnlineShopTest
     }
     private Notebook CreateNotebook3()
     {
-      Product product = new Product("ASUS", 999.99);
+      Product product = new Product("ASUS", new Money(999.99m));
       CPU cpu = new CPU(4, 5.5, "INTEL CORE i7 7200HQ");
       Graphic graphic = new Graphic(4, "NVIDIA GEFORCE 1080TI");
       HardDrive hardDrive = new HardDrive(2048, "ssd");

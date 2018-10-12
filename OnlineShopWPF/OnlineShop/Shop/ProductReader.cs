@@ -23,7 +23,7 @@ namespace OnlineShop
         {
           productRows.Add(row[i].ToString());
         }
-        products.Add(new Product(productRows[2], double.Parse(productRows[3])));
+        products.Add(new Product(productRows[2], new Money(decimal.Parse(productRows[3]))));
       }
       return products;
     }

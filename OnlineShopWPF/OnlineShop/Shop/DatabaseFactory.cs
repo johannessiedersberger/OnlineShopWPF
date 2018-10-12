@@ -85,7 +85,7 @@ namespace OnlineShop
       {
         createProduct.AddParameter("$id", null);
         createProduct.AddParameter("$name", product.Name);
-        createProduct.AddParameter("$price", product.Price);
+        createProduct.AddParameter("$price", product.Price.Amount);
         createProduct.Execute();
       }
     }
@@ -117,7 +117,7 @@ namespace OnlineShop
             result.Add(row[i].ToString());
           }
         }
-        return new Product(result[0], double.Parse(result[1]));
+        return new Product(result[0], new Money(decimal.Parse(result[1])));
       }
     }
 

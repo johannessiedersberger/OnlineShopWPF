@@ -86,7 +86,7 @@ namespace OnlineShopTest
       {
         Assert.That(nb.Name.Contains("Dell"));
         Assert.That(nb.Ram == 16);
-        Assert.That(nb.Price > 500 && nb.Price < 1000);
+        Assert.That(nb.Price.Amount > 500 && nb.Price.Amount < 1000);
         Assert.That(nb.Os == OS.windows);
       }
     }

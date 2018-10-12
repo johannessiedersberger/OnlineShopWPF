@@ -34,7 +34,7 @@ namespace OnlineShop
   public class NotebookView
   {
     public string Name { get; set; }
-    public double Price { get; set; }
+    public Money Price { get; set; }
     public string Cpu { get; set; }
     public int Ram { get; set; }
     public int HdMemory { get; set; }

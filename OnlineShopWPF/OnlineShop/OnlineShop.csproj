@@ -79,6 +79,7 @@
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="Money.cs" />
     <Compile Include="ProductNotFoundException.cs" />
     <Compile Include="Shop\CPUQueryParams.cs" />
     <Compile Include="Shop\DatabaseFactory.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Shop\NotebookQueryParams.cs" />
     <Compile Include="Shop\NotebookReader.cs" />
     <Compile Include="Shop\NotebookSearchQueries.cs" />
+    <Compile Include="Shop\PriceRange.cs" />
     <Compile Include="Shop\ProductAlreadyExistsException.cs" />
     <Compile Include="Shop\ProductQueryParams.cs" />
     <Compile Include="Shop\ProductReader.cs" />
