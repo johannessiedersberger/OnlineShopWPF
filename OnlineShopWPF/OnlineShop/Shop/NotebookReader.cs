@@ -37,6 +37,7 @@ namespace OnlineShop
       }
       return notebooks;
     }
+
     private static OS ParseEnum(string osDbString)
     {
       Enum.TryParse(osDbString, out OS os);
