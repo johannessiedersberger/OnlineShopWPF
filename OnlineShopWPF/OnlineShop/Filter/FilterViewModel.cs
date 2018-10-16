@@ -10,21 +10,22 @@ namespace OnlineShop
   {
     private DatabaseFactory _db;
     private ObservableCollection<NotebookView> _notebookList;
-    public ObservableCollection<NotebookView> NotebookList {
+    public ObservableCollection<NotebookView> NotebookList
+    {
       get => _notebookList;
       set
       {
         _notebookList = value;
         FirePropertyChanged();
       }
-    } 
+    }
 
     public FilterViewModel()
     {
       _db = new DatabaseFactory(new MySqliteDatabase(Shop.file));
       _notebookList = new ObservableCollection<NotebookView>();
       ShowNotebooks();
-      Search = new DelegateAction(ShowNotebooks); 
+      Search = new DelegateAction(ShowNotebooks);
     }
 
     #region cpucores
@@ -35,9 +36,12 @@ namespace OnlineShop
       get => _minCPUCores;
       set
       {
-        _minCPUCores = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if (_minCPUCores != value)
+        {
+          _minCPUCores = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minCPUCores = 0;
@@ -48,9 +52,12 @@ namespace OnlineShop
       get => _maxCpuCores;
       set
       {
-        _maxCpuCores = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if (_maxCpuCores != value)
+        {
+          _maxCpuCores = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxCpuCores = 16;
@@ -75,9 +82,12 @@ namespace OnlineShop
       get => _isIntelCPU;
       set
       {
-        _isIntelCPU = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if (_isIntelCPU != value)
+        {
+          _isIntelCPU = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isIntelCPU = false;
@@ -88,9 +98,12 @@ namespace OnlineShop
       get => _isAmdCpu;
       set
       {
-        _isAmdCpu = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if (_isAmdCpu != value)
+        {
+          _isAmdCpu = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isAmdCpu = false;
@@ -105,9 +118,12 @@ namespace OnlineShop
       get => _minClockRate;
       set
       {
-        _minClockRate = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minClockRate != value)
+        {
+          _minClockRate = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minClockRate = 0;
@@ -118,9 +134,12 @@ namespace OnlineShop
       get => _maxClockRate;
       set
       {
-        _maxClockRate = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_maxClockRate != value)
+        {
+          _maxClockRate = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxClockRate = 10;
@@ -132,7 +151,7 @@ namespace OnlineShop
     private string graphicName
     {
       get
-      {    
+      {
         if (IsNVIDIAGraphicCard)
           return "NVIDIA";
         if (IsAMDGrapicCard)
@@ -146,22 +165,27 @@ namespace OnlineShop
       get => _IsNVIDIAGraphicCard;
       set
       {
-        _IsNVIDIAGraphicCard = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_IsNVIDIAGraphicCard != value)
+        {
+          _IsNVIDIAGraphicCard = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _IsNVIDIAGraphicCard = false;
-
 
     public bool IsAMDGrapicCard
     {
       get => _IsAMDGrapicCard;
       set
       {
-        _IsAMDGrapicCard = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_IsAMDGrapicCard != value)
+        {
+          _IsAMDGrapicCard = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _IsAMDGrapicCard = false;
@@ -177,9 +201,12 @@ namespace OnlineShop
       get => _minVram;
       set
       {
-        _minVram = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minVram != value)
+        {
+          _minVram = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minVram = 0;
@@ -190,9 +217,12 @@ namespace OnlineShop
       get => _maxVram;
       set
       {
-        _maxVram = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_maxVram != value)
+        {
+          _maxVram = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxVram = 16;
@@ -219,9 +249,12 @@ namespace OnlineShop
       get => _isSSd;
       set
       {
-        _isSSd = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_isSSd != value)
+        {
+          _isSSd = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isSSd = false;
@@ -232,9 +265,12 @@ namespace OnlineShop
       get => _isHdd;
       set
       {
-        _isHdd = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_isHdd != value)
+        {
+          _isHdd = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isHdd = false;
@@ -250,9 +286,12 @@ namespace OnlineShop
       get => _minHdMemory;
       set
       {
-        _minHdMemory = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minHdMemory != value)
+        {
+          _minHdMemory = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minHdMemory = 0;
@@ -262,9 +301,12 @@ namespace OnlineShop
       get => _MaxHdMemory;
       set
       {
-        _MaxHdMemory = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_MaxHdMemory != value)
+        {
+          _MaxHdMemory = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _MaxHdMemory = 10000;
@@ -293,9 +335,12 @@ namespace OnlineShop
       get => _isWindows;
       set
       {
-        _isWindows = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_isWindows != value)
+        {
+          _isWindows = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isWindows = false;
@@ -305,9 +350,12 @@ namespace OnlineShop
       get => _isLinux;
       set
       {
-        _isLinux = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_isLinux != value)
+        {
+          _isLinux = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isLinux = false;
@@ -317,9 +365,12 @@ namespace OnlineShop
       get => _isMac;
       set
       {
-        _isMac = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_isMac != value)
+        {
+          _isMac = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private bool _isMac = false;
@@ -335,9 +386,12 @@ namespace OnlineShop
       get => _minRamMemory;
       set
       {
-        _minRamMemory = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minRamMemory != value)
+        {
+          _minRamMemory = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minRamMemory = 0;
@@ -347,9 +401,12 @@ namespace OnlineShop
       get => _maxRamMemory;
       set
       {
-        _maxRamMemory = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_maxRamMemory != value)
+        {
+          _maxRamMemory = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxRamMemory = 128;
@@ -361,9 +418,12 @@ namespace OnlineShop
       get => _notebookName;
       set
       {
-        _notebookName = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_notebookName != value)
+        {
+          _notebookName = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private string _notebookName = "";
@@ -378,9 +438,12 @@ namespace OnlineShop
       get => _minBatteryTime;
       set
       {
-        _minBatteryTime = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minBatteryTime != value)
+        {
+          _minBatteryTime = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minBatteryTime = 0;
@@ -390,9 +453,12 @@ namespace OnlineShop
       get => _maxBatteryTime;
       set
       {
-        _maxBatteryTime = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_maxBatteryTime != value)
+        {
+          _maxBatteryTime = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxBatteryTime = 2000;
@@ -408,9 +474,12 @@ namespace OnlineShop
       get => _minPrice;
       set
       {
-        _minPrice = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_minPrice != value)
+        {
+          _minPrice = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _minPrice = 0;
@@ -420,9 +489,12 @@ namespace OnlineShop
       get => _maxPrice;
       set
       {
-        _maxPrice = value;
-        FirePropertyChanged();
-        ShowNotebooks();
+        if(_maxPrice != value)
+        {
+          _maxPrice = value;
+          FirePropertyChanged();
+          ShowNotebooks();
+        }
       }
     }
     private int _maxPrice = 5000;
