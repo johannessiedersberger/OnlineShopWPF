@@ -16,6 +16,7 @@ using OnlineShop;
 
 namespace OnlineShop
 {
+
   /// <summary>
   /// Interaction logic for MainWindow.xaml
   /// </summary>
@@ -24,6 +25,8 @@ namespace OnlineShop
     public MainWindow()
     {
       InitializeComponent();
+
+      DataContext = new MainViewModel();
     }
 
   }

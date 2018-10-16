@@ -16,7 +16,7 @@ namespace OnlineShop
     /// <summary>
     /// The number of kernels
     /// </summary>
-    public int Count { get; private set; }
+    public int NumCores { get; private set; }
     /// <summary>
     /// The Clock rate in GHZ
     /// </summary>
@@ -34,7 +34,7 @@ namespace OnlineShop
     /// <param name="name">The name of the cpu </param>
     public CPU(int numCores, double clockRateInGHZ, string name)
     {
-      Count = numCores;
+      NumCores = numCores;
       ClockRateInGHZ = clockRateInGHZ;
       Name = name;
     }

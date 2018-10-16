@@ -22,7 +22,7 @@ namespace OnlineShopTest
       {
         Assert.That(nb.Cpu.Name.Contains("Intel"));
         Assert.That(nb.Cpu.ClockRateInGHZ > 1 && nb.Cpu.ClockRateInGHZ < 3.5 );
-        Assert.That(nb.Cpu.Count == 4);
+        Assert.That(nb.Cpu.NumCores == 4);
       }
     }
 

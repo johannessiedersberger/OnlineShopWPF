@@ -5,30 +5,12 @@ namespace OnlineShop
 {
   public class MainViewModel
   {
-    public static ObservableCollection<NotebookView> ProductList { get; private set; } = new ObservableCollection<NotebookView>();
-    
     public MainViewModel()
     {
-      
+      FilterViewModel = new FilterViewModel();
     }
 
-    public static void ShowNotebooks(List<Notebook> notebooks)
-    {
-      ProductList.Clear();
-      foreach (Notebook notebook in notebooks)
-      {
-        NotebookView view = new NotebookView
-        {
-          Name = notebook.Name,
-          Price = notebook.Price,
-          Cpu = notebook.Cpu.Name,
-          Ram = notebook.RamInGB,
-          HdMemory = notebook.HardDrive.MemoryInGB,
-          HdType = notebook.HardDrive.Type,
-        };
-        ProductList.Add(view);
-      }      
-    }
+    public FilterViewModel FilterViewModel { get; private set; }
   }
 
   public class NotebookView

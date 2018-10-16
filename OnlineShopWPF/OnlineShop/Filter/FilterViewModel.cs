@@ -2,15 +2,27 @@
 using System.Windows.Input;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace OnlineShop
 {
   public class FilterViewModel : ViewModelBase, INotifyPropertyChanged
   {
-    private static DatabaseFactory db = new DatabaseFactory(new MySqliteDatabase(Shop.file));
+    private DatabaseFactory _db;
+    private ObservableCollection<NotebookView> _notebookList;
+    public ObservableCollection<NotebookView> NotebookList {
+      get => _notebookList;
+      set
+      {
+        _notebookList = value;
+        FirePropertyChanged();
+      }
+    } 
 
     public FilterViewModel()
     {
+      _db = new DatabaseFactory(new MySqliteDatabase(Shop.file));
+      _notebookList = new ObservableCollection<NotebookView>();
       ShowNotebooks();
       Search = new DelegateAction(ShowNotebooks); 
     }
@@ -422,7 +434,7 @@ namespace OnlineShop
 
     public List<Notebook> GetNotebooks()
     {
-      return db.GetNotebooks(db.FindMatchingProducts(new NotebookQueryParams
+      return _db.GetNotebooks(_db.FindMatchingProducts(new NotebookQueryParams
       {
         CPUQueryParams = new CPUQueryParams
         {
@@ -453,8 +465,22 @@ namespace OnlineShop
     }
 
     public void ShowNotebooks()
-    { 
-      MainViewModel.ShowNotebooks(GetNotebooks());
+    {
+      var notebooks = GetNotebooks();
+      NotebookList.Clear();
+      foreach (Notebook notebook in notebooks)
+      {
+        NotebookView view = new NotebookView
+        {
+          Name = notebook.Name,
+          Price = notebook.Price,
+          Cpu = notebook.Cpu.Name,
+          Ram = notebook.RamInGB,
+          HdMemory = notebook.HardDrive.MemoryInGB,
+          HdType = notebook.HardDrive.Type,
+        };
+        NotebookList.Add(view);
+      }
     }
   }
 }

@@ -6,9 +6,7 @@
              xmlns:local="clr-namespace:OnlineShop"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="800">
-  <UserControl.DataContext>
-    <local:FilterViewModel></local:FilterViewModel>
-  </UserControl.DataContext>
+
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition/>
@@ -445,7 +443,7 @@
     </Grid>
 
   </Grid>
-
 </UserControl>
+
 
 

@@ -408,7 +408,7 @@ namespace OnlineShop
       using (var createCPU = _db.CreateNonQueryCommand(CommandAddCPU))
       {
         createCPU.AddParameter("$id", null);
-        createCPU.AddParameter("$count", cpu.Count);
+        createCPU.AddParameter("$count", cpu.NumCores);
         createCPU.AddParameter("$clockRate", cpu.ClockRateInGHZ);
         createCPU.AddParameter("$name", cpu.Name);
         createCPU.Execute();
