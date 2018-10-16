@@ -113,7 +113,7 @@ namespace OnlineShop
     private int _minClockRate = 0;
 
 
-    public double MaxClockRate
+    public int MaxClockRate
     {
       get => _maxClockRate;
       set
@@ -123,7 +123,7 @@ namespace OnlineShop
         ShowNotebooks();
       }
     }
-    private double _maxClockRate = 10;
+    private int _maxClockRate = 10;
 
     #endregion
 
@@ -401,7 +401,7 @@ namespace OnlineShop
 
     #region price
 
-    public int MaxPriceSliderValue { get; set; } = 10000;
+    public int MaxPriceSliderValue { get; set; } = 5000;
 
     public int MinPrice
     {
@@ -425,7 +425,7 @@ namespace OnlineShop
         ShowNotebooks();
       }
     }
-    private int _maxPrice = 10000;
+    private int _maxPrice = 5000;
 
     #endregion
 

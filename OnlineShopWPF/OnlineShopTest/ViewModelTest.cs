@@ -15,13 +15,13 @@ namespace OnlineShopTest
       FilterViewModel filter = new FilterViewModel();
       filter.IsIntelCpu = true;
       filter.MinClockRate = 1;
-      filter.MaxClockRate = 3.5;
+      filter.MaxClockRate = 4;
       filter.MinCPUCores = 4;
       filter.MaxCPUCores = 4;
       foreach(Notebook nb in filter.GetNotebooks())
       {
         Assert.That(nb.Cpu.Name.Contains("Intel"));
-        Assert.That(nb.Cpu.ClockRateInGHZ > 1 && nb.Cpu.ClockRateInGHZ < 3.5 );
+        Assert.That(nb.Cpu.ClockRateInGHZ > 1 && nb.Cpu.ClockRateInGHZ < 4 );
         Assert.That(nb.Cpu.NumCores == 4);
       }
     }

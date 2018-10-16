@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local ="clr-namespace:OnlineShop"
-        Title="MainWindow" Height="1000" Width="1200">
+        Title="MainWindow" Height="720" Width="1280">
 
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="3*"/>
-      <RowDefinition Height="2*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <local:Filter DataContext="{Binding FilterViewModel}" />
+    <local:Filter DataContext="{Binding FilterViewModel}"  />
 
     <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="True" ItemsSource="{Binding FilterViewModel.NotebookList}"  >
      
