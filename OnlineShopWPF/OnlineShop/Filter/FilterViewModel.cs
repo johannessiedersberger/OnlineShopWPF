@@ -15,13 +15,8 @@ namespace OnlineShop
   }
   public enum HardDriveType
   {
-    ssd,
+    ssd, 
     hdd
-  }
-  public enum CpuManufacturer
-  {
-    Intel,
-    AMD
   }
 
   public class FilterViewModel : ViewModelBase, INotifyPropertyChanged
@@ -220,50 +215,20 @@ namespace OnlineShop
 
     #region hardDriveType
 
-    private string HdType
+    public HardDriveType HDType
     {
-      get
-      {
-        if (IsSSD)
-          return "ssd";
-        if (IsHDD)
-          return "hdd";
-        else
-          return "";
-      }
-    }
-
-    public bool IsSSD
-    {
-      get => _isSSd;
+      get => _hardDriveType;
       set
       {
-        if (_isSSd != value)
+        if(_hardDriveType != value)
         {
-          _isSSd = value;
-          FirePropertyChanged();
+          _hardDriveType = value;
           ShowNotebooks();
         }
       }
     }
-    private bool _isSSd = false;
-
-
-    public bool IsHDD
-    {
-      get => _isHdd;
-      set
-      {
-        if (_isHdd != value)
-        {
-          _isHdd = value;
-          FirePropertyChanged();
-          ShowNotebooks();
-        }
-      }
-    }
-    private bool _isHdd = false;
-
+    private HardDriveType _hardDriveType;
+    
     #endregion
 
     #region hardDriveMemory
@@ -510,7 +475,7 @@ namespace OnlineShop
         },
         HardDriveQueryParams = new HardDriveQueryParams
         {
-          hdType = HdType,
+          hdType = HDType.ToString(),
           hdMemoryRange = new Range(MinHdMemory, MaxHdMemory),
         },
         NotebookDataQueryParams = new NotebookDataQueryParams
@@ -529,7 +494,7 @@ namespace OnlineShop
       var notebooks =  _db.FindMatchingNotebook(new NotebookQueryParams())
                          .Where(nb => nb.Graphic.Name.Contains(GraphicCardManufacturer.ToString())) // Graphic
                          .Where(nb => IsInRange(MinVram, MaxVram, nb.Graphic.VRAMInGB))
-                         .Where(nb => nb.HardDrive.Type.Contains(HdType)) // HardDrive
+                         .Where(nb => nb.HardDrive.Type.Contains(HDType.ToString())) // HardDrive
                          .Where(nb => IsInRange(MinHdMemory, MaxHdMemory, nb.HardDrive.MemoryInGB))
                          .Where(nb => nb.Cpu.Name.Contains(cpuName)) // CPU
                          .Where(nb => IsInRange(MinClockRate, MaxClockRate, nb.Cpu.ClockRateInGHZ))

@@ -9,14 +9,18 @@
              d:DesignHeight="250" d:DesignWidth="800">
 
   <UserControl.Resources>
-    <ObjectDataProvider MethodName="GetValues"
-                    ObjectType="{x:Type sys:Enum}"
-                    x:Key="GPUDataProvider">
+    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="GPUDataProvider" >
       <ObjectDataProvider.MethodParameters>
         <x:Type TypeName="local:GraphicManufacturer"/>
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
+    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="HDDataProvider">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="local:HardDriveType"/>
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
   </UserControl.Resources>
+  
 
   <Grid>
     <Grid.RowDefinitions>
@@ -106,14 +110,7 @@
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="Type">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition/>
-              <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RadioButton GroupName="hdtype" Grid.Row="0" Content="SSD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsSSD}"/>
-            <RadioButton GroupName="hdtype" Grid.Row="1" Content="HDD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsHDD}"/>
-          </Grid>
+          <ComboBox MaxHeight="25" ItemsSource="{Binding Source={StaticResource HDDataProvider}}" SelectedItem="{Binding HDType}" />
         </GroupBox>
         <GroupBox Grid.Column="1" Header="Memory">
           <Grid>
