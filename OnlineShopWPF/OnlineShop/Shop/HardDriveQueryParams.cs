@@ -14,7 +14,7 @@ namespace OnlineShop
     /// <summary>
     /// The Memory of the hardDrive
     /// </summary>
-    public Range hdMemoryRange;
+    public Range? hdMemoryRange;
     /// <summary>
     /// The type of the hardDrive
     /// </summary>

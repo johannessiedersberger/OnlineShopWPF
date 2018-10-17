@@ -14,7 +14,7 @@ namespace OnlineShop
     /// <summary>
     /// The Vram Range
     /// </summary>
-    public Range vramRange;
+    public Range? vramRange;
     /// <summary>
     /// The name of the graphic card
     /// </summary>

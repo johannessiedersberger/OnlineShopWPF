@@ -18,10 +18,10 @@ namespace OnlineShop
     /// <summary>
     /// The clock Rate of the CPU
     /// </summary>
-    public Range cpuClockRate;
+    public Range? cpuClockRate;
     /// <summary>
     /// The number of cores in the cpu
     /// </summary>
-    public Range cpuCount;
+    public Range? cpuCount;
   }
 }

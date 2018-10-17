@@ -9,7 +9,7 @@ namespace OnlineShop
   /// <summary>
   /// The Range 
   /// </summary>
-  public class Range
+  public struct Range
   {
     /// <summary>
     /// Min value

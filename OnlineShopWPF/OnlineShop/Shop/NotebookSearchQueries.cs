@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OnlineShop
 {
@@ -17,21 +13,21 @@ namespace OnlineShop
     /// <returns></returns>
     public static List<Product> FindMatchingNotebooks(NotebookQueryParams notebookSearchData, IDatabase db)
     {
-      List<IQueryPart> querieParts = GetQueryPartsNotebook(notebookSearchData);
-      string QuerieText;
+      List<IQueryPart> queryParts = GetQueryPartsNotebook(notebookSearchData);
+      string querieText;
       
-      if (querieParts.Count == 0)
-        QuerieText = "SELECT product_id FROM Notebooks ";
+      if (queryParts.Count == 0)
+        querieText = "SELECT product_id FROM Notebooks ";
       else
-        QuerieText = QuerieCreation.CreateQueryText(querieParts);
+        querieText = QueryCreation.CreateQueryText(queryParts);
 
       string CommandGetNotebooks = string.Format("SELECT * FROM " +
         "  ( {0} ) AS PID " +
-        " INNER JOIN Products As p ON p.product_id = PID.product_id", QuerieText);
+        " INNER JOIN Products As p ON p.product_id = PID.product_id", querieText);
 
       using (var getNotebook = db.CreateQueryCommand(CommandGetNotebooks))
       {
-        QuerieCreation.SetQueryParameters(getNotebook, querieParts);
+        QueryCreation.SetQueryParameters(getNotebook, queryParts);
         IReader reader = getNotebook.ExecuteReader();
         return ProductReader.ReadForProducts(reader);
       }
@@ -63,7 +59,7 @@ namespace OnlineShop
       if (param.GraphicQueryParams.graphicCardName != null)
         queryParts.Add(GetNotebooksByGraphicCardName(param.GraphicQueryParams.graphicCardName));
       if (param.GraphicQueryParams.vramRange != null)
-        queryParts.Add(GetNotebooksByVRAMMemory(param.GraphicQueryParams.vramRange));
+        queryParts.Add(GetNotebooksByVRAMMemory(param.GraphicQueryParams.vramRange.Value));
     }
 
     private static void FillQueryPartsWithHardDriveQueries(List<IQueryPart> queryParts, NotebookQueryParams param)
@@ -71,7 +67,7 @@ namespace OnlineShop
       if (param.HardDriveQueryParams == null)
         return;
       if (param.HardDriveQueryParams.hdMemoryRange != null)
-        queryParts.Add(GetNotebooksByhardDriveMemory(param.HardDriveQueryParams.hdMemoryRange));
+        queryParts.Add(GetNotebooksByhardDriveMemory(param.HardDriveQueryParams.hdMemoryRange.Value));
       if (param.HardDriveQueryParams.hdType != null)
         queryParts.Add(GetNotebooksByhardDriveType(param.HardDriveQueryParams.hdType));
     }
@@ -81,11 +77,11 @@ namespace OnlineShop
       if (param.CPUQueryParams == null)
         return;
       if (param.CPUQueryParams.cpuCount != null)
-        queryParts.Add(GetNotebooksByCpuCountQuery(param.CPUQueryParams.cpuCount));
+        queryParts.Add(GetNotebooksByCpuCountQuery(param.CPUQueryParams.cpuCount.Value));
       if (param.CPUQueryParams.cpuName != null)
         queryParts.Add(GetNotebooksByCPUNameQuery(param.CPUQueryParams.cpuName));
       if (param.CPUQueryParams.cpuClockRate != null)
-        queryParts.Add(GetNotebooksByCPUClockRateQuery(param.CPUQueryParams.cpuClockRate));
+        queryParts.Add(GetNotebooksByCPUClockRateQuery(param.CPUQueryParams.cpuClockRate.Value));
     }
 
     private static void FillQueryPartsWithNotebookQuery(List<IQueryPart> queryParts, NotebookQueryParams param)
@@ -99,9 +95,9 @@ namespace OnlineShop
       if (param.NotebookDataQueryParams.os != OS.empty)
         queryParts.Add(GetNotebooksByOsQuery(param.NotebookDataQueryParams.os));
       if (param.NotebookDataQueryParams.batteryTimeRange != null)
-        queryParts.Add(GetNotebooksByBatteryTimeQuery(param.NotebookDataQueryParams.batteryTimeRange));
+        queryParts.Add(GetNotebooksByBatteryTimeQuery(param.NotebookDataQueryParams.batteryTimeRange.Value));
       if (param.NotebookDataQueryParams.ramMemoryRange != null)
-        queryParts.Add(GetNotebooksByRAMQuery(param.NotebookDataQueryParams.ramMemoryRange));
+        queryParts.Add(GetNotebooksByRAMQuery(param.NotebookDataQueryParams.ramMemoryRange.Value));
     }
 
    

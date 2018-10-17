@@ -18,11 +18,11 @@ namespace OnlineShop
     /// <summary>
     /// the ram of the notebook
     /// </summary>
-    public Range ramMemoryRange;
+    public Range? ramMemoryRange;
     /// <summary>
     /// The battery-time of the notebook
     /// </summary>
-    public Range batteryTimeRange;
+    public Range? batteryTimeRange;
     /// <summary>
     /// The os of the notebook
     /// </summary>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnlineShop
 {
-  public class QuerieCreation
+  public class QueryCreation
   {
     /// <summary>
     /// Creates a query text based on the parts of a query
@@ -16,7 +16,7 @@ namespace OnlineShop
     public static string CreateQueryText(List<IQueryPart> parts)
     {
       string query = "";
-      for (int i = 0; i < parts.Count(); i++)
+      for (int i = 0; i < parts.Count; i++)
       {
         query += parts[i].QueryText + " ";
         if (i + 1 < parts.Count)

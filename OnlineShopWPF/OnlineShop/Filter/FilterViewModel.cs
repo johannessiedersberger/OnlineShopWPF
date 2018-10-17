@@ -15,7 +15,7 @@ namespace OnlineShop
   }
   public enum HardDriveType
   {
-    ssd, 
+    ssd,
     hdd
   }
   public enum CPUManufacturer
@@ -88,7 +88,7 @@ namespace OnlineShop
       get => _cpuManufacturer;
       set
       {
-        if(_cpuManufacturer != value)
+        if (_cpuManufacturer != value)
         {
           _cpuManufacturer = value;
           ShowNotebooks();
@@ -141,12 +141,12 @@ namespace OnlineShop
       get => _graphicManufacturer;
       set
       {
-        if(_graphicManufacturer != value)
+        if (_graphicManufacturer != value)
         {
           _graphicManufacturer = value;
           ShowNotebooks();
         }
-      }     
+      }
     }
     private GraphicManufacturer _graphicManufacturer;
     #endregion
@@ -195,7 +195,7 @@ namespace OnlineShop
       get => _hardDriveType;
       set
       {
-        if(_hardDriveType != value)
+        if (_hardDriveType != value)
         {
           _hardDriveType = value;
           ShowNotebooks();
@@ -203,7 +203,7 @@ namespace OnlineShop
       }
     }
     private HardDriveType _hardDriveType;
-    
+
     #endregion
 
     #region hardDriveMemory
@@ -249,15 +249,15 @@ namespace OnlineShop
       get => _os;
       set
       {
-        if(_os != value)
+        if (_os != value)
         {
           _os = value;
           ShowNotebooks();
         }
-      }         
+      }
     }
     private OS _os;
-    
+
     #endregion
 
     #region ram
@@ -420,31 +420,26 @@ namespace OnlineShop
 
     public void ShowNotebooks()
     {
-      var notebooks =  _db.FindMatchingNotebook(new NotebookQueryParams())
+      var notebooks = _db.FindMatchingNotebook(new NotebookQueryParams())
                          .Where(nb => nb.Graphic.Name.Contains(GraphicCardManufacturer.ToString())) // Graphic
-                         .Where(nb => IsInRange(MinVram, MaxVram, nb.Graphic.VRAMInGB))
+                         .Where(nb => IsInRange(nb.Graphic.VRAMInGB,MinVram, MaxVram))
                          .Where(nb => nb.HardDrive.Type.Contains(HDType.ToString())) // HardDrive
-                         .Where(nb => IsInRange(MinHdMemory, MaxHdMemory, nb.HardDrive.MemoryInGB))
+                         .Where(nb => IsInRange(nb.HardDrive.MemoryInGB,MinHdMemory, MaxHdMemory))
                          .Where(nb => nb.Cpu.Name.Contains(CPUManufacturer.ToString())) // CPU
-                         .Where(nb => IsInRange(MinClockRate, MaxClockRate, nb.Cpu.ClockRateInGHZ))
-                         .Where(nb => IsInRange(MinCPUCores, MaxCPUCores, nb.Cpu.NumCores))
-                         .Where(x => IsInRange(MinBatteryTime, MaxBatteryTime, x.AverageBatteryTimeInMinutes)) // Notebook
-                         .Where(x => x.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase))
-                         .Where(x => x.Os == OS)
-                         .Where(x => IsInRange(MinPrice, MaxPrice, Convert.ToInt16(x.Price.Amount)))
-                         .Where(x => IsInRange(MinRamMemory, MaxRamMemory, x.RamInGB));
+                         .Where(nb => IsInRange(nb.Cpu.ClockRateInGHZ, MinClockRate, MaxClockRate))
+                         .Where(nb => IsInRange(nb.Cpu.NumCores, MinCPUCores, MaxCPUCores))
+                         .Where(nb => IsInRange(nb.AverageBatteryTimeInMinutes,MinBatteryTime, MaxBatteryTime)) // Notebook
+                         .Where(nb => nb.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase))
+                         .Where(nb => nb.Os == OS)
+                         .Where(nb => IsInRange(Convert.ToInt16(nb.Price.Amount),MinPrice, MaxPrice))
+                         .Where(nb => IsInRange(nb.RamInGB,MinRamMemory, MaxRamMemory));
       AddNotebooksToViewList(notebooks);
-
-
     }
 
-    private bool IsInRange(double min, double max, double check)
-    {
-      return check >= min && check <= max;
-    }
     private bool IsInRange(int min, int max, int check)
+    private static bool IsInRange<T>(T value, T min, T max) where T : IComparable<T>
     {
-      return check >= min && check <= max;
+      return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
     }
 
     private void AddNotebooksToViewList(IEnumerable<Notebook> notebooks)
