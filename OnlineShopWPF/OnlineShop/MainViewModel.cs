@@ -15,6 +15,16 @@ namespace OnlineShop
 
   public class NotebookView
   {
+    public NotebookView(Notebook notebook)
+    {
+      Name = notebook.Name;
+      Price = notebook.Price;
+      Cpu = notebook.Cpu.Name;
+      Ram = notebook.RamInGB;
+      HdMemory = notebook.HardDrive.MemoryInGB;
+      HdType = notebook.HardDrive.Type;
+    }
+
     public string Name { get; set; }
     public Money Price { get; set; }
     public string Cpu { get; set; }

@@ -39,6 +39,11 @@ namespace OnlineShop
       }
     }
 
+    public List<Notebook> FindMatchingNotebook(NotebookQueryParams notebookParams)
+    {
+      return GetNotebooks(NotebookSearchQueries.FindMatchingNotebooks(notebookParams, _db));
+    }
+
     /// <summary>
     /// Delete a complete Notebook with CPU/HD/Graphic/Product
     /// </summary>

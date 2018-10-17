@@ -8,6 +8,22 @@ using System;
 
 namespace OnlineShop
 {
+  public enum GraphicManufacturer
+  {
+    NVIDIA,
+    AMD
+  }
+  public enum HardDriveType
+  {
+    ssd,
+    hdd
+  }
+  public enum CpuManufacturer
+  {
+    Intel,
+    AMD
+  }
+
   public class FilterViewModel : ViewModelBase, INotifyPropertyChanged
   {
     private DatabaseFactory _db;
@@ -120,7 +136,7 @@ namespace OnlineShop
       get => _minClockRate;
       set
       {
-        if(_minClockRate != value)
+        if (_minClockRate != value)
         {
           _minClockRate = value;
           FirePropertyChanged();
@@ -136,7 +152,7 @@ namespace OnlineShop
       get => _maxClockRate;
       set
       {
-        if(_maxClockRate != value)
+        if (_maxClockRate != value)
         {
           _maxClockRate = value;
           FirePropertyChanged();
@@ -150,48 +166,19 @@ namespace OnlineShop
 
     #region graphicCardManufacturer
 
-    private string graphicName
+    public GraphicManufacturer GraphicCardManufacturer
     {
-      get
-      {
-        if (IsNVIDIAGraphicCard)
-          return "NVIDIA";
-        if (IsAMDGrapicCard)
-          return "AMD";
-        else
-          return "";
-      }
-    }
-    public bool IsNVIDIAGraphicCard
-    {
-      get => _IsNVIDIAGraphicCard;
+      get => _graphicManufacturer;
       set
       {
-        if(_IsNVIDIAGraphicCard != value)
+        if(_graphicManufacturer != value)
         {
-          _IsNVIDIAGraphicCard = value;
-          FirePropertyChanged();
+          _graphicManufacturer = value;
           ShowNotebooks();
         }
-      }
+      }     
     }
-    private bool _IsNVIDIAGraphicCard = false;
-
-    public bool IsAMDGrapicCard
-    {
-      get => _IsAMDGrapicCard;
-      set
-      {
-        if(_IsAMDGrapicCard != value)
-        {
-          _IsAMDGrapicCard = value;
-          FirePropertyChanged();
-          ShowNotebooks();
-        }
-      }
-    }
-    private bool _IsAMDGrapicCard = false;
-
+    private GraphicManufacturer _graphicManufacturer;
     #endregion
 
     #region graphicCardVram
@@ -203,7 +190,7 @@ namespace OnlineShop
       get => _minVram;
       set
       {
-        if(_minVram != value)
+        if (_minVram != value)
         {
           _minVram = value;
           FirePropertyChanged();
@@ -219,7 +206,7 @@ namespace OnlineShop
       get => _maxVram;
       set
       {
-        if(_maxVram != value)
+        if (_maxVram != value)
         {
           _maxVram = value;
           FirePropertyChanged();
@@ -233,7 +220,7 @@ namespace OnlineShop
 
     #region hardDriveType
 
-    private string hdType
+    private string HdType
     {
       get
       {
@@ -251,7 +238,7 @@ namespace OnlineShop
       get => _isSSd;
       set
       {
-        if(_isSSd != value)
+        if (_isSSd != value)
         {
           _isSSd = value;
           FirePropertyChanged();
@@ -267,7 +254,7 @@ namespace OnlineShop
       get => _isHdd;
       set
       {
-        if(_isHdd != value)
+        if (_isHdd != value)
         {
           _isHdd = value;
           FirePropertyChanged();
@@ -288,7 +275,7 @@ namespace OnlineShop
       get => _minHdMemory;
       set
       {
-        if(_minHdMemory != value)
+        if (_minHdMemory != value)
         {
           _minHdMemory = value;
           FirePropertyChanged();
@@ -303,7 +290,7 @@ namespace OnlineShop
       get => _MaxHdMemory;
       set
       {
-        if(_MaxHdMemory != value)
+        if (_MaxHdMemory != value)
         {
           _MaxHdMemory = value;
           FirePropertyChanged();
@@ -337,7 +324,7 @@ namespace OnlineShop
       get => _isWindows;
       set
       {
-        if(_isWindows != value)
+        if (_isWindows != value)
         {
           _isWindows = value;
           FirePropertyChanged();
@@ -352,7 +339,7 @@ namespace OnlineShop
       get => _isLinux;
       set
       {
-        if(_isLinux != value)
+        if (_isLinux != value)
         {
           _isLinux = value;
           FirePropertyChanged();
@@ -367,7 +354,7 @@ namespace OnlineShop
       get => _isMac;
       set
       {
-        if(_isMac != value)
+        if (_isMac != value)
         {
           _isMac = value;
           FirePropertyChanged();
@@ -388,7 +375,7 @@ namespace OnlineShop
       get => _minRamMemory;
       set
       {
-        if(_minRamMemory != value)
+        if (_minRamMemory != value)
         {
           _minRamMemory = value;
           FirePropertyChanged();
@@ -403,7 +390,7 @@ namespace OnlineShop
       get => _maxRamMemory;
       set
       {
-        if(_maxRamMemory != value)
+        if (_maxRamMemory != value)
         {
           _maxRamMemory = value;
           FirePropertyChanged();
@@ -420,7 +407,7 @@ namespace OnlineShop
       get => _notebookName;
       set
       {
-        if(_notebookName != value)
+        if (_notebookName != value)
         {
           _notebookName = value;
           FirePropertyChanged();
@@ -440,7 +427,7 @@ namespace OnlineShop
       get => _minBatteryTime;
       set
       {
-        if(_minBatteryTime != value)
+        if (_minBatteryTime != value)
         {
           _minBatteryTime = value;
           FirePropertyChanged();
@@ -455,7 +442,7 @@ namespace OnlineShop
       get => _maxBatteryTime;
       set
       {
-        if(_maxBatteryTime != value)
+        if (_maxBatteryTime != value)
         {
           _maxBatteryTime = value;
           FirePropertyChanged();
@@ -476,7 +463,7 @@ namespace OnlineShop
       get => _minPrice;
       set
       {
-        if(_minPrice != value)
+        if (_minPrice != value)
         {
           _minPrice = value;
           FirePropertyChanged();
@@ -491,7 +478,7 @@ namespace OnlineShop
       get => _maxPrice;
       set
       {
-        if(_maxPrice != value)
+        if (_maxPrice != value)
         {
           _maxPrice = value;
           FirePropertyChanged();
@@ -518,12 +505,12 @@ namespace OnlineShop
         },
         GraphicQueryParams = new GraphicQueryParams
         {
-          graphicCardName = this.graphicName,
+          graphicCardName = this.GraphicCardManufacturer.ToString(),
           vramRange = new Range(MinVram, MaxVram),
         },
         HardDriveQueryParams = new HardDriveQueryParams
         {
-          hdType = hdType,
+          hdType = HdType,
           hdMemoryRange = new Range(MinHdMemory, MaxHdMemory),
         },
         NotebookDataQueryParams = new NotebookDataQueryParams
@@ -535,32 +522,28 @@ namespace OnlineShop
           notebookName = NotebookName,
         }
       }));
-
     }
 
     public void ShowNotebooks()
     {
-      var notebooks = _db.GetNotebooks(_db.FindMatchingProducts(new NotebookQueryParams { }));
-      NotebookList.Clear();
-      //Grapic
-      notebooks = notebooks.Where(x => x.Graphic.Name.Contains(graphicName)).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinVram,MaxVram,x.Graphic.VRAMInGB)).ToList();
-      //HardDrive
-      notebooks = notebooks.Where(x => x.HardDrive.Type.Contains(hdType)).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinHdMemory,MaxHdMemory,x.HardDrive.MemoryInGB)).ToList();
-      //CPU
-      notebooks = notebooks.Where(x => x.Cpu.Name.Contains(cpuName)).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinClockRate, MaxClockRate, x.Cpu.ClockRateInGHZ)).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinCPUCores,MaxCPUCores, x.Cpu.NumCores)).ToList();
-      //Notebook
-      notebooks = notebooks.Where(x => IsInRange(MinBatteryTime,MaxBatteryTime,x.AverageBatteryTimeInMinutes)).ToList();
-      notebooks = notebooks.Where(x => x.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase)).ToList();
-      notebooks = notebooks.Where(x => OS == OS.empty || x.Os == OS).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinPrice, MaxPrice, Convert.ToInt16(x.Price.Amount))).ToList();
-      notebooks = notebooks.Where(x => IsInRange(MinRamMemory, MaxRamMemory, x.RamInGB)).ToList();
+      var notebooks =  _db.FindMatchingNotebook(new NotebookQueryParams())
+                         .Where(nb => nb.Graphic.Name.Contains(GraphicCardManufacturer.ToString())) // Graphic
+                         .Where(nb => IsInRange(MinVram, MaxVram, nb.Graphic.VRAMInGB))
+                         .Where(nb => nb.HardDrive.Type.Contains(HdType)) // HardDrive
+                         .Where(nb => IsInRange(MinHdMemory, MaxHdMemory, nb.HardDrive.MemoryInGB))
+                         .Where(nb => nb.Cpu.Name.Contains(cpuName)) // CPU
+                         .Where(nb => IsInRange(MinClockRate, MaxClockRate, nb.Cpu.ClockRateInGHZ))
+                         .Where(nb => IsInRange(MinCPUCores, MaxCPUCores, nb.Cpu.NumCores))
+                         .Where(x => IsInRange(MinBatteryTime, MaxBatteryTime, x.AverageBatteryTimeInMinutes)) // Notebook
+                         .Where(x => x.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase))
+                         .Where(x => OS == OS.empty || x.Os == OS)
+                         .Where(x => IsInRange(MinPrice, MaxPrice, Convert.ToInt16(x.Price.Amount)))
+                         .Where(x => IsInRange(MinRamMemory, MaxRamMemory, x.RamInGB));
       AddNotebooksToViewList(notebooks);
+
+
     }
-    
+
     private bool IsInRange(double min, double max, double check)
     {
       return check >= min && check <= max;
@@ -569,21 +552,13 @@ namespace OnlineShop
     {
       return check >= min && check <= max;
     }
-    
-    private void AddNotebooksToViewList(List<Notebook> notebooks)
+
+    private void AddNotebooksToViewList(IEnumerable<Notebook> notebooks)
     {
-      foreach (Notebook notebook in notebooks)
+      NotebookList.Clear();
+      foreach (var notebookView in notebooks.Select(nb => new NotebookView(nb)))
       {
-        NotebookView view = new NotebookView
-        {
-          Name = notebook.Name,
-          Price = notebook.Price,
-          Cpu = notebook.Cpu.Name,
-          Ram = notebook.RamInGB,
-          HdMemory = notebook.HardDrive.MemoryInGB,
-          HdType = notebook.HardDrive.Type,
-        };
-        NotebookList.Add(view);
+        NotebookList.Add(notebookView);
       }
     }
   }

@@ -3,9 +3,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:OnlineShop"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="800">
+
+  <UserControl.Resources>
+    <ObjectDataProvider MethodName="GetValues"
+                    ObjectType="{x:Type sys:Enum}"
+                    x:Key="GPUDataProvider">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="local:GraphicManufacturer"/>
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </UserControl.Resources>
 
   <Grid>
     <Grid.RowDefinitions>
@@ -31,7 +42,7 @@
           <RowDefinition/>
           <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox  Grid.Row="1"  Text="{Binding NotebookName, UpdateSourceTrigger=PropertyChanged}" Height="30" FontSize="20"/>
+        <TextBox  Grid.Row="1"  MinWidth="200" HorizontalAlignment="Center" VerticalAlignment="Center"  Text="{Binding NotebookName, UpdateSourceTrigger=PropertyChanged}" Height="30" FontSize="20"/>
       </Grid>
 
       <Grid Grid.Column="2">
@@ -40,320 +51,296 @@
           <RowDefinition/>
           <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Content="Search" HorizontalAlignment="Center"  Grid.Row="1" VerticalAlignment="Center" Width="75" Command="{Binding Search}"/>
-
-
-        <Grid Grid.Row="2">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
-          </Grid.ColumnDefinitions>
-          <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxVram}"/>
-        </Grid>
+        <Button Content="Search" Height="30" Grid.Row="1"  Width="75" Command="{Binding Search}" HorizontalAlignment="Center" Grid.RowSpan="2"/>
       </Grid>
 
     </Grid>
 
-    <Grid Grid.Row="1">
-      <Expander Header="Graphic Card">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-          </Grid.ColumnDefinitions>
-          <GroupBox Header="Manufacturer">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <RadioButton GroupName="graphicManufacturer" Grid.Row="0" Content="AMD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsAMDGrapicCard}"/>
-              <RadioButton GroupName="graphicManufacturer" Grid.Row="1" Content="NVIDIA" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsNVIDIAGraphicCard}"/>
+    <Expander Grid.Row="1" Header="Graphic Card">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Manufacturer">
+
+          <ComboBox ItemsSource="{Binding Source={StaticResource GPUDataProvider}}" SelectedItem="{Binding GraphicCardManufacturer}"  MaxHeight="25"/>
+
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Video Ram">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinVram}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinVram}" />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="1" Header="Video Ram">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinVram}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinVram}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxVram}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxVram }"  />
-              </Grid>
-
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxVram}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxVramSliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxVram }"  />
             </Grid>
-          </GroupBox>
-        </Grid>
-      </Expander>
 
-    </Grid>
-    <Grid Grid.Row="2">
-      <Expander Header="HardDrive">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-          </Grid.ColumnDefinitions>
-          <GroupBox Header="Type">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <RadioButton GroupName="hdtype" Grid.Row="0" Content="SSD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsSSD}"/>
-              <RadioButton GroupName="hdtype" Grid.Row="1" Content="HDD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsHDD}"/>
+          </Grid>
+        </GroupBox>
+      </Grid>
+    </Expander>
+    <Expander Grid.Row="2" Header="HardDrive">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Type">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RadioButton GroupName="hdtype" Grid.Row="0" Content="SSD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsSSD}"/>
+            <RadioButton GroupName="hdtype" Grid.Row="1" Content="HDD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsHDD}"/>
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Memory">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinHdMemory}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinHdMemory}" />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="1" Header="Memory">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinHdMemory}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MinHdMemory}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxHdMemory}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxHdMemory }"  />
-              </Grid>
-
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxHdMemory}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxHdMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="256" VerticalAlignment="Center" Value="{Binding MaxHdMemory }"  />
             </Grid>
-          </GroupBox>
-        </Grid>
 
-      </Expander>
-    </Grid>
-    <Grid Grid.Row="3">
-      <Expander Header="CPU">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-          </Grid.ColumnDefinitions>
-          <GroupBox Header="Manufacturer">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <RadioButton GroupName="cpuManufacturer" Grid.Row="0" Content="INTEL" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsIntelCpu}"/>
-              <RadioButton GroupName="cpuManufacturer" Grid.Row="1" Content="AMD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsAMDCpu}"/>
+          </Grid>
+        </GroupBox>
+      </Grid>
+
+    </Expander>
+    <Expander Grid.Row="3" Header="CPU">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Manufacturer">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RadioButton GroupName="cpuManufacturer" Grid.Row="0" Content="INTEL" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsIntelCpu}"/>
+            <RadioButton GroupName="cpuManufacturer" Grid.Row="1" Content="AMD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsAMDCpu}"/>
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Number Of Cores">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinCPUCores}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinCPUCores}" />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="1" Header="Number Of Cores">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinCPUCores}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinCPUCores}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxCPUCores}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxCPUCores }"  />
-              </Grid>
-
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxCPUCores}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxCPUSliderLenth}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxCPUCores }"  />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="2" Header="Clock Rate">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinClockRate}"/>
-                <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinClockRate}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxClockRate}"/>
-                <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxClockRate }"  />
-              </Grid>
-
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Header="Clock Rate">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinClockRate}"/>
+              <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MinClockRate}" />
             </Grid>
-          </GroupBox>
-        </Grid>
 
-      </Expander>
-    </Grid>
-    <Grid Grid.Row="4">
-      <Expander Header="Notebook">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-          </Grid.ColumnDefinitions>
-          <GroupBox Header="OS">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <RadioButton GroupName="os" Grid.Row="0" Content="Windows" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsWindows}"/>
-              <RadioButton GroupName="os" Grid.Row="1" Content="Linux" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsLinux}"/>
-              <RadioButton GroupName="os" Grid.Row="2" Content="MAC" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsMac}"/>
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxClockRate}"/>
+              <Slider Grid.Column="1" Maximum="10" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="2" VerticalAlignment="Center" Value="{Binding MaxClockRate }"  />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="1" Header="RAM Memory">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinRamMemory}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="4" VerticalAlignment="Center" Value="{Binding MinRamMemory}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxRamMemory}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="4" VerticalAlignment="Center" Value="{Binding MaxRamMemory }"  />
-              </Grid>
+          </Grid>
+        </GroupBox>
+      </Grid>
 
+    </Expander>
+    <Expander Grid.Row="4" Header="Notebook">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="OS">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RadioButton GroupName="os" Grid.Row="0" Content="Windows" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsWindows}"/>
+            <RadioButton GroupName="os" Grid.Row="1" Content="Linux" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsLinux}"/>
+            <RadioButton GroupName="os" Grid.Row="2" Content="MAC" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsMac}"/>
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="RAM Memory">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinRamMemory}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="4" VerticalAlignment="Center" Value="{Binding MinRamMemory}" />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="2" Header="Battery Time">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinBatteryTime}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="60" VerticalAlignment="Center" Value="{Binding MinBatteryTime}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxBatteryTime}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="60" VerticalAlignment="Center" Value="{Binding MaxBatteryTime }"  />
-              </Grid>
-
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxRamMemory}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxRAMMemorySliderRange}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="4" VerticalAlignment="Center" Value="{Binding MaxRamMemory }"  />
             </Grid>
-          </GroupBox>
-          <GroupBox Grid.Column="3" Header="Price">
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinPrice}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="100" VerticalAlignment="Center" Value="{Binding MinPrice}" />
-              </Grid>
 
-              <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*"/>
-                  <ColumnDefinition Width="3*"/>
-                  <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
-                <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxPrice}"/>
-                <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="100" VerticalAlignment="Center" Value="{Binding MaxPrice }"  />
-              </Grid>
-
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="2" Header="Battery Time">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinBatteryTime}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="60" VerticalAlignment="Center" Value="{Binding MinBatteryTime}" />
             </Grid>
-          </GroupBox>
-        </Grid>
 
-      </Expander>
-    </Grid>
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxBatteryTime}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxBatteryTimeSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="60" VerticalAlignment="Center" Value="{Binding MaxBatteryTime }"  />
+            </Grid>
+
+          </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="3" Header="Price">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Min"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MinPrice}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="100" VerticalAlignment="Center" Value="{Binding MinPrice}" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+              </Grid.ColumnDefinitions>
+              <Label Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="max"/>
+              <Label Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding MaxPrice}"/>
+              <Slider Grid.Column="1" Maximum="{Binding MaxPriceSliderValue}" TickPlacement="BottomRight" MaxWidth="190" TickFrequency="100" VerticalAlignment="Center" Value="{Binding MaxPrice }"  />
+            </Grid>
+
+          </Grid>
+        </GroupBox>
+      </Grid>
+
+    </Expander>
   </Grid>
 </UserControl>
 
