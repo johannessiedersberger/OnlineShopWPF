@@ -78,6 +78,7 @@
     <Compile Include="Filter\Filter.xaml.cs">
       <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Filter\StringExtensions.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Money.cs" />
     <Compile Include="ProductNotFoundException.cs" />

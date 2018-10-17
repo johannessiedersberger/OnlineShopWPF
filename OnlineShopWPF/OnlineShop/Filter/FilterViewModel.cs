@@ -3,6 +3,8 @@ using System.Windows.Input;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System;
 
 namespace OnlineShop
 {
@@ -70,7 +72,7 @@ namespace OnlineShop
       get
       {
         if (IsIntelCpu)
-          return "INTEL";
+          return "Intel";
         if (IsAMDCpu)
           return "AMD";
         else
@@ -113,7 +115,7 @@ namespace OnlineShop
     #region cpuClockRate
     public static int MaxCPUClockRateSliderLength = 16;
 
-    public int MinClockRate
+    public double MinClockRate
     {
       get => _minClockRate;
       set
@@ -126,10 +128,10 @@ namespace OnlineShop
         }
       }
     }
-    private int _minClockRate = 0;
+    private double _minClockRate = 0;
 
 
-    public int MaxClockRate
+    public double MaxClockRate
     {
       get => _maxClockRate;
       set
@@ -142,7 +144,7 @@ namespace OnlineShop
         }
       }
     }
-    private int _maxClockRate = 10;
+    private double _maxClockRate = 10;
 
     #endregion
 
@@ -461,7 +463,7 @@ namespace OnlineShop
         }
       }
     }
-    private int _maxBatteryTime = 2000;
+    private int _maxBatteryTime = 2500;
 
     #endregion
 
@@ -538,8 +540,38 @@ namespace OnlineShop
 
     public void ShowNotebooks()
     {
-      var notebooks = GetNotebooks();
+      var notebooks = _db.GetNotebooks(_db.FindMatchingProducts(new NotebookQueryParams { }));
       NotebookList.Clear();
+      //Grapic
+      notebooks = notebooks.Where(x => x.Graphic.Name.Contains(graphicName)).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinVram,MaxVram,x.Graphic.VRAMInGB)).ToList();
+      //HardDrive
+      notebooks = notebooks.Where(x => x.HardDrive.Type.Contains(hdType)).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinHdMemory,MaxHdMemory,x.HardDrive.MemoryInGB)).ToList();
+      //CPU
+      notebooks = notebooks.Where(x => x.Cpu.Name.Contains(cpuName)).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinClockRate, MaxClockRate, x.Cpu.ClockRateInGHZ)).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinCPUCores,MaxCPUCores, x.Cpu.NumCores)).ToList();
+      //Notebook
+      notebooks = notebooks.Where(x => IsInRange(MinBatteryTime,MaxBatteryTime,x.AverageBatteryTimeInMinutes)).ToList();
+      notebooks = notebooks.Where(x => x.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase)).ToList();
+      notebooks = notebooks.Where(x => OS == OS.empty || x.Os == OS).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinPrice, MaxPrice, Convert.ToInt16(x.Price.Amount))).ToList();
+      notebooks = notebooks.Where(x => IsInRange(MinRamMemory, MaxRamMemory, x.RamInGB)).ToList();
+      AddNotebooksToViewList(notebooks);
+    }
+    
+    private bool IsInRange(double min, double max, double check)
+    {
+      return check >= min && check <= max;
+    }
+    private bool IsInRange(int min, int max, int check)
+    {
+      return check >= min && check <= max;
+    }
+    
+    private void AddNotebooksToViewList(List<Notebook> notebooks)
+    {
       foreach (Notebook notebook in notebooks)
       {
         NotebookView view = new NotebookView
