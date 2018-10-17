@@ -18,6 +18,11 @@ namespace OnlineShop
     ssd, 
     hdd
   }
+  public enum CPUManufacturer
+  {
+    Intel,
+    AMD
+  }
 
   public class FilterViewModel : ViewModelBase, INotifyPropertyChanged
   {
@@ -78,49 +83,19 @@ namespace OnlineShop
 
     #region cpuManufacturer
 
-    private string cpuName
+    public CPUManufacturer CPUManufacturer
     {
-      get
-      {
-        if (IsIntelCpu)
-          return "Intel";
-        if (IsAMDCpu)
-          return "AMD";
-        else
-          return "";
-      }
-    }
-    public bool IsIntelCpu
-    {
-      get => _isIntelCPU;
+      get => _cpuManufacturer;
       set
       {
-        if (_isIntelCPU != value)
+        if(_cpuManufacturer != value)
         {
-          _isIntelCPU = value;
-          FirePropertyChanged();
+          _cpuManufacturer = value;
           ShowNotebooks();
         }
       }
     }
-    private bool _isIntelCPU = false;
-
-
-    public bool IsAMDCpu
-    {
-      get => _isAmdCpu;
-      set
-      {
-        if (_isAmdCpu != value)
-        {
-          _isAmdCpu = value;
-          FirePropertyChanged();
-          ShowNotebooks();
-        }
-      }
-    }
-    private bool _isAmdCpu = false;
-
+    private CPUManufacturer _cpuManufacturer;
     #endregion
 
     #region cpuClockRate
@@ -269,66 +244,20 @@ namespace OnlineShop
 
     #region os
 
-    private OS OS
+    public OS OS
     {
-      get
-      {
-        if (IsWindows)
-          return OS.windows;
-        if (IsLinux)
-          return OS.linux;
-        if (IsMac)
-          return OS.mac;
-        else
-          return OS.empty;
-      }
-    }
-
-    public bool IsWindows
-    {
-      get => _isWindows;
+      get => _os;
       set
       {
-        if (_isWindows != value)
+        if(_os != value)
         {
-          _isWindows = value;
-          FirePropertyChanged();
+          _os = value;
           ShowNotebooks();
         }
-      }
+      }         
     }
-    private bool _isWindows = false;
-
-    public bool IsLinux
-    {
-      get => _isLinux;
-      set
-      {
-        if (_isLinux != value)
-        {
-          _isLinux = value;
-          FirePropertyChanged();
-          ShowNotebooks();
-        }
-      }
-    }
-    private bool _isLinux = false;
-
-    public bool IsMac
-    {
-      get => _isMac;
-      set
-      {
-        if (_isMac != value)
-        {
-          _isMac = value;
-          FirePropertyChanged();
-          ShowNotebooks();
-        }
-      }
-    }
-    private bool _isMac = false;
-
+    private OS _os;
+    
     #endregion
 
     #region ram
@@ -466,7 +395,7 @@ namespace OnlineShop
         {
           cpuCount = new Range(MinCPUCores, MaxCPUCores),
           cpuClockRate = new Range(MinClockRate, MaxClockRate),
-          cpuName = this.cpuName
+          cpuName = this.CPUManufacturer.ToString(),
         },
         GraphicQueryParams = new GraphicQueryParams
         {
@@ -496,12 +425,12 @@ namespace OnlineShop
                          .Where(nb => IsInRange(MinVram, MaxVram, nb.Graphic.VRAMInGB))
                          .Where(nb => nb.HardDrive.Type.Contains(HDType.ToString())) // HardDrive
                          .Where(nb => IsInRange(MinHdMemory, MaxHdMemory, nb.HardDrive.MemoryInGB))
-                         .Where(nb => nb.Cpu.Name.Contains(cpuName)) // CPU
+                         .Where(nb => nb.Cpu.Name.Contains(CPUManufacturer.ToString())) // CPU
                          .Where(nb => IsInRange(MinClockRate, MaxClockRate, nb.Cpu.ClockRateInGHZ))
                          .Where(nb => IsInRange(MinCPUCores, MaxCPUCores, nb.Cpu.NumCores))
                          .Where(x => IsInRange(MinBatteryTime, MaxBatteryTime, x.AverageBatteryTimeInMinutes)) // Notebook
                          .Where(x => x.Name.Contains(NotebookName, StringComparison.OrdinalIgnoreCase))
-                         .Where(x => OS == OS.empty || x.Os == OS)
+                         .Where(x => x.Os == OS)
                          .Where(x => IsInRange(MinPrice, MaxPrice, Convert.ToInt16(x.Price.Amount)))
                          .Where(x => IsInRange(MinRamMemory, MaxRamMemory, x.RamInGB));
       AddNotebooksToViewList(notebooks);

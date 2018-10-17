@@ -14,9 +14,22 @@
         <x:Type TypeName="local:GraphicManufacturer"/>
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
+    
     <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="HDDataProvider">
       <ObjectDataProvider.MethodParameters>
         <x:Type TypeName="local:HardDriveType"/>
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+    
+    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="CPUDataProvider">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="local:CPUManufacturer"/>
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+
+    <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="OSDataProvider">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="local:OS"/>
       </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
   </UserControl.Resources>
@@ -153,14 +166,7 @@
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="Manufacturer">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition/>
-              <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RadioButton GroupName="cpuManufacturer" Grid.Row="0" Content="INTEL" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsIntelCpu}"/>
-            <RadioButton GroupName="cpuManufacturer" Grid.Row="1" Content="AMD" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsAMDCpu}"/>
-          </Grid>
+          <ComboBox ItemsSource="{Binding Source={StaticResource CPUDataProvider}}" SelectedItem="{Binding CPUManufacturer}" MaxHeight="25" />
         </GroupBox>
         <GroupBox Grid.Column="1" Header="Number Of Cores">
           <Grid>
@@ -234,16 +240,7 @@
           <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="OS">
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition/>
-              <RowDefinition/>
-              <RowDefinition/>
-            </Grid.RowDefinitions>
-            <RadioButton GroupName="os" Grid.Row="0" Content="Windows" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsWindows}"/>
-            <RadioButton GroupName="os" Grid.Row="1" Content="Linux" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsLinux}"/>
-            <RadioButton GroupName="os" Grid.Row="2" Content="MAC" HorizontalAlignment="Left" VerticalAlignment="Center"  IsChecked="{Binding IsMac}"/>
-          </Grid>
+          <ComboBox ItemsSource="{Binding Source={StaticResource OSDataProvider}}" SelectedItem="{Binding OS}" MaxHeight="25" />
         </GroupBox>
         <GroupBox Grid.Column="1" Header="RAM Memory">
           <Grid>

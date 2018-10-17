@@ -24,9 +24,6 @@ namespace OnlineShop
     /// Apple Mac OS
     /// </summary>
     mac,
-    /// <summary>
-    /// No Operating System installed
-    /// </summary>
     empty
   }
 

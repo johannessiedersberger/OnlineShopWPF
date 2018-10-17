@@ -13,7 +13,7 @@ namespace OnlineShopTest
     public void TestCPUViewModel()
     {
       FilterViewModel filter = new FilterViewModel();
-      filter.IsIntelCpu = true;
+      filter.CPUManufacturer = CPUManufacturer.Intel;
       filter.MinClockRate = 1;
       filter.MaxClockRate = 4;
       filter.MinCPUCores = 4;
@@ -34,8 +34,7 @@ namespace OnlineShopTest
     public void TestHardDriveViewModel()
     {
       FilterViewModel filter = new FilterViewModel();
-      filter.IsSSD = true;
-      filter.IsHDD = false;
+      filter.HDType = HardDriveType.ssd;
       filter.MinHdMemory = 200;
       filter.MaxHdMemory = 300;
       foreach (Notebook nb in filter.GetNotebooks())
@@ -53,8 +52,7 @@ namespace OnlineShopTest
     public void TestGraphicViewModel()
     {
       FilterViewModel filter = new FilterViewModel();
-      filter.IsAMDGrapicCard = false;
-      filter.IsNVIDIAGraphicCard = true;
+      filter.GraphicCardManufacturer = GraphicManufacturer.NVIDIA;
       filter.MaxVram = 4;
       filter.MinVram = 1;
       foreach(Notebook nb in filter.GetNotebooks())
@@ -77,9 +75,7 @@ namespace OnlineShopTest
       filter.MaxRamMemory = 16;
       filter.MaxBatteryTime = 1000;
       filter.MinBatteryTime = 901;
-      filter.IsWindows = true;
-      filter.IsLinux = false;
-      filter.IsMac = false;
+      filter.OS = OS.windows;
       filter.MaxPrice = 1000;
       filter.MinPrice = 500;
       foreach(Notebook nb in filter.GetNotebooks())
