@@ -436,7 +436,6 @@ namespace OnlineShop
       AddNotebooksToViewList(notebooks);
     }
 
-    private bool IsInRange(int min, int max, int check)
     private static bool IsInRange<T>(T value, T min, T max) where T : IComparable<T>
     {
       return value.CompareTo(min) >= 0 && value.CompareTo(max) <= 0;
