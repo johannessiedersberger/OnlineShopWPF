@@ -16,7 +16,7 @@ namespace OnlineShop
     /// <summary>
     /// The Path to the Database File
     /// </summary>
-    public static string file = @"C:\Users\johan\Documents\GitHub\OnlineShopWPF\OnlineShopWPF\OnlineShop.db";
+    public static string file = @"C:\Users\johan\Documents\GitHub\OnlineShopWPF\OnlineShop\OnlineShop\OnlineShop.db";
 
     static MySqliteDatabase _database = new MySqliteDatabase(file);
 
